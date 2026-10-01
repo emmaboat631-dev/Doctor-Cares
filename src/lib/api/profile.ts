@@ -20,7 +20,7 @@ export async function updateBaseProfile(id: string, patch: Partial<Pick<Profile,
   return data as unknown as Profile;
 }
 
-export async function updatePatientProfile(id: string, patch: Partial<Pick<PatientProfile, 'date_of_birth' | 'gender' | 'blood_group' | 'allergies' | 'emergency_contact_name' | 'emergency_contact_phone' | 'emergency_contact_relation' | 'height_cm' | 'chronic_conditions' | 'current_medications' | 'past_surgeries' | 'immunizations' | 'family_history' | 'smoking_status' | 'alcohol_use'>>): Promise<PatientProfile> {
+export async function updatePatientProfile(id: string, patch: Partial<Pick<PatientProfile, 'date_of_birth' | 'gender' | 'blood_group' | 'allergies' | 'emergency_contact_name' | 'emergency_contact_phone' | 'emergency_contact_relation' | 'height_cm' | 'chronic_conditions' | 'current_medications' | 'past_surgeries' | 'immunizations' | 'family_history' | 'smoking_status' | 'alcohol_use' | 'nhis_number' | 'nhis_expires'>>): Promise<PatientProfile> {
   const sb = requireClient();
   const { data, error } = await sb.from('patient_profiles').update(patch).eq('id', id).select('*').single();
   if (error) throw error;

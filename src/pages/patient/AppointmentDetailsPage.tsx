@@ -119,7 +119,7 @@ export function AppointmentDetailsPage() {
             <button
               type="button"
               className="inline-flex flex-1 h-11 items-center justify-center gap-2 rounded-xl bg-brand-500 text-sm font-semibold text-white hover:bg-brand-600 shadow-sm"
-              onClick={() => alert('Video call integration comes in a later phase.')}
+              onClick={() => navigate(`/appointments/${d.id}/call`)}
             >
               <Video className="h-4 w-4" /> Join call
             </button>

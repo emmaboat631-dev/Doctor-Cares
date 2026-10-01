@@ -54,6 +54,8 @@ export interface PatientProfileRow {
   family_history: string | null;
   smoking_status: 'never' | 'former' | 'current' | null;
   alcohol_use: 'none' | 'occasional' | 'regular' | 'heavy' | null;
+  nhis_number: string | null;
+  nhis_expires: string | null;
   updated_at: string;
 }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CalendarRange, Flag, LayoutDashboard, Lightbulb, Menu, Monitor, Settings, Stethoscope, Users, X } from 'lucide-react';
+import { CalendarRange, FileText, Flag, LayoutDashboard, Lightbulb, Menu, Monitor, Settings, Stethoscope, Users, X } from 'lucide-react';
 import { Sidebar, type SidebarItem } from './Sidebar';
 import { OfflineBanner } from './OfflineBanner';
 import { PageTransition } from './PageTransition';
@@ -12,6 +12,7 @@ const items: SidebarItem[] = [
   { to: '/appointments', label: 'Appointments', icon: CalendarRange },
   { to: '/reports', label: 'Reports', icon: Flag },
   { to: '/tips', label: 'Health tips', icon: Lightbulb },
+  { to: '/claims', label: 'NHIS claims', icon: FileText },
   { to: '/settings', label: 'Settings', icon: Settings },
 ];
 

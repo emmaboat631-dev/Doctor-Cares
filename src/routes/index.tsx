@@ -10,6 +10,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
+import { VideoCallPage } from '@/pages/VideoCallPage';
 
 import {
   SplashPage, OnboardingPage, LoginPage, RegisterPage, ForgotPasswordPage,
@@ -33,7 +34,7 @@ import {
 
 import {
   AdminDashboardPage, AdminDoctorsPage, AdminPatientsPage, AdminAppointmentsPage,
-  AdminUserDetailsPage, AdminReportsPage, AdminSettingsPage, AdminHealthTipsPage,
+  AdminUserDetailsPage, AdminReportsPage, AdminSettingsPage, AdminHealthTipsPage, AdminNhisClaimsPage,
 } from '@/pages/admin';
 
 
@@ -57,6 +58,7 @@ function RoleRouter() {
           <Route path="appointments/:id" element={<AppointmentDetailsPage />} />
           <Route path="appointments/:id/confirmed" element={<BookingConfirmationPage />} />
           <Route path="appointments/:id/review" element={<RateVisitPage />} />
+          <Route path="appointments/:id/call" element={<VideoCallPage />} />
           <Route path="metrics" element={<HealthMetricsPage />} />
           <Route path="tips" element={<HealthTipsPage />} />
           <Route path="tips/:id" element={<HealthTipDetailPage />} />
@@ -86,6 +88,7 @@ function RoleRouter() {
           <Route index element={<DoctorDashboardPage />} />
           <Route path="appointments" element={<DoctorAppointmentsPage />} />
           <Route path="appointments/:id" element={<DoctorAppointmentDetailsPage />} />
+          <Route path="appointments/:id/call" element={<VideoCallPage />} />
           <Route path="patients" element={<DoctorPatientsPage />} />
           <Route path="patients/:id" element={<DoctorPatientDetailsPage />} />
           <Route path="chat" element={<DoctorChatListPage />} />
@@ -113,6 +116,7 @@ function RoleRouter() {
           <Route path="users/:id" element={<AdminUserDetailsPage />} />
           <Route path="reports" element={<AdminReportsPage />} />
           <Route path="tips" element={<AdminHealthTipsPage />} />
+          <Route path="claims" element={<AdminNhisClaimsPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

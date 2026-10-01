@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CheckCircle2, MessageSquare, XCircle } from 'lucide-react';
+import { CheckCircle2, FileText, MessageSquare, Video, XCircle } from 'lucide-react';
+import { FileClaimModal } from '@/components/doctor/FileClaimModal';
+import { useAuth } from '@/contexts/AuthContext';
+import { getClaimForAppointment, STATUS_LABEL, STATUS_TONE } from '@/lib/api/nhisClaims';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -26,10 +29,13 @@ const statusTone: Record<AppointmentStatus, { tone: 'brand' | 'success' | 'warni
 
 export function DoctorAppointmentDetailsPage() {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const appt = useAsync(() => (id ? getAppointmentForDoctor(id) : Promise.resolve(null)), [id]);
   const patientId = appt.data?.patient_id ?? null;
   const patient = useAsync(async () => (patientId ? getPatientForDoctor(patientId) : null), [patientId]);
+  const claim = useAsync(async () => (id ? getClaimForAppointment(id) : null), [id]);
+  const [claimOpen, setClaimOpen] = useState(false);
 
   const [notes, setNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
@@ -170,10 +176,34 @@ export function DoctorAppointmentDetailsPage() {
               </Button>
             </>
           )}
+          {d.status === 'confirmed' && d.mode === 'video' && (
+            <Button onClick={() => navigate(`/appointments/${d.id}/call`)}
+              leftIcon={<Video className="h-4 w-4" />}>
+              Start video call
+            </Button>
+          )}
           {canComplete && (
             <Button loading={busy} onClick={() => act('completed')} leftIcon={<CheckCircle2 className="h-4 w-4" />}>
               Mark as completed
             </Button>
+          )}
+          {(d.status === 'completed' || d.status === 'confirmed') && !claim.data && (
+            <Button variant="outline" onClick={() => setClaimOpen(true)}
+              leftIcon={<FileText className="h-4 w-4" />}>
+              File NHIS claim
+            </Button>
+          )}
+          {claim.data && (
+            <div className="flex items-center gap-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 px-3 py-2 text-xs">
+              <FileText className="h-3.5 w-3.5 text-ink-muted" />
+              <span className="flex-1">NHIS claim</span>
+              <span className={`rounded-full px-2 py-0.5 font-bold ${
+                STATUS_TONE[claim.data.status] === 'success' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+                : STATUS_TONE[claim.data.status] === 'danger' ? 'bg-rose-50 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300'
+                : STATUS_TONE[claim.data.status] === 'warning' ? 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300'
+                : 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
+              }`}>{STATUS_LABEL[claim.data.status]}</span>
+            </div>
           )}
           <Button variant="outline" loading={messaging} onClick={handleMessage}
             leftIcon={<MessageSquare className="h-4 w-4" />}>
@@ -181,6 +211,17 @@ export function DoctorAppointmentDetailsPage() {
           </Button>
         </div>
       </div>
+
+      {user && d && (
+        <FileClaimModal
+          open={claimOpen}
+          onClose={() => setClaimOpen(false)}
+          appointmentId={d.id}
+          patientId={d.patient_id}
+          doctorId={user.id}
+          onCreated={() => claim.refetch()}
+        />
+      )}
     </>
   );
 }

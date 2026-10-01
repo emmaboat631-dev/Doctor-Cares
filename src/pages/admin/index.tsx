@@ -6,3 +6,4 @@ export { AdminReportsPage }      from './ReportsPage';
 export { AdminUserDetailsPage }  from './UserDetailsPage';
 export { AdminSettingsPage }     from './SettingsPage';
 export { AdminHealthTipsPage }   from './HealthTipsPage';
+export { AdminNhisClaimsPage }   from './NhisClaimsPage';

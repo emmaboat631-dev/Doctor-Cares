@@ -170,7 +170,9 @@ function AppointmentRichCard({ appointment: a, tab }: { appointment: Appointment
           </button>
           <button
             type="button"
-            onClick={() => navigate(`/appointments/${a.id}`)}
+            onClick={() => navigate(primary === 'Join call'
+              ? `/appointments/${a.id}/call`
+              : `/appointments/${a.id}`)}
             className="flex-1 h-10 rounded-full bg-brand-500 text-xs font-bold text-white shadow-md shadow-brand-500/30 hover:bg-brand-600 active:scale-[0.98] transition"
           >
             {primary}

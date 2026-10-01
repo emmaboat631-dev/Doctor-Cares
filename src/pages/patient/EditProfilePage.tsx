@@ -26,6 +26,8 @@ export function EditProfilePage() {
   const [emName, setEmName] = useState('');
   const [emPhone, setEmPhone] = useState('');
   const [emRelation, setEmRelation] = useState('');
+  const [nhisNumber, setNhisNumber] = useState('');
+  const [nhisExpires, setNhisExpires] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -40,6 +42,8 @@ export function EditProfilePage() {
       setEmName(patient.data.emergency_contact_name ?? '');
       setEmPhone(patient.data.emergency_contact_phone ?? '');
       setEmRelation(patient.data.emergency_contact_relation ?? '');
+      setNhisNumber(patient.data.nhis_number ?? '');
+      setNhisExpires(patient.data.nhis_expires ?? '');
     }
   }, [patient.data]);
 
@@ -63,6 +67,8 @@ export function EditProfilePage() {
           emergency_contact_name: emName.trim() || null,
           emergency_contact_phone: emPhone.trim() || null,
           emergency_contact_relation: emRelation.trim() || null,
+          nhis_number: nhisNumber.trim() || null,
+          nhis_expires: nhisExpires || null,
         }),
       ]);
       await refreshProfile();
@@ -113,6 +119,22 @@ export function EditProfilePage() {
             className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
+
+        <Card padding="lg">
+          <div className="mb-3">
+            <div className="text-sm font-bold">NHIS insurance</div>
+            <div className="mt-0.5 text-xs text-ink-muted">
+              Your National Health Insurance Scheme (Ghana) membership. Doctors file claims against this.
+            </div>
+          </div>
+          <div className="space-y-3">
+            <Input label="NHIS number" value={nhisNumber}
+              onChange={(e) => setNhisNumber(e.target.value)}
+              placeholder="e.g. 123456789012" />
+            <Input label="Expires" type="date" value={nhisExpires}
+              onChange={(e) => setNhisExpires(e.target.value)} />
+          </div>
+        </Card>
 
         <Card padding="lg">
           <div className="mb-3">
