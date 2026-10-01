@@ -55,7 +55,8 @@ export function DoctorDashboardPage() {
     }
   }, [appts, stats]);
 
-  const firstName = (profile?.full_name ?? '').split(' ')[0] || 'Doctor';
+  const firstName = (profile?.full_name ?? '').split(' ')[0] || (profile?.role === 'nurse' ? 'Nurse' : 'Doctor');
+  const titlePrefix = profile?.role === 'nurse' ? 'Nurse' : 'Dr.';
 
   return (
     <>
@@ -63,7 +64,7 @@ export function DoctorDashboardPage() {
         <Avatar name={profile?.full_name} src={profile?.avatar_url ?? undefined} size="md" />
         <div className="min-w-0">
           <div className="text-xs text-ink-muted">{greetingFor()},</div>
-          <div className="truncate font-semibold">Dr. {firstName}</div>
+          <div className="truncate font-semibold">{titlePrefix} {firstName}</div>
         </div>
         <Link
           to="/notifications"
