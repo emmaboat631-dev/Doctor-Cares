@@ -27,7 +27,7 @@ import { cn } from '@/lib/cn';
 
 export function DoctorPatientDetailsPage() {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const navigate = useNavigate();
 
   const patient = useAsync(() => (id ? getPatientForDoctor(id) : Promise.resolve(null)), [id]);
@@ -108,7 +108,12 @@ export function DoctorPatientDetailsPage() {
               {patientAppts.map((a) => (
                 <AppointmentCard
                   key={a.id}
-                  appointment={{ ...a, doctor: { id: user?.id ?? '', full_name: null, avatar_url: null, doctor_profile: null } }}
+                  appointment={{ ...a, doctor: {
+                    id: user?.id ?? '',
+                    full_name: profile?.full_name ? `Dr. ${profile.full_name}` : 'You',
+                    avatar_url: profile?.avatar_url ?? null,
+                    doctor_profile: null,
+                  }}}
                   linkTo={`/appointments/${a.id}`}
                 />
               ))}
