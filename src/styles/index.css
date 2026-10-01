@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-surface-muted text-ink;
+    min-height: 100dvh;
+  }
+
+  html.dark body {
+    @apply bg-slate-950 text-ink-onDark;
+  }
+
+  /* Better focus ring, keyboard-only */
+  :focus-visible {
+    outline: 2px solid theme('colors.brand.500');
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  /* Better scrollbar in dark mode */
+  html.dark ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.4); }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+}
+
+@layer components {
+  /* Bottom navigation safe-area helper */
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+  }
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 0.5rem);
+  }
+
+  /* Card in dark mode */
+  .card-surface {
+    @apply bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800;
+  }
+
+  /* Subtle divider */
+  .hairline {
+    @apply border-t border-slate-200/70 dark:border-slate-800;
+  }
+
+  /* Page transitions — iOS 26-ish spring curve */
+  @keyframes page-slide-forward {
+    from { opacity: 0; transform: translate3d(24px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @keyframes page-slide-back {
+    from { opacity: 0; transform: translate3d(-24px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  .page-enter-forward {
+    animation: page-slide-forward 360ms cubic-bezier(0.32, 0.72, 0, 1) both;
+    will-change: transform, opacity;
+  }
+  .page-enter-back {
+    animation: page-slide-back 360ms cubic-bezier(0.32, 0.72, 0, 1) both;
+    will-change: transform, opacity;
+  }
+
+  /* Splash — cinematic reveal */
+  @keyframes splash-logo-in {
+    0%   { opacity: 0; transform: scale(0.7) translateY(20px); filter: blur(8px); }
+    60%  { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  }
+  @keyframes splash-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+  @keyframes splash-title-in {
+    0%   { opacity: 0; transform: translateY(20px); letter-spacing: 0.02em; }
+    100% { opacity: 1; transform: translateY(0); letter-spacing: -0.01em; }
+  }
+  @keyframes splash-blur-in {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes splash-orb {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.6; }
+    50%      { transform: translate3d(10px, -10px, 0) scale(1.15); opacity: 0.85; }
+  }
+  @keyframes splash-progress {
+    0%   { transform: scaleX(0); transform-origin: left; }
+    100% { transform: scaleX(1); transform-origin: left; }
+  }
+  .splash-orb        { animation: splash-orb 4s ease-in-out infinite; }
+  .splash-logo-in    { animation: splash-logo-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both,
+                                  splash-float 4.5s ease-in-out 900ms infinite; }
+  .splash-title-in   { animation: splash-title-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 350ms both; }
+  .splash-sub-in     { animation: splash-title-in 700ms cubic-bezier(0.16, 1, 0.3, 1) 600ms both; }
+  .splash-progress   { animation: splash-progress 2400ms cubic-bezier(0.4, 0, 0.2, 1) 200ms both; }
+
+  /* Splash → onboarding — video-like camera pull */
+  @keyframes splash-scene-out {
+    0%   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    60%  { opacity: 0.4; filter: blur(2px); }
+    100% { opacity: 0; transform: scale(1.15) translateY(-8px); filter: blur(8px); }
+  }
+  @keyframes splash-bg-wash {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  @keyframes onboarding-scene-in {
+    0%   { opacity: 0; transform: scale(1.05); filter: blur(6px); }
+    40%  { opacity: 0.7; }
+    100% { opacity: 1; transform: scale(1); filter: blur(0); }
+  }
+  .splash-exit           { animation: splash-scene-out 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+  .splash-exit-bg        { animation: splash-bg-wash 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+  .onboarding-scene-in   { animation: onboarding-scene-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* Onboarding — content stagger when slide becomes active */
+  @keyframes ob-illus-in {
+    0%   { opacity: 0; transform: translateY(20px) scale(0.94); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes ob-title-in {
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ob-body-in {
+    0%   { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes ob-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .ob-illus-in { animation: ob-illus-in 700ms cubic-bezier(0.16, 1, 0.3, 1) both,
+                            ob-float 5s ease-in-out 700ms infinite; }
+  .ob-title-in { animation: ob-title-in 550ms cubic-bezier(0.16, 1, 0.3, 1) 200ms both; }
+  .ob-body-in  { animation: ob-body-in 500ms cubic-bezier(0.16, 1, 0.3, 1) 350ms both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter-forward, .page-enter-back,
+    .splash-orb, .splash-logo-in, .splash-title-in, .splash-sub-in, .splash-progress,
+    .splash-exit, .splash-exit-bg, .onboarding-scene-in,
+    .ob-illus-in, .ob-title-in, .ob-body-in {
+      animation: none !important;
+    }
+  }
+}

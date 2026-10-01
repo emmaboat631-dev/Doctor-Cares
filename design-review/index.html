@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doctor Cares — Design System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:'#EEF3FF',100:'#D9E4FF',200:'#B4C9FF',300:'#8AA8FF',400:'#5A82FF',
+              500:'#1E5EFF',600:'#1A4FDB',700:'#173FB2',800:'#122F87',900:'#0D215E'
+            },
+            accent: {
+              50:'#EAFBF6',100:'#CDF3E6',200:'#9DE7CD',300:'#65D7B0',400:'#2FBF8F',
+              500:'#0FA774',600:'#0A855C',700:'#086648',800:'#064932',900:'#03301F'
+            },
+            surface: { DEFAULT:'#FFFFFF', muted:'#F5F7FB', soft:'#EEF1F7' },
+            ink: { DEFAULT:'#0F172A', soft:'#334155', muted:'#64748B', faint:'#94A3B8', onDark:'#F8FAFC' },
+            success: { DEFAULT:'#16A34A', soft:'#DCFCE7' },
+            warning: { DEFAULT:'#F59E0B', soft:'#FEF3C7' },
+            danger: { DEFAULT:'#DC2626', soft:'#FEE2E2' },
+            info: { DEFAULT:'#0EA5E9', soft:'#E0F2FE' },
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { --phone-w: 320px; --phone-h: 660px; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* iPhone frame */
+    .device-phone {
+      width: var(--phone-w); height: var(--phone-h);
+      border-radius: 42px; background: #0f172a; padding: 8px;
+      box-shadow: 0 24px 60px -20px rgba(15,23,42,0.25), 0 12px 24px -12px rgba(15,23,42,0.15);
+      flex-shrink: 0;
+    }
+    .phone-screen {
+      width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+      background: #f5f7fb; position: relative; display: flex; flex-direction: column;
+    }
+    .phone-notch {
+      position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+      width: 90px; height: 22px; background: #0f172a; border-radius: 999px; z-index: 50;
+    }
+    .status-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 22px 4px; font-size: 12px; font-weight: 700; color: #0f172a;
+      flex-shrink: 0;
+    }
+    .phone-body { flex: 1; overflow: hidden; position: relative; }
+
+    /* Laptop frame */
+    .device-laptop {
+      width: 900px; background: #0f172a; padding: 12px;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 24px 60px -20px rgba(15,23,42,0.25);
+    }
+    .device-laptop-screen {
+      background: #f5f7fb; border-radius: 4px; overflow: hidden;
+      aspect-ratio: 16 / 10;
+    }
+    .device-laptop-base {
+      width: 980px; height: 12px; margin-left: -40px;
+      background: linear-gradient(to bottom, #1e293b 0%, #0f172a 100%);
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 8px 16px rgba(15,23,42,0.15);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f5f7fb; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+    /* Screen title */
+    .screen-title {
+      display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 12px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-ink">
+
+<div class="min-h-screen flex">
+  <!-- Sidebar -->
+  <aside class="hidden lg:flex flex-col w-64 bg-white border-r border-slate-200 sticky top-0 h-screen overflow-y-auto p-6 gap-6">
+    <div class="flex items-center gap-2">
+      <div class="grid h-9 w-9 place-items-center rounded-xl bg-brand-500 text-white font-black">DC</div>
+      <div>
+        <div class="font-bold text-sm leading-tight">Doctor Cares</div>
+        <div class="text-[10px] text-ink-muted uppercase tracking-wide">Design System</div>
+      </div>
+    </div>
+    <nav class="text-sm space-y-1">
+      <div class="text-[10px] font-bold uppercase tracking-wider text-ink-muted mt-2 mb-1">Foundation</div>
+      <a href="#tokens" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Design tokens</a>
+      <a href="#components" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Components</a>
+
+      <div class="text-[10px] font-bold uppercase tracking-wider text-ink-muted mt-4 mb-1">Screens</div>
+      <a href="#auth" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Auth flow (4)</a>
+      <a href="#patient" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Patient (8)</a>
+      <a href="#doctor" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Doctor (5)</a>
+      <a href="#admin" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">Admin (4)</a>
+
+      <div class="text-[10px] font-bold uppercase tracking-wider text-ink-muted mt-4 mb-1">Links</div>
+      <a href="https://doctor-cares-ten.vercel.app" target="_blank" class="block px-3 py-1.5 rounded-lg hover:bg-brand-50 hover:text-brand-700">↗ Live app</a>
+    </nav>
+
+    <div class="mt-auto text-[10px] text-ink-muted leading-relaxed">
+      Rendered from live Tailwind classes — pixel-identical to the shipped app.
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 min-w-0">
+    <!-- Hero -->
+    <section class="bg-gradient-to-br from-brand-500 via-brand-600 to-brand-800 text-white px-10 py-16">
+      <div class="max-w-4xl">
+        <div class="text-xs uppercase tracking-widest text-brand-200 font-bold">Doctor Cares</div>
+        <h1 class="mt-2 text-5xl font-black tracking-tight leading-tight">Design System &amp; Screen Gallery</h1>
+        <p class="mt-4 text-lg text-brand-100 max-w-2xl">
+          Healthcare, anytime, anywhere. A mobile-first PWA + Android app that connects patients, doctors,
+          and administrators — with real-time chat, appointment booking, drug information from OpenFDA,
+          and secure medical records. Currency: Ghana Cedis (GH₵).
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2 text-xs font-semibold">
+          <span class="rounded-full bg-white/15 px-3 py-1.5">React · Vite · TypeScript</span>
+          <span class="rounded-full bg-white/15 px-3 py-1.5">Tailwind CSS</span>
+          <span class="rounded-full bg-white/15 px-3 py-1.5">Supabase (Auth · Postgres · Realtime · Storage)</span>
+          <span class="rounded-full bg-white/15 px-3 py-1.5">Capacitor Android</span>
+          <span class="rounded-full bg-white/15 px-3 py-1.5">Vercel</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DESIGN TOKENS ================= -->
+    <section id="tokens" class="px-10 py-14 max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Foundation</div>
+      <h2 class="text-3xl font-black">Design tokens</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">Colors, typography, radii and shadows that keep every surface of the app consistent.</p>
+
+      <!-- Colors -->
+      <div class="mt-8">
+        <div class="text-sm font-bold mb-3">Brand palette — trust blue</div>
+        <div class="grid grid-cols-5 md:grid-cols-10 gap-2 rounded-2xl border border-slate-200 bg-white p-4">
+          <template id="brand-swatches"></template>
+        </div>
+      </div>
+
+      <div class="mt-6">
+        <div class="text-sm font-bold mb-3">Accent — clinical teal</div>
+        <div class="grid grid-cols-5 md:grid-cols-10 gap-2 rounded-2xl border border-slate-200 bg-white p-4" id="accent-swatches"></div>
+      </div>
+
+      <div class="mt-6 grid md:grid-cols-4 gap-3">
+        <div class="rounded-xl border border-slate-200 bg-white p-4">
+          <div class="h-16 rounded-lg bg-success mb-2"></div>
+          <div class="text-xs font-bold">success</div><div class="text-[10px] text-ink-muted">#16A34A</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-4">
+          <div class="h-16 rounded-lg bg-warning mb-2"></div>
+          <div class="text-xs font-bold">warning</div><div class="text-[10px] text-ink-muted">#F59E0B</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-4">
+          <div class="h-16 rounded-lg bg-danger mb-2"></div>
+          <div class="text-xs font-bold">danger</div><div class="text-[10px] text-ink-muted">#DC2626</div>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-white p-4">
+          <div class="h-16 rounded-lg bg-info mb-2"></div>
+          <div class="text-xs font-bold">info</div><div class="text-[10px] text-ink-muted">#0EA5E9</div>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="mt-10">
+        <div class="text-sm font-bold mb-3">Typography — Inter</div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 space-y-3">
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">3XL</span><span class="text-3xl font-black">Book your next appointment</span></div>
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">2XL</span><span class="text-2xl font-bold">Section heading</span></div>
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">XL</span><span class="text-xl font-bold">Card title</span></div>
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">BASE</span><span class="text-base">Body copy that explains the feature clearly.</span></div>
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">SM</span><span class="text-sm text-ink-soft">Small text used in cards and captions</span></div>
+          <div><span class="text-[10px] font-bold uppercase text-ink-muted mr-3">XS</span><span class="text-xs text-ink-muted">Micro labels and helper text</span></div>
+        </div>
+      </div>
+
+      <!-- Radii + shadows -->
+      <div class="mt-10 grid md:grid-cols-2 gap-6">
+        <div>
+          <div class="text-sm font-bold mb-3">Corner radius</div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-end gap-3">
+            <div class="text-center"><div class="w-14 h-14 rounded-lg bg-brand-100"></div><div class="text-[10px] mt-1">lg 8</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-xl bg-brand-200"></div><div class="text-[10px] mt-1">xl 14</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-2xl bg-brand-300"></div><div class="text-[10px] mt-1">2xl 16</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-3xl bg-brand-400"></div><div class="text-[10px] mt-1">3xl 24</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-full bg-brand-500"></div><div class="text-[10px] mt-1">full</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="text-sm font-bold mb-3">Elevation</div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-4">
+            <div class="text-center"><div class="w-14 h-14 rounded-xl bg-white shadow-sm"></div><div class="text-[10px] mt-2">card</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-xl bg-white shadow-lg"></div><div class="text-[10px] mt-2">pop</div></div>
+            <div class="text-center"><div class="w-14 h-14 rounded-xl bg-white shadow-2xl"></div><div class="text-[10px] mt-2">nav</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COMPONENTS ================= -->
+    <section id="components" class="px-10 py-14 bg-slate-100 border-y border-slate-200">
+      <div class="max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Foundation</div>
+      <h2 class="text-3xl font-black">Components</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">The reusable primitives that make every screen feel like part of the same product.</p>
+
+      <div class="mt-8 grid md:grid-cols-2 gap-6">
+        <!-- Buttons -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <div class="text-sm font-bold mb-4">Buttons</div>
+          <div class="space-y-3">
+            <button class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-600 px-5 text-sm font-bold text-white shadow-lg shadow-brand-500/30">Primary CTA</button>
+            <button class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 text-sm font-bold text-ink hover:bg-slate-50">Secondary</button>
+            <button class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-danger hover:bg-red-700 px-5 text-sm font-bold text-white">Destructive</button>
+            <button class="inline-flex h-9 items-center justify-center gap-1 rounded-lg bg-slate-100 hover:bg-slate-200 px-3 text-xs font-bold text-ink-soft">Ghost small</button>
+          </div>
+        </div>
+
+        <!-- Badges/Chips -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <div class="text-sm font-bold mb-4">Badges &amp; chips</div>
+          <div class="flex flex-wrap gap-2">
+            <span class="inline-flex items-center gap-1 rounded-full bg-success-soft px-2.5 py-1 text-xs font-bold text-emerald-800">✓ Verified</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-warning-soft px-2.5 py-1 text-xs font-bold text-amber-800">Pending</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-danger-soft px-2.5 py-1 text-xs font-bold text-red-800">Cancelled</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand-700">Cardiology</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold text-ink-soft">Video</span>
+            <span class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700">★ 4.8</span>
+          </div>
+          <div class="mt-4 text-sm font-bold mb-2">Pills</div>
+          <div class="flex gap-2">
+            <button class="rounded-full bg-ink px-4 py-2 text-xs font-bold text-white">Upcoming</button>
+            <button class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-ink-soft">Past</button>
+            <button class="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-ink-soft">Cancelled</button>
+          </div>
+        </div>
+
+        <!-- Doctor card -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <div class="text-sm font-bold mb-4">Doctor card</div>
+          <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-3 shadow-sm">
+            <div class="grid h-14 w-14 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold">AW</div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1"><div class="text-sm font-bold truncate">Aldin Wolf</div>
+              <span class="text-emerald-600">✓</span></div>
+              <div class="text-xs text-ink-muted">Cardiology · 8 yrs</div>
+              <div class="mt-1 flex gap-1"><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">Video</span><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">Clinic</span></div>
+            </div>
+            <div class="text-right"><div class="font-bold text-brand-700 text-sm">GH₵60</div></div>
+          </div>
+        </div>
+
+        <!-- Chat bubbles -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6">
+          <div class="text-sm font-bold mb-4">Chat bubbles</div>
+          <div class="space-y-2">
+            <div class="flex"><div class="max-w-[70%] rounded-2xl rounded-bl-md bg-white border border-slate-200 px-3.5 py-2 text-sm shadow-sm">Hi doctor, my chest is hurting since morning.</div></div>
+            <div class="flex justify-end"><div class="max-w-[70%] rounded-2xl rounded-br-md bg-brand-500 text-white px-3.5 py-2 text-sm shadow-md shadow-brand-500/20">Where exactly is the pain? On a scale of 1–10?<div class="text-[10px] mt-1 text-brand-100">10:24 AM · ✓✓</div></div></div>
+            <div class="flex"><div class="max-w-[70%] rounded-2xl rounded-bl-md bg-white border border-slate-200 px-3.5 py-2 text-sm shadow-sm">Left side, about a 6.<div class="text-[10px] mt-1 text-ink-muted">10:25 AM</div></div></div>
+          </div>
+        </div>
+
+        <!-- Pill nav -->
+        <div class="rounded-2xl border border-slate-200 bg-white p-6 md:col-span-2">
+          <div class="text-sm font-bold mb-4">Floating pill nav (bottom of mobile screens)</div>
+          <div class="flex justify-center py-3">
+            <ul class="flex items-stretch gap-1 rounded-[28px] bg-slate-900/90 backdrop-blur px-2 py-2 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.5)] border border-white/10">
+              <li><a class="flex flex-col items-center gap-1 rounded-2xl px-4 py-2 bg-brand-500 text-white shadow-lg shadow-brand-500/40"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V9.5z"/></svg><span class="text-[10.5px] font-bold">Home</span></a></li>
+              <li><a class="flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-white/70"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span class="text-[10.5px] font-bold">Appts</span></a></li>
+              <li class="relative"><a class="flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-white/70"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="text-[10.5px] font-bold">Chat</span><span class="absolute -top-1 right-1 grid h-4 min-w-[16px] place-items-center rounded-full bg-danger text-[9px] font-bold text-white ring-2 ring-slate-900">3</span></a></li>
+              <li><a class="flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-white/70"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 20.5a5 5 0 0 1-7-7l11-11a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg><span class="text-[10.5px] font-bold">Drugs</span></a></li>
+              <li><a class="flex flex-col items-center gap-1 rounded-2xl px-4 py-2 text-white/70"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span class="text-[10.5px] font-bold">Profile</span></a></li>
+            </ul>
+          </div>
+          <div class="text-xs text-ink-muted text-center">Dark glass pill · brand-blue active state · notification badges · haptic tap on native</div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ================= AUTH SCREENS ================= -->
+    <section id="auth" class="px-10 py-14 max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Screens · Public</div>
+      <h2 class="text-3xl font-black">Auth &amp; onboarding</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">Cinematic splash → animated 3-slide onboarding → role-aware signup.</p>
+
+      <div class="mt-8 flex flex-wrap gap-8 justify-center">
+        <!-- Splash -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="flex-1 flex flex-col items-center justify-center bg-gradient-to-b from-brand-50 via-white to-brand-50 relative overflow-hidden">
+              <div class="absolute top-16 left-8 h-24 w-24 rounded-full bg-brand-500/15 blur-2xl"></div>
+              <div class="absolute bottom-28 right-8 h-28 w-28 rounded-full bg-accent-500/20 blur-3xl"></div>
+              <div class="w-32 h-32 rounded-3xl bg-brand-500 grid place-items-center text-white text-6xl font-black shadow-2xl shadow-brand-500/30">+</div>
+              <h1 class="mt-6 text-3xl font-black tracking-tight">Doctor Cares</h1>
+              <p class="mt-1 text-sm text-ink-muted">Healthcare. Anytime. Anywhere.</p>
+              <div class="absolute bottom-12 h-1 w-24 rounded-full bg-slate-200 overflow-hidden"><div class="h-full w-3/4 bg-brand-500"></div></div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Splash</div>
+        </div>
+
+        <!-- Onboarding -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="flex-1 flex flex-col p-6">
+              <div class="flex justify-end pt-4"><button class="text-xs font-bold text-ink-muted">Skip</button></div>
+              <div class="flex-1 flex flex-col items-center justify-center gap-6">
+                <div class="w-56 h-56 rounded-3xl bg-brand-100 grid place-items-center">
+                  <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#1E5EFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>
+                </div>
+                <div class="text-center">
+                  <div class="text-2xl font-black leading-tight">Book an<br/>Appointment</div>
+                  <p class="mt-3 text-sm text-ink-muted leading-relaxed">Consult trusted doctors anytime, from anywhere — no queues, no waiting rooms.</p>
+                </div>
+                <div class="flex gap-2"><div class="h-1.5 w-6 bg-brand-500 rounded-full"></div><div class="h-1.5 w-1.5 bg-slate-300 rounded-full"></div><div class="h-1.5 w-1.5 bg-slate-300 rounded-full"></div></div>
+              </div>
+              <button class="w-full h-12 rounded-2xl bg-brand-500 text-white font-bold text-sm shadow-lg shadow-brand-500/30 mb-4">Continue</button>
+              <div class="text-center text-xs text-ink-muted">Already have an account? <span class="text-brand-600 font-bold">Log in</span></div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Onboarding · Slide 1 of 3</div>
+        </div>
+
+        <!-- Login -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-6 flex flex-col">
+              <div class="rounded-3xl bg-white shadow-xl p-6 mt-8">
+                <div class="flex items-center gap-2 mb-4"><div class="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 text-white font-black text-sm">DC</div><span class="text-sm font-bold">Doctor Cares</span></div>
+                <div class="text-2xl font-black">Welcome back</div>
+                <div class="text-xs text-ink-muted mt-1">Log in to continue.</div>
+                <div class="mt-5 space-y-3">
+                  <div><div class="text-xs font-bold mb-1.5">Email</div><div class="h-11 rounded-xl border border-slate-300 flex items-center px-3 text-sm text-ink-muted">📧 you@example.com</div></div>
+                  <div><div class="text-xs font-bold mb-1.5">Password</div><div class="h-11 rounded-xl border-2 border-brand-500 flex items-center px-3 text-sm text-ink justify-between">•••••••••<span class="text-ink-muted">👁</span></div></div>
+                  <div class="flex justify-between items-center text-xs"><label class="flex items-center gap-2"><input type="checkbox" class="rounded"/> Remember me</label><span class="text-brand-600 font-bold">Forgot password?</span></div>
+                  <button class="w-full h-11 rounded-xl bg-brand-500 text-white font-bold text-sm shadow-lg shadow-brand-500/30">→ Log in</button>
+                </div>
+                <div class="my-4 text-center text-[10px] font-bold text-ink-muted tracking-wider">OR CONTINUE WITH</div>
+                <div class="grid grid-cols-2 gap-2"><button class="h-10 rounded-xl border border-slate-300 text-xs font-bold">G Google</button><button class="h-10 rounded-xl border border-slate-300 text-xs font-bold"> Apple</button></div>
+                <div class="mt-4 text-center text-xs">No account? <span class="text-brand-600 font-bold">Create one</span></div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Login</div>
+        </div>
+
+        <!-- Register -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-5 overflow-hidden">
+              <div class="rounded-3xl bg-white shadow-xl p-5 mt-4">
+                <div class="text-xl font-black">Create your account</div>
+                <div class="text-xs text-ink-muted mt-1">Start using Doctor Cares in minutes.</div>
+                <div class="mt-4"><div class="text-xs font-bold mb-2">I am a…</div><div class="grid grid-cols-2 gap-2">
+                  <div class="rounded-2xl border-2 border-brand-500 bg-brand-50 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 text-white mb-1">👤</div><div class="text-sm font-bold">Patient</div><div class="text-[10px] text-ink-muted">Book, chat, look up drugs</div></div>
+                  <div class="rounded-2xl border border-slate-300 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100 mb-1">🩺</div><div class="text-sm font-bold">Doctor</div><div class="text-[10px] text-ink-muted">Manage practice + patients</div></div>
+                </div><div class="text-[10px] text-ink-muted mt-2">Admin accounts are provisioned by the platform team.</div></div>
+                <div class="mt-3 space-y-2">
+                  <div><div class="text-[10px] font-bold mb-1">Full name</div><div class="h-10 rounded-xl border border-slate-300 flex items-center px-3 text-xs text-ink-muted">👤 Jane Doe</div></div>
+                  <div><div class="text-[10px] font-bold mb-1">Email</div><div class="h-10 rounded-xl border border-slate-300 flex items-center px-3 text-xs text-ink-muted">📧 you@example.com</div></div>
+                  <div><div class="text-[10px] font-bold mb-1">Password</div><div class="h-10 rounded-xl border border-slate-300 flex items-center px-3 text-xs text-ink-muted">Pick something you'll remember</div>
+                    <div class="mt-2 space-y-1 text-[10px]">
+                      <div class="text-[9px] font-bold uppercase text-ink-muted">Password strength · <span class="text-danger">Weak</span></div>
+                      <div class="flex gap-0.5"><div class="h-1 w-8 bg-danger rounded"></div><div class="h-1 w-8 bg-slate-200 rounded"></div><div class="h-1 w-8 bg-slate-200 rounded"></div><div class="h-1 w-8 bg-slate-200 rounded"></div></div>
+                      <div class="text-ink-muted">○ At least 8 characters</div>
+                      <div class="text-ink-muted">○ One uppercase (A–Z)</div>
+                      <div class="text-emerald-600">✓ One lowercase (a–z)</div>
+                      <div class="text-ink-muted">○ One number (0–9)</div>
+                      <div class="text-ink-muted">○ One symbol (!?@#…)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Register · with password rules</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PATIENT SCREENS ================= -->
+    <section id="patient" class="px-10 py-14 bg-slate-100 border-y border-slate-200">
+      <div class="max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Screens · Patient</div>
+      <h2 class="text-3xl font-black">Patient app (mobile-first)</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">Browse verified doctors, book with real-time availability, chat with attachments &amp; voice, look up any drug via OpenFDA, manage appointments &amp; profile.</p>
+
+      <div class="mt-8 flex flex-wrap gap-8 justify-center">
+        <!-- Patient Home -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="grid h-10 w-10 place-items-center rounded-full bg-slate-200 font-bold text-ink-soft">J</div>
+                <div class="flex-1"><div class="text-[11px] text-ink-muted">Good morning,</div><div class="text-sm font-bold">Joseph 👋</div></div>
+                <div class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200 relative">🔔<span class="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-danger text-[9px] font-bold text-white">3</span></div>
+              </div>
+              <div class="rounded-2xl border border-slate-200 bg-white h-11 flex items-center px-3 gap-2 mb-4"><span class="text-ink-muted">🔍</span><span class="text-xs text-ink-muted flex-1">Search doctors, specialties…</span><button class="h-7 px-3 rounded-full bg-brand-500 text-white text-[10px] font-bold">Go</button></div>
+              <div class="rounded-3xl bg-brand-500 text-white p-5 relative overflow-hidden mb-4">
+                <div class="text-[9px] font-bold tracking-widest opacity-70">✦ BETTER CARE, BETTER LIFE</div>
+                <div class="mt-2 text-2xl font-black leading-tight">Book your next<br/>appointment</div>
+                <div class="mt-1 text-[11px] opacity-80 max-w-[60%]">Consult trusted doctors anytime, from anywhere.</div>
+                <button class="mt-3 h-8 px-3 rounded-full bg-white text-brand-700 text-[11px] font-bold">Book now ›</button>
+                <div class="absolute right-2 top-4 text-6xl opacity-20">🩺</div>
+              </div>
+              <div class="flex justify-between items-center mb-3"><div class="text-sm font-bold">Health snapshot</div><div class="text-[10px] text-ink-muted">Sample data</div></div>
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3"><div class="grid h-7 w-7 place-items-center rounded-lg bg-rose-100 text-rose-500 mb-1">♥</div><div class="text-[9px] font-bold text-ink-muted">HEART</div><div class="text-sm font-bold">72 <span class="text-[9px] font-normal">bpm</span></div><div class="text-[9px] text-emerald-600">↗ Normal</div></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3"><div class="grid h-7 w-7 place-items-center rounded-lg bg-amber-100 text-amber-500 mb-1">🌡</div><div class="text-[9px] font-bold text-ink-muted">TEMP</div><div class="text-sm font-bold">36.8 <span class="text-[9px] font-normal">°C</span></div><div class="text-[9px] text-emerald-600">↗ Normal</div></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3"><div class="grid h-7 w-7 place-items-center rounded-lg bg-brand-100 text-brand-600 mb-1">≋</div><div class="text-[9px] font-bold text-ink-muted">BP</div><div class="text-sm font-bold">120/80</div><div class="text-[9px] text-emerald-600">↗ Optimal</div></div>
+              </div>
+              <div class="text-sm font-bold mb-2">Our services</div>
+              <div class="grid grid-cols-4 gap-2">
+                <div class="text-center"><div class="grid h-11 w-11 mx-auto place-items-center rounded-xl bg-brand-500 text-white">🩺</div><div class="text-[10px] font-bold mt-1">Find<br/>doctor</div></div>
+                <div class="text-center"><div class="grid h-11 w-11 mx-auto place-items-center rounded-xl bg-emerald-500 text-white">📅</div><div class="text-[10px] font-bold mt-1">My visits</div></div>
+                <div class="text-center"><div class="grid h-11 w-11 mx-auto place-items-center rounded-xl bg-rose-500 text-white">💬</div><div class="text-[10px] font-bold mt-1">Messages</div></div>
+                <div class="text-center"><div class="grid h-11 w-11 mx-auto place-items-center rounded-xl bg-purple-500 text-white">💊</div><div class="text-[10px] font-bold mt-1">Drug info</div></div>
+              </div>
+            </div>
+            <div class="absolute inset-x-3 bottom-3 z-10"><ul class="flex items-stretch gap-1 rounded-[24px] bg-slate-900/90 px-1.5 py-1.5 shadow-2xl border border-white/10">
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 bg-brand-500 text-white"><span>🏠</span><span class="text-[9px] font-bold">Home</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>📅</span><span class="text-[9px] font-bold">Appts</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>💬</span><span class="text-[9px] font-bold">Chat</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>💊</span><span class="text-[9px] font-bold">Drugs</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>👤</span><span class="text-[9px] font-bold">Profile</span></a></li>
+            </ul></div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Patient · Home</div>
+        </div>
+
+        <!-- Find doctors -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="flex items-center gap-3 mb-3"><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200">←</button><div class="text-lg font-black">Find doctors</div></div>
+              <div class="rounded-2xl border border-slate-200 bg-white h-11 flex items-center px-3 gap-2 mb-3 text-xs text-ink-muted">🔍 Search by name or specialty</div>
+              <div class="flex gap-2 mb-4 overflow-x-auto"><button class="rounded-full bg-ink text-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">All</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Cardiology</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Pediatrics</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Dermatology</button></div>
+              <div class="space-y-3">
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-3">
+                  <div class="grid h-14 w-14 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold">AW</div>
+                  <div class="flex-1 min-w-0"><div class="flex items-center gap-1"><div class="text-sm font-bold">Aldin Wolf</div><span class="text-emerald-600 text-xs">✓</span></div><div class="text-[11px] text-ink-muted">Cardiology · 8 yrs</div><div class="mt-1 flex gap-1"><span class="rounded-full bg-brand-50 px-1.5 py-0.5 text-[9px] font-bold text-brand-700">📹Video</span><span class="rounded-full bg-brand-50 px-1.5 py-0.5 text-[9px] font-bold text-brand-700">🏥Clinic</span></div></div>
+                  <div class="text-right"><div class="font-bold text-brand-700 text-sm">GH₵60</div><div class="text-[10px] text-amber-600">★ 4.8</div></div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-3">
+                  <div class="grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-emerald-700 font-bold">MO</div>
+                  <div class="flex-1 min-w-0"><div class="flex items-center gap-1"><div class="text-sm font-bold">Maame Osei</div><span class="text-emerald-600 text-xs">✓</span></div><div class="text-[11px] text-ink-muted">Pediatrics · 12 yrs</div><div class="mt-1 flex gap-1"><span class="rounded-full bg-brand-50 px-1.5 py-0.5 text-[9px] font-bold text-brand-700">📹Video</span></div></div>
+                  <div class="text-right"><div class="font-bold text-brand-700 text-sm">GH₵80</div><div class="text-[10px] text-amber-600">★ 4.9</div></div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-3">
+                  <div class="grid h-14 w-14 place-items-center rounded-full bg-rose-100 text-rose-700 font-bold">KA</div>
+                  <div class="flex-1 min-w-0"><div class="flex items-center gap-1"><div class="text-sm font-bold">Kwame Asante</div><span class="text-emerald-600 text-xs">✓</span></div><div class="text-[11px] text-ink-muted">Dermatology · 5 yrs</div><div class="mt-1 flex gap-1"><span class="rounded-full bg-brand-50 px-1.5 py-0.5 text-[9px] font-bold text-brand-700">🏥Clinic</span></div></div>
+                  <div class="text-right"><div class="font-bold text-brand-700 text-sm">GH₵50</div><div class="text-[10px] text-amber-600">★ 4.6</div></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Find doctors</div>
+        </div>
+
+        <!-- Doctor profile -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-2"><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200">←</button><div class="text-sm font-bold flex-1">Doctor profile</div><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200 text-rose-500">♡</button></div>
+              <div class="bg-brand-50 px-4 pt-4 pb-6 text-center">
+                <div class="w-24 h-24 mx-auto rounded-full bg-white shadow-lg ring-4 ring-white grid place-items-center text-2xl font-black text-brand-700">AW</div>
+                <div class="mt-3 text-xl font-black">Aldin Wolf</div>
+                <div class="text-[11px] text-ink-muted">Cardiology</div>
+                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-bold text-emerald-700">✓ Verified</div>
+              </div>
+              <div class="p-4 space-y-3">
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="rounded-xl bg-white border border-slate-200 p-3 text-center"><div class="text-lg font-black">0</div><div class="text-[9px] font-bold uppercase text-ink-muted">Patients</div></div>
+                  <div class="rounded-xl bg-white border border-slate-200 p-3 text-center"><div class="text-lg font-black">8+</div><div class="text-[9px] font-bold uppercase text-ink-muted">Years</div></div>
+                  <div class="rounded-xl bg-white border border-slate-200 p-3 text-center"><div class="text-lg font-black">4.8</div><div class="text-[9px] font-bold uppercase text-ink-muted">Rating</div></div>
+                </div>
+                <div class="flex gap-2"><button class="rounded-full bg-ink text-white px-3 py-1.5 text-[11px] font-bold">About</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold">Reviews</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold">Location</button></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold mb-1">About Wolf</div><div class="text-[11px] text-ink-soft leading-relaxed">Interventional cardiologist with 8 years experience.</div></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 space-y-2 text-xs">
+                  <div class="font-bold text-sm">Consultation</div>
+                  <div class="flex justify-between"><span class="text-ink-muted">Fee</span><span class="font-bold text-brand-700">GH₵60.00</span></div>
+                  <div class="flex justify-between items-center"><span class="text-ink-muted">Modes</span><div class="flex gap-1"><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">📹Video</span><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">🏥Clinic</span></div></div>
+                  <div class="flex justify-between"><span class="text-ink-muted">Languages</span><span>English, French</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-x-3 bottom-3 z-10 rounded-2xl bg-white border border-slate-200 p-2 flex gap-2 shadow-lg"><button class="flex-1 h-11 rounded-xl border border-slate-300 text-sm font-bold">💬 Message</button><button class="flex-1 h-11 rounded-xl bg-brand-500 text-white text-sm font-bold shadow shadow-brand-500/30">Book appointment</button></div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor profile</div>
+        </div>
+
+        <!-- Book appointment -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 overflow-hidden">
+              <div class="flex items-center gap-3 px-4 py-3 border-b border-slate-200 bg-white"><button class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">←</button><div class="text-sm font-black">Book appointment</div></div>
+              <div class="p-4 space-y-4">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-11 w-11 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold text-sm">AW</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">Aldin Wolf</div><div class="text-[10px] text-ink-muted">Cardiology · GH₵60.00</div></div></div>
+                <div><div class="text-[10px] font-bold uppercase tracking-widest text-ink-muted mb-2">Select date</div><div class="grid grid-cols-5 gap-1.5">
+                  <div class="rounded-xl border border-slate-200 bg-white py-2 text-center"><div class="text-[9px] font-bold uppercase text-ink-muted">FRI</div><div class="text-sm font-black mt-0.5">25</div></div>
+                  <div class="rounded-xl border border-slate-200 bg-white py-2 text-center"><div class="text-[9px] font-bold uppercase text-ink-muted">SAT</div><div class="text-sm font-black mt-0.5">26</div></div>
+                  <div class="rounded-xl border-2 border-brand-500 bg-brand-500 py-2 text-center shadow-lg shadow-brand-500/30 scale-105"><div class="text-[9px] font-bold uppercase text-white/80">SUN</div><div class="text-sm font-black mt-0.5 text-white">27</div></div>
+                  <div class="rounded-xl border border-slate-200 bg-white py-2 text-center"><div class="text-[9px] font-bold uppercase text-ink-muted">MON</div><div class="text-sm font-black mt-0.5">28</div></div>
+                  <div class="rounded-xl border border-slate-200 bg-white py-2 text-center"><div class="text-[9px] font-bold uppercase text-ink-muted">TUE</div><div class="text-sm font-black mt-0.5">29</div></div>
+                </div></div>
+                <div><div class="text-[10px] font-bold uppercase tracking-widest text-ink-muted mb-2">Available times</div><div class="grid grid-cols-3 gap-1.5">
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">09:00</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">09:30</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">10:00</button>
+                  <button class="h-9 rounded-lg border-2 border-brand-500 bg-brand-500 text-white text-xs font-bold">10:30</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">11:00</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold text-ink-muted line-through opacity-60">11:30</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">14:00</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">14:30</button>
+                  <button class="h-9 rounded-lg border border-slate-300 bg-white text-xs font-bold">15:00</button>
+                </div></div>
+              </div>
+            </div>
+            <div class="absolute inset-x-3 bottom-3 z-10 rounded-2xl bg-white border border-slate-200 p-3 shadow-lg">
+              <div class="rounded-xl bg-brand-50 p-2.5 flex justify-between items-center mb-2"><div><div class="text-[9px] font-bold uppercase text-brand-700 tracking-widest">Summary</div><div class="text-xs font-black">Sun, Sep 27 · 10:30 AM</div></div><div class="font-black text-brand-700">GH₵60</div></div>
+              <button class="w-full h-11 rounded-full bg-brand-500 text-white text-sm font-bold shadow-lg shadow-brand-500/30">Confirm booking</button>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Book appointment · realtime slots</div>
+        </div>
+
+        <!-- Chat detail -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex items-center gap-3 px-3 py-2 border-b border-slate-200 bg-white"><button class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs">←</button><div class="grid h-8 w-8 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold text-xs">AW</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">Dr. Aldin Wolf</div><div class="flex items-center gap-1 text-[9px]"><span class="h-1.5 w-1.5 rounded-full bg-success"></span><span class="text-success font-bold">Online</span></div></div><button class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs">📹</button><button class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs">📞</button></div>
+            <div class="flex-1 p-3 space-y-2 overflow-hidden">
+              <div class="text-center text-[10px] text-ink-muted my-2">— Today —</div>
+              <div class="flex"><div class="max-w-[75%] rounded-2xl rounded-bl-md bg-white border border-slate-200 px-3 py-2 text-xs">Hi doctor, my chest is hurting since this morning.<div class="text-[9px] mt-1 text-ink-muted">08:40 AM</div></div></div>
+              <div class="flex justify-end"><div class="max-w-[75%] rounded-2xl rounded-br-md bg-brand-500 text-white px-3 py-2 text-xs shadow shadow-brand-500/20">Where is the pain? Scale of 1–10?<div class="text-[9px] mt-1 text-brand-100">08:41 AM · ✓✓</div></div></div>
+              <div class="flex"><div class="max-w-[75%] rounded-2xl rounded-bl-md bg-white border border-slate-200 px-3 py-2 text-xs">Left side, about 6.<div class="text-[9px] mt-1 text-ink-muted">08:42 AM</div></div></div>
+              <div class="flex justify-end"><div class="max-w-[60%] rounded-2xl rounded-br-md bg-brand-500 text-white px-3 py-2 text-xs shadow shadow-brand-500/20 flex items-center gap-2"><button class="grid h-7 w-7 place-items-center rounded-full bg-white/25">▶</button><div class="flex-1"><div class="h-1 bg-white/30 rounded-full"><div class="h-1 w-1/3 bg-white rounded-full"></div></div></div><span class="text-[10px]">0:12</span></div></div>
+              <div class="flex"><div class="max-w-[75%] rounded-2xl rounded-bl-md bg-white border border-slate-200 px-2 py-2 text-xs"><div class="w-32 h-24 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 grid place-items-center text-3xl">🖼</div><div class="text-[9px] mt-1 text-ink-muted">08:45 AM</div></div></div>
+            </div>
+            <div class="border-t border-slate-200 bg-white p-2 flex items-center gap-2"><button class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">📎</button><div class="flex-1 rounded-full border border-slate-300 bg-white h-9 flex items-center px-3 text-xs text-ink-muted">Type a message…</div><button class="grid h-9 w-9 place-items-center rounded-full bg-brand-500 text-white">🎤</button></div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Chat · text, image, voice, ✓✓</div>
+        </div>
+
+        <!-- My appointments -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-2xl font-black">My appointments</div>
+              <div class="text-[11px] text-ink-muted mt-1">2 upcoming · 4 total</div>
+              <div class="flex gap-2 mt-3"><button class="flex-1 rounded-full bg-white border border-brand-500 text-brand-700 text-[11px] font-bold py-2">Upcoming</button><button class="flex-1 rounded-full text-[11px] font-bold py-2 text-ink-muted">Past</button><button class="flex-1 rounded-full text-[11px] font-bold py-2 text-ink-muted">Cancelled</button></div>
+              <div class="mt-4 space-y-3">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3">
+                  <div class="flex items-center gap-2 mb-2"><div class="grid h-9 w-9 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold text-xs">AW</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">Dr. Aldin Wolf</div><div class="text-[10px] text-ink-muted">Cardiology</div></div><span class="rounded-full bg-warning-soft text-amber-700 text-[9px] font-bold px-2 py-0.5">Pending</span></div>
+                  <div class="grid grid-cols-2 gap-2 text-[11px] mb-3"><div class="rounded-lg bg-brand-50 p-2 flex items-center gap-1.5 text-brand-700 font-bold">📅 Mon, Sep 28</div><div class="rounded-lg bg-brand-50 p-2 flex items-center gap-1.5 text-brand-700 font-bold">🕐 10:30 AM</div><div class="rounded-lg bg-brand-50 p-2 flex items-center gap-1.5 text-brand-700 font-bold col-span-2">📹 Video consultation</div></div>
+                  <div class="flex gap-2"><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Reschedule</button><button class="flex-1 h-9 rounded-lg bg-brand-500 text-white text-[11px] font-bold">Details</button></div>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3">
+                  <div class="flex items-center gap-2 mb-2"><div class="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">MO</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">Dr. Maame Osei</div><div class="text-[10px] text-ink-muted">Pediatrics</div></div><span class="rounded-full bg-success-soft text-emerald-700 text-[9px] font-bold px-2 py-0.5">Confirmed</span></div>
+                  <div class="grid grid-cols-2 gap-2 text-[11px] mb-3"><div class="rounded-lg bg-brand-50 p-2 flex items-center gap-1.5 text-brand-700 font-bold">📅 Tue, Sep 29</div><div class="rounded-lg bg-brand-50 p-2 flex items-center gap-1.5 text-brand-700 font-bold">🕐 02:00 PM</div></div>
+                  <div class="flex gap-2"><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Reschedule</button><button class="flex-1 h-9 rounded-lg bg-brand-500 text-white text-[11px] font-bold">Details</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-x-3 bottom-3 z-10"><ul class="flex items-stretch gap-1 rounded-[24px] bg-slate-900/90 px-1.5 py-1.5 shadow-2xl border border-white/10">
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>🏠</span><span class="text-[9px] font-bold">Home</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 bg-brand-500 text-white"><span>📅</span><span class="text-[9px] font-bold">Appts</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>💬</span><span class="text-[9px] font-bold">Chat</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>💊</span><span class="text-[9px] font-bold">Drugs</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>👤</span><span class="text-[9px] font-bold">Profile</span></a></li>
+            </ul></div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">My appointments · tabbed</div>
+        </div>
+
+        <!-- Drug info -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-lg font-black">Drug information</div>
+              <div class="rounded-xl bg-info-soft border border-info/30 p-2.5 text-[10px] text-sky-800 my-3">ⓘ Powered by OpenFDA. Information only — not a substitute for medical advice. Always consult a licensed clinician.</div>
+              <div class="rounded-2xl border border-slate-200 bg-white h-11 flex items-center px-3 gap-2 mb-3"><span>🔍</span><span class="text-xs text-ink-muted flex-1">Search medications (e.g. Paracetamol)</span></div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-ink-muted mb-2">Recent searches</div>
+              <div class="mb-3"><div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Pain Reliever Extra Strength</div><div class="text-[10px] text-ink-muted">ACETAMINOPHEN</div></div></div>
+              <div class="text-[10px] font-bold uppercase tracking-widest text-ink-muted mb-2">Popular</div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Paracetamol</div><div class="text-[10px] text-ink-muted">Analgesic · Antipyretic</div></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Ibuprofen</div><div class="text-[10px] text-ink-muted">NSAID · Anti-inflammatory</div></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Amoxicillin</div><div class="text-[10px] text-ink-muted">Antibiotic</div></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Metformin</div><div class="text-[10px] text-ink-muted">Diabetes · Type 2</div></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Loratadine</div><div class="text-[10px] text-ink-muted">Antihistamine</div></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-xs font-bold">Omeprazole</div><div class="text-[10px] text-ink-muted">Acid reflux</div></div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Drug info · OpenFDA</div>
+        </div>
+
+        <!-- Patient profile -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="flex items-center justify-between mb-3"><div class="text-lg font-black">Profile</div><div class="flex gap-1"><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200">🌙</button><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200">🔔</button><button class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200">✎</button></div></div>
+              <div class="rounded-2xl bg-white border border-slate-200 p-4 text-center mb-3">
+                <div class="w-16 h-16 mx-auto rounded-full bg-brand-100 grid place-items-center font-bold text-brand-700">J</div>
+                <div class="mt-2 text-sm font-black">Joseph Engmann</div>
+                <div class="text-[10px] text-ink-muted">joseph@example.com</div>
+                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">Patient</div>
+              </div>
+              <div class="grid grid-cols-2 gap-2 mb-3">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center"><div class="text-xl font-black">3</div><div class="text-[9px] font-bold uppercase text-ink-muted">Appointments</div></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center"><div class="text-xl font-black">1</div><div class="text-[9px] font-bold uppercase text-ink-muted">Doctors</div></div>
+              </div>
+              <div class="rounded-2xl bg-white border border-slate-200 divide-y divide-slate-100">
+                <div class="flex items-center gap-3 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100">✎</div><div class="flex-1 text-xs font-bold">Edit profile</div><span class="text-ink-muted">›</span></div>
+                <div class="flex items-center gap-3 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100">🔒</div><div class="flex-1 text-xs font-bold">Privacy &amp; security</div><span class="text-ink-muted">›</span></div>
+                <div class="flex items-center gap-3 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100">🔔</div><div class="flex-1 text-xs font-bold">Notifications</div><span class="text-ink-muted">›</span></div>
+                <div class="flex items-center gap-3 p-3"><div class="grid h-8 w-8 place-items-center rounded-lg bg-slate-100">🎨</div><div class="flex-1 text-xs font-bold">Appearance</div><span class="text-ink-muted">›</span></div>
+              </div>
+              <button class="mt-3 w-full h-10 rounded-xl border-2 border-danger text-danger text-xs font-bold">↦ Log out</button>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Profile</div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ================= DOCTOR SCREENS ================= -->
+    <section id="doctor" class="px-10 py-14 max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Screens · Doctor</div>
+      <h2 class="text-3xl font-black">Doctor app (mobile-first)</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">Review pending bookings, manage weekly availability + blackout dates, chat with patients, view your patient list.</p>
+
+      <div class="mt-8 flex flex-wrap gap-8 justify-center">
+        <!-- Doctor Dashboard -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="flex items-center gap-3 mb-4"><div class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold">AW</div><div class="flex-1"><div class="text-[11px] text-ink-muted">Good morning,</div><div class="text-sm font-bold">Dr. Aldin</div></div><div class="grid h-9 w-9 place-items-center rounded-full bg-white border border-slate-200 relative">🔔<span class="absolute -top-1 -right-1 grid h-4 min-w-[16px] px-1 place-items-center rounded-full bg-danger text-[9px] font-bold text-white">9+</span></div></div>
+              <div class="grid grid-cols-3 gap-2 mb-4">
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center"><div class="text-xl font-black">0</div><div class="text-[9px] font-bold uppercase text-ink-muted">Today</div></div>
+                <div class="rounded-2xl bg-brand-500 text-white p-3 text-center shadow-lg shadow-brand-500/30"><div class="text-xl font-black">2</div><div class="text-[9px] font-bold uppercase opacity-90">Pending</div></div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-3 text-center"><div class="text-xl font-black">5</div><div class="text-[9px] font-bold uppercase text-ink-muted">This week</div></div>
+              </div>
+              <div class="flex justify-between items-center mb-2"><div class="text-sm font-bold">Today's schedule</div><span class="text-[10px] text-brand-600 font-bold">See all</span></div>
+              <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center mb-3">
+                <div class="mx-auto w-14 h-14 grid place-items-center rounded-2xl bg-brand-50 text-2xl mb-2">📅</div>
+                <div class="text-sm font-bold">Nothing on the calendar today</div>
+                <div class="text-[11px] text-ink-muted mt-1">Enjoy the quiet, or check pending requests below.</div>
+              </div>
+              <div class="rounded-2xl bg-warning-soft border border-warning/30 p-3 flex items-center gap-2"><div class="grid h-9 w-9 place-items-center rounded-full bg-warning text-white">⚠</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">2 pending requests</div><div class="text-[10px] text-ink-muted">Review and accept from the Appointments tab.</div></div><button class="h-8 px-3 rounded-full bg-white border border-slate-300 text-[11px] font-bold">Review</button></div>
+            </div>
+            <div class="absolute inset-x-3 bottom-3 z-10"><ul class="flex items-stretch gap-1 rounded-[24px] bg-slate-900/90 px-1.5 py-1.5 shadow-2xl border border-white/10">
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 bg-brand-500 text-white"><span>▦</span><span class="text-[9px] font-bold">Dash</span></a></li>
+              <li class="flex-1 relative"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>📅</span><span class="text-[9px] font-bold">Appts</span><span class="absolute -top-0.5 right-1 grid h-3.5 w-3.5 place-items-center rounded-full bg-danger text-[8px] font-bold text-white">2</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>💬</span><span class="text-[9px] font-bold">Chat</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>👥</span><span class="text-[9px] font-bold">Patients</span></a></li>
+              <li class="flex-1"><a class="flex flex-col items-center gap-0.5 px-2 py-1.5 text-white/70"><span>👤</span><span class="text-[9px] font-bold">Profile</span></a></li>
+            </ul></div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor · Dashboard</div>
+        </div>
+
+        <!-- Doctor Appointments -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-lg font-black mb-3">Appointments</div>
+              <div class="flex gap-1.5 mb-4 overflow-x-auto"><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Today</button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Upcoming</button><button class="rounded-full bg-ink text-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap flex items-center gap-1">Pending <span class="rounded-full bg-danger px-1.5 py-0 text-[9px]">2</span></button><button class="rounded-full border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-bold whitespace-nowrap">Past</button></div>
+              <div class="space-y-3">
+                <div class="rounded-2xl bg-white border border-slate-200 p-4">
+                  <div class="flex items-center gap-2 mb-2"><div class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 font-bold text-xs">Y</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">yjc2dn8bhh</div><div class="text-[10px] text-ink-muted">Patient · 10:30 AM</div></div><span class="rounded-full bg-warning-soft text-amber-700 text-[9px] font-bold px-2 py-0.5">Pending</span></div>
+                  <div class="text-[11px] text-ink-soft italic mb-3">"i need help"</div>
+                  <div class="grid grid-cols-3 gap-1.5 text-[10px] mb-3"><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">Mon Sep 28</div><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">30m</div><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">📹 Video</div></div>
+                  <div class="flex gap-1.5"><button class="flex-1 h-9 rounded-lg bg-emerald-500 text-white text-[11px] font-bold">Accept</button><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Decline</button><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Details</button></div>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-4">
+                  <div class="flex items-center gap-2 mb-2"><div class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 font-bold text-xs">Y</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">yjc2dn8bhh</div><div class="text-[10px] text-ink-muted">Patient · 02:00 PM</div></div><span class="rounded-full bg-warning-soft text-amber-700 text-[9px] font-bold px-2 py-0.5">Pending</span></div>
+                  <div class="text-[11px] text-ink-soft italic mb-3">"Chest pain test booking"</div>
+                  <div class="grid grid-cols-3 gap-1.5 text-[10px] mb-3"><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">Tue Sep 29</div><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">30m</div><div class="rounded-lg bg-slate-50 p-1.5 text-center font-bold">📹 Video</div></div>
+                  <div class="flex gap-1.5"><button class="flex-1 h-9 rounded-lg bg-emerald-500 text-white text-[11px] font-bold">Accept</button><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Decline</button><button class="flex-1 h-9 rounded-lg border border-slate-300 text-[11px] font-bold">Details</button></div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor · Appointments (Pending)</div>
+        </div>
+
+        <!-- Doctor Availability -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-lg font-black mb-1">Availability</div>
+              <div class="text-[11px] text-ink-muted mb-3">Weekly schedule · Add multiple windows per day for splits.</div>
+              <div class="space-y-2 mb-4">
+                <div class="rounded-xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-700 font-black text-[11px]">MON</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">09:00 – 13:00</div><div class="text-[10px] text-ink-muted">30m slots</div></div><button class="text-danger text-lg">×</button></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-700 font-black text-[11px]">TUE</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">09:00 – 13:00</div><div class="text-[10px] text-ink-muted">30m slots</div></div><button class="text-danger text-lg">×</button></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-700 font-black text-[11px]">TUE</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">14:00 – 17:00</div><div class="text-[10px] text-ink-muted">30m slots</div></div><button class="text-danger text-lg">×</button></div>
+                <div class="rounded-xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-9 w-9 place-items-center rounded-lg bg-brand-100 text-brand-700 font-black text-[11px]">THU</div><div class="flex-1 min-w-0"><div class="text-xs font-bold">09:00 – 13:00</div><div class="text-[10px] text-ink-muted">30m slots</div></div><button class="text-danger text-lg">×</button></div>
+              </div>
+              <div class="rounded-xl border-2 border-dashed border-slate-300 p-3 mb-3">
+                <div class="text-xs font-bold mb-2">Add a window</div>
+                <div class="flex gap-1 mb-2 overflow-x-auto"><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Sun</button><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Mon</button><button class="rounded-lg bg-brand-500 text-white px-2 py-1 text-[10px] font-bold">Tue</button><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Wed</button><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Thu</button><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Fri</button><button class="rounded-lg border border-slate-300 px-2 py-1 text-[10px] font-bold">Sat</button></div>
+                <div class="grid grid-cols-2 gap-2"><div><div class="text-[9px] font-bold uppercase mb-0.5">Start</div><div class="h-8 rounded-lg border border-slate-300 flex items-center px-2 text-xs">09:00</div></div><div><div class="text-[9px] font-bold uppercase mb-0.5">End</div><div class="h-8 rounded-lg border border-slate-300 flex items-center px-2 text-xs">17:00</div></div></div>
+                <button class="mt-2 w-full h-9 rounded-lg bg-brand-500 text-white text-[11px] font-bold">Add window</button>
+              </div>
+              <div class="text-xs font-bold mb-2">Blocked dates</div>
+              <div class="rounded-xl bg-white border border-slate-200 p-3 text-[11px] text-ink-muted text-center">No blocked dates.</div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor · Availability</div>
+        </div>
+
+        <!-- Doctor Patients -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-lg font-black mb-1">My patients</div>
+              <div class="text-[11px] text-ink-muted mb-4">You only see patients you've had appointments with — enforced by row-level security in the database.</div>
+              <div class="space-y-3">
+                <div class="rounded-2xl bg-white border border-slate-200 p-4 flex items-center gap-3">
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold">Y</div>
+                  <div class="flex-1 min-w-0"><div class="text-sm font-bold">yjc2dn8bhh</div><div class="text-[10px] text-brand-700 font-bold">Next: Mon, Sep 28</div><div class="text-[10px] text-ink-muted">5 visits · last Mon, Sep 28</div></div>
+                  <button class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">›</button>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-4 flex items-center gap-3">
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-emerald-100 text-emerald-700 font-bold">MJ</div>
+                  <div class="flex-1 min-w-0"><div class="text-sm font-bold">Marfo James</div><div class="text-[10px] text-ink-muted">2 visits · last Sep 15</div></div>
+                  <button class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">›</button>
+                </div>
+                <div class="rounded-2xl bg-white border border-slate-200 p-4 flex items-center gap-3">
+                  <div class="grid h-12 w-12 place-items-center rounded-full bg-amber-100 text-amber-700 font-bold">JE</div>
+                  <div class="flex-1 min-w-0"><div class="text-sm font-bold">Joseph Engmann</div><div class="text-[10px] text-ink-muted">1 visit · last Sep 12</div></div>
+                  <button class="grid h-9 w-9 place-items-center rounded-full bg-slate-100">›</button>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor · Patients (RLS-scoped)</div>
+        </div>
+
+        <!-- Doctor Profile -->
+        <div class="screen-title">
+          <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+            <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+            <div class="flex-1 p-4 overflow-hidden">
+              <div class="text-lg font-black mb-3">Profile</div>
+              <div class="rounded-2xl bg-white border border-slate-200 p-4 text-center mb-3">
+                <div class="w-20 h-20 mx-auto rounded-full bg-brand-100 grid place-items-center font-bold text-2xl text-brand-700">AW</div>
+                <div class="mt-2 text-lg font-black">Aldin Wolf</div>
+                <div class="text-[11px] text-ink-muted">Cardiology</div>
+                <div class="mt-2 inline-flex items-center gap-1 rounded-full bg-success-soft px-2 py-0.5 text-[10px] font-bold text-emerald-700">✓ Verified</div>
+              </div>
+              <div class="rounded-2xl bg-white border border-slate-200 p-3 mb-3">
+                <div class="text-xs font-bold mb-1">About</div>
+                <div class="text-[11px] text-ink-soft leading-relaxed">Interventional cardiologist with 8 years experience.</div>
+              </div>
+              <div class="rounded-2xl bg-white border border-slate-200 p-3 space-y-2 text-xs mb-3">
+                <div class="font-bold">Consultation</div>
+                <div class="flex justify-between"><span class="text-ink-muted">Fee</span><span class="font-bold text-brand-700">GH₵60.00</span></div>
+                <div class="flex justify-between"><span class="text-ink-muted">Years of experience</span><span>8</span></div>
+                <div class="flex justify-between items-center"><span class="text-ink-muted">Modes</span><div class="flex gap-1"><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">Video</span><span class="rounded-full bg-brand-50 px-2 py-0.5 text-[10px] font-bold text-brand-700">Clinic</span></div></div>
+                <div class="flex justify-between"><span class="text-ink-muted">Languages</span><span>English, French</span></div>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button class="h-11 rounded-xl bg-white border border-slate-300 text-xs font-bold">📅 Availability</button>
+                <button class="h-11 rounded-xl bg-white border border-slate-300 text-xs font-bold">⚙ Settings</button>
+              </div>
+            </div>
+          </div></div>
+          <div class="text-xs font-bold text-ink mt-3">Doctor · Profile</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ADMIN SCREENS ================= -->
+    <section id="admin" class="px-10 py-14 bg-slate-100 border-y border-slate-200">
+      <div class="max-w-6xl">
+      <div class="mb-2 text-[10px] font-bold uppercase tracking-widest text-brand-500">Screens · Admin (Desktop only)</div>
+      <h2 class="text-3xl font-black">Admin console</h2>
+      <p class="mt-2 text-ink-muted max-w-2xl">Web-only console for platform operators — KPIs, doctor verification, moderation queue, user management. Phone visitors see a mobile-gate splash.</p>
+
+      <div class="mt-8 space-y-10">
+        <!-- Admin Overview -->
+        <div>
+          <div class="mx-auto w-fit">
+            <div class="device-laptop"><div class="device-laptop-screen">
+              <div class="flex h-full">
+                <aside class="w-52 bg-white border-r border-slate-200 p-4">
+                  <div class="flex items-center gap-2 mb-6"><div class="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 text-white font-black text-xs">DC</div><div><div class="text-xs font-bold">Doctor Cares</div><div class="text-[9px] text-ink-muted uppercase tracking-wide">Admin</div></div></div>
+                  <nav class="space-y-1 text-xs">
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-500 text-white font-bold">▦ Overview</a>
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg text-ink-soft hover:bg-slate-100">🩺 Doctors</a>
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg text-ink-soft hover:bg-slate-100">👥 Patients</a>
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg text-ink-soft hover:bg-slate-100">📅 Appointments</a>
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg text-ink-soft hover:bg-slate-100">⚠ Reports</a>
+                    <a class="flex items-center gap-2 px-3 py-2 rounded-lg text-ink-soft hover:bg-slate-100">⚙ Settings</a>
+                  </nav>
+                </aside>
+                <main class="flex-1 bg-slate-50 p-5 overflow-hidden">
+                  <div class="flex justify-between items-center mb-4"><div><div class="text-xl font-black">Overview</div><div class="text-[10px] text-ink-muted">Friday, Sep 25, 2026 · Last 30 days</div></div><div class="flex gap-1.5"><button class="h-8 px-3 rounded-lg border border-slate-300 bg-white text-[11px] font-bold">Export</button><button class="h-8 px-3 rounded-lg bg-brand-500 text-white text-[11px] font-bold">+ Invite doctor</button></div></div>
+                  <div class="grid grid-cols-4 gap-3 mb-4">
+                    <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-[9px] font-bold uppercase text-ink-muted">Patients</div><div class="text-xl font-black mt-1">3</div><div class="text-[9px] text-emerald-600">+12% vs previous</div></div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-[9px] font-bold uppercase text-ink-muted">Doctors</div><div class="text-xl font-black mt-1">1</div><div class="text-[9px] text-ink-muted">All verified</div></div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-[9px] font-bold uppercase text-ink-muted">Appointments</div><div class="text-xl font-black mt-1">5</div><div class="text-[9px] text-emerald-600">+5 this week</div></div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-3"><div class="text-[9px] font-bold uppercase text-ink-muted">Open reports</div><div class="text-xl font-black mt-1 text-danger">3</div><div class="text-[9px] text-ink-muted">3 today</div></div>
+                  </div>
+                  <div class="grid grid-cols-3 gap-3">
+                    <div class="col-span-2 rounded-xl bg-white border border-slate-200 p-3">
+                      <div class="flex justify-between items-center mb-2"><div class="text-xs font-bold">Appointments over time</div><div class="flex gap-1 text-[10px]"><button class="rounded bg-slate-100 px-2 py-0.5 font-bold">7D</button><button class="rounded bg-ink text-white px-2 py-0.5 font-bold">30D</button><button class="rounded bg-slate-100 px-2 py-0.5 font-bold">90D</button></div></div>
+                      <div class="h-32 relative">
+                        <svg viewBox="0 0 300 100" class="w-full h-full">
+                          <defs><linearGradient id="chartGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#1E5EFF" stop-opacity="0.3"/><stop offset="100%" stop-color="#1E5EFF" stop-opacity="0"/></linearGradient></defs>
+                          <path d="M0,80 L30,72 L60,68 L90,58 L120,60 L150,45 L180,50 L210,40 L240,32 L270,28 L300,20 L300,100 L0,100 Z" fill="url(#chartGrad)"/>
+                          <path d="M0,80 L30,72 L60,68 L90,58 L120,60 L150,45 L180,50 L210,40 L240,32 L270,28 L300,20" fill="none" stroke="#1E5EFF" stroke-width="2"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-3">
+                      <div class="text-xs font-bold mb-2">By status</div>
+                      <div class="relative w-24 h-24 mx-auto">
+                        <svg viewBox="0 0 42 42" class="w-full h-full -rotate-90">
+                          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#F5F7FB" stroke-width="6"/>
+                          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#16A34A" stroke-width="6" stroke-dasharray="20 80"/>
+                          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#1E5EFF" stroke-width="6" stroke-dasharray="20 80" stroke-dashoffset="-20"/>
+                          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#F59E0B" stroke-width="6" stroke-dasharray="40 60" stroke-dashoffset="-40"/>
+                          <circle cx="21" cy="21" r="15.9" fill="none" stroke="#DC2626" stroke-width="6" stroke-dasharray="20 80" stroke-dashoffset="-80"/>
+                        </svg>
+                        <div class="absolute inset-0 grid place-items-center"><div class="text-center"><div class="text-lg font-black">5</div><div class="text-[8px] font-bold uppercase text-ink-muted">total</div></div></div>
+                      </div>
+                      <div class="mt-2 text-[9px] space-y-0.5"><div class="flex justify-between"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-brand-500"></span>Confirmed</span><span class="font-bold">20%</span></div><div class="flex justify-between"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-success"></span>Completed</span><span class="font-bold">20%</span></div><div class="flex justify-between"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-warning"></span>Pending</span><span class="font-bold">40%</span></div><div class="flex justify-between"><span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-danger"></span>Cancelled</span><span class="font-bold">20%</span></div></div>
+                    </div>
+                  </div>
+                </main>
+              </div>
+            </div></div>
+            <div class="device-laptop-base"></div>
+          </div>
+          <div class="text-xs font-bold text-ink mt-4 text-center">Admin · Overview (desktop only, 1024px+ gate)</div>
+        </div>
+
+        <!-- Admin Doctors + Patients side by side -->
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <div class="device-laptop"><div class="device-laptop-screen">
+              <div class="flex h-full">
+                <aside class="w-40 bg-white border-r border-slate-200 p-3 text-[10px]">
+                  <div class="font-bold mb-3">Doctor Cares</div>
+                  <div class="space-y-1"><div class="px-2 py-1 rounded">Overview</div><div class="px-2 py-1 rounded bg-brand-500 text-white font-bold">Doctors</div><div class="px-2 py-1 rounded">Patients</div><div class="px-2 py-1 rounded">Appointments</div></div>
+                </aside>
+                <main class="flex-1 bg-slate-50 p-4">
+                  <div class="text-lg font-black mb-2">Doctors</div>
+                  <div class="flex gap-1 mb-3 text-[10px]"><button class="rounded-full bg-ink text-white px-2 py-1 font-bold">All 1</button><button class="rounded-full border px-2 py-1 font-bold">Verified 1</button><button class="rounded-full border px-2 py-1 font-bold">Pending 0</button></div>
+                  <div class="rounded-xl bg-white border border-slate-200 p-3 flex items-center gap-3"><div class="grid h-10 w-10 place-items-center rounded-full bg-brand-100 text-brand-700 font-bold text-xs">AW</div><div class="flex-1 min-w-0"><div class="text-xs font-bold flex items-center gap-1">Aldin Wolf <span class="rounded-full bg-success-soft text-emerald-700 text-[8px] font-bold px-1.5 py-0.5">Verified</span></div><div class="text-[10px] text-ink-muted">Cardiology · GH₵60.00 · joined Sep 2026</div></div><button class="text-[10px] font-bold text-ink-muted">Unverify</button><button class="text-[10px] font-bold text-danger">Suspend</button></div>
+                </main>
+              </div>
+            </div></div>
+            <div class="device-laptop-base" style="width:100%;margin-left:0"></div>
+            <div class="text-xs font-bold text-ink mt-3 text-center">Admin · Doctors</div>
+          </div>
+          <div>
+            <div class="device-laptop"><div class="device-laptop-screen">
+              <div class="flex h-full">
+                <aside class="w-40 bg-white border-r border-slate-200 p-3 text-[10px]">
+                  <div class="font-bold mb-3">Doctor Cares</div>
+                  <div class="space-y-1"><div class="px-2 py-1 rounded">Overview</div><div class="px-2 py-1 rounded">Doctors</div><div class="px-2 py-1 rounded bg-brand-500 text-white font-bold">Patients</div><div class="px-2 py-1 rounded">Appointments</div></div>
+                </aside>
+                <main class="flex-1 bg-slate-50 p-4">
+                  <div class="text-lg font-black mb-2">Patients</div>
+                  <div class="flex gap-1 mb-3 text-[10px]"><button class="rounded-full bg-ink text-white px-2 py-1 font-bold">All</button><button class="rounded-full border px-2 py-1 font-bold">Active</button><button class="rounded-full border px-2 py-1 font-bold">Suspended</button></div>
+                  <div class="space-y-2">
+                    <div class="rounded-xl bg-white border border-slate-200 p-2.5 flex items-center gap-2"><div class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs font-bold">MD</div><div class="flex-1 min-w-0"><div class="text-xs font-bold flex items-center gap-1">morris doe <span class="rounded-full bg-success-soft text-emerald-700 text-[8px] font-bold px-1.5">Active</span></div><div class="text-[10px] text-ink-muted">0 appointments</div></div></div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-2.5 flex items-center gap-2"><div class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs font-bold">MJ</div><div class="flex-1 min-w-0"><div class="text-xs font-bold flex items-center gap-1">Marfo James <span class="rounded-full bg-success-soft text-emerald-700 text-[8px] font-bold px-1.5">Active</span></div><div class="text-[10px] text-ink-muted">2 appointments</div></div></div>
+                    <div class="rounded-xl bg-white border border-slate-200 p-2.5 flex items-center gap-2"><div class="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-xs font-bold">JE</div><div class="flex-1 min-w-0"><div class="text-xs font-bold flex items-center gap-1">Joseph Eng <span class="rounded-full bg-success-soft text-emerald-700 text-[8px] font-bold px-1.5">Active</span></div><div class="text-[10px] text-ink-muted">1 appointment</div></div></div>
+                  </div>
+                </main>
+              </div>
+            </div></div>
+            <div class="device-laptop-base" style="width:100%;margin-left:0"></div>
+            <div class="text-xs font-bold text-ink mt-3 text-center">Admin · Patients</div>
+          </div>
+        </div>
+
+        <!-- Admin Reports + Mobile gate -->
+        <div class="grid md:grid-cols-3 gap-8 items-start">
+          <div class="md:col-span-2">
+            <div class="device-laptop"><div class="device-laptop-screen">
+              <div class="flex h-full">
+                <aside class="w-40 bg-white border-r border-slate-200 p-3 text-[10px]">
+                  <div class="font-bold mb-3">Doctor Cares</div>
+                  <div class="space-y-1"><div class="px-2 py-1 rounded">Overview</div><div class="px-2 py-1 rounded">Doctors</div><div class="px-2 py-1 rounded">Patients</div><div class="px-2 py-1 rounded">Appointments</div><div class="px-2 py-1 rounded bg-brand-500 text-white font-bold">Reports</div></div>
+                </aside>
+                <main class="flex-1 bg-slate-50 p-4">
+                  <div class="text-lg font-black mb-3">Reports</div>
+                  <div class="flex gap-1 mb-3 text-[10px]"><button class="rounded-full bg-ink text-white px-2 py-1 font-bold">Open</button><button class="rounded-full border px-2 py-1 font-bold">Resolved</button><button class="rounded-full border px-2 py-1 font-bold">Dismissed</button></div>
+                  <div class="space-y-2">
+                    <div class="rounded-xl bg-white border-l-4 border-l-danger border border-slate-200 p-3"><div class="flex justify-between mb-1"><span class="text-[10px] font-bold text-danger">High Priority · #c135fc12</span><span class="text-[10px] text-ink-muted">14 hours ago</span></div><div class="text-[11px] font-bold mb-1">Target: User</div><div class="text-[11px] text-ink-soft italic mb-2">"Test — the patient has been sending spam messages."</div><div class="text-[10px] text-ink-muted">Reported by Marfo James (patient)</div><div class="mt-2 flex gap-2"><button class="h-7 px-3 rounded-lg bg-success text-white text-[10px] font-bold">Resolve</button><button class="h-7 px-3 rounded-lg border text-[10px] font-bold">Dismiss</button></div></div>
+                    <div class="rounded-xl bg-white border-l-4 border-l-warning border border-slate-200 p-3"><div class="flex justify-between mb-1"><span class="text-[10px] font-bold text-amber-600">Medium Priority · #2b4d5a4d</span><span class="text-[10px] text-ink-muted">14 hours ago</span></div><div class="text-[11px] font-bold mb-1">Target: Appointment</div><div class="text-[11px] text-ink-soft italic mb-2">"Doctor no-show for scheduled appointment."</div></div>
+                  </div>
+                </main>
+              </div>
+            </div></div>
+            <div class="device-laptop-base" style="width:100%;margin-left:0"></div>
+            <div class="text-xs font-bold text-ink mt-3 text-center">Admin · Reports queue</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="device-phone"><div class="phone-screen"><div class="phone-notch"></div>
+              <div class="status-bar"><span>9:41</span><span>●●● 3G 🔋</span></div>
+              <div class="flex-1 p-6 flex flex-col items-center justify-center text-center">
+                <div class="w-16 h-16 rounded-2xl bg-brand-100 grid place-items-center text-3xl mb-4">💻</div>
+                <div class="text-lg font-black mb-2">Admin console</div>
+                <div class="text-xs text-ink-muted leading-relaxed">The Doctor Cares admin console is designed for desktop. Open this URL on a laptop or desktop for the best experience with tables, charts and moderation tools.</div>
+                <button class="mt-6 h-10 px-4 rounded-full border border-slate-300 text-xs font-bold">Continue on this device anyway</button>
+                <div class="text-[10px] text-ink-muted mt-3">Preference is saved for this session.</div>
+              </div>
+            </div></div>
+            <div class="text-xs font-bold text-ink mt-3 text-center">Admin · Mobile gate</div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="px-10 py-8 text-center text-xs text-ink-muted border-t border-slate-200">
+      <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-2">
+        <div>Doctor Cares · Design System · v1.0</div>
+        <div>Rendered from live Tailwind — <a href="https://doctor-cares-ten.vercel.app" class="text-brand-600 font-bold hover:underline" target="_blank">visit the app ↗</a></div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Auto-populate brand + accent swatch grids
+  const brand = [50,100,200,300,400,500,600,700,800,900];
+  const brandHex = ['#EEF3FF','#D9E4FF','#B4C9FF','#8AA8FF','#5A82FF','#1E5EFF','#1A4FDB','#173FB2','#122F87','#0D215E'];
+  const accentHex = ['#EAFBF6','#CDF3E6','#9DE7CD','#65D7B0','#2FBF8F','#0FA774','#0A855C','#086648','#064932','#03301F'];
+  const brandGrid = document.querySelector('#tokens .grid.grid-cols-5.md\\:grid-cols-10.gap-2.rounded-2xl.border.border-slate-200.bg-white.p-4');
+  brand.forEach((n, i) => {
+    const div = document.createElement('div');
+    div.className = 'text-center';
+    div.innerHTML = `<div style="background:${brandHex[i]}" class="h-14 rounded-lg mb-1 border border-slate-200"></div><div class="text-[9px] font-bold">${n}</div><div class="text-[8px] text-ink-muted">${brandHex[i]}</div>`;
+    brandGrid?.appendChild(div);
+  });
+  const accentGrid = document.querySelector('#accent-swatches');
+  brand.forEach((n, i) => {
+    const div = document.createElement('div');
+    div.className = 'text-center';
+    div.innerHTML = `<div style="background:${accentHex[i]}" class="h-14 rounded-lg mb-1 border border-slate-200"></div><div class="text-[9px] font-bold">${n}</div><div class="text-[8px] text-ink-muted">${accentHex[i]}</div>`;
+    accentGrid?.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

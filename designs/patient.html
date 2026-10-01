@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares · Patient designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+<script src="icons.js"></script>
+
+<header class="page-header">
+  <h1>Patient experience</h1>
+  <p>Bottom nav on mobile · Home · Appointments · Chat · Drugs · Profile. On tablets/desktop the same items live in a left sidebar.</p>
+  <div class="crumbs">
+    <a href="index.html">← All designs</a>
+    <a href="auth.html">Auth</a>
+    <a href="patient.html" class="active">Patient</a>
+    <a href="doctor.html">Doctor</a>
+    <a href="admin.html">Admin</a>
+    <a href="system.html">System / PWA</a>
+  </div>
+</header>
+
+<div class="section">
+  <div class="grid">
+
+    <!-- 08 · PATIENT DASHBOARD -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar" style="padding: 10px 16px; height: auto;">
+          <span class="avatar md">JD</span>
+          <div class="col" style="gap: 0;"><span style="font-size: 11px; color: var(--ink-muted);">Good morning,</span><span style="font-size: 15px; font-weight: 700;">John</span></div>
+          <div class="spacer"></div>
+          <button class="icon-btn" style="position: relative;"><svg class="ic"><use href="#i-bell"/></svg><span class="badge dot" style="position: absolute; top: 4px; right: 4px;">2</span></button>
+        </div>
+        <div class="body">
+          <div class="search">
+            <svg class="ic-16"><use href="#i-search"/></svg>
+            <span>Search doctors, specialties…</span>
+          </div>
+
+          <div class="card gradient" style="padding: 16px;">
+            <div class="row between" style="align-items: flex-start;">
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;" class="muted">Next appointment</div>
+                <div style="font-weight: 700; font-size: 16px; margin-top: 6px;">Dr. Sarah Chen</div>
+                <div style="font-size: 12px; opacity: 0.9; margin-top: 2px;">Cardiologist</div>
+                <div class="row" style="margin-top: 10px; gap: 8px;">
+                  <span class="chip" style="background: rgba(255,255,255,0.2); color: white; border: none;"><svg class="ic-14"><use href="#i-calendar"/></svg> Tue · 2:30 PM</span>
+                  <span class="chip" style="background: rgba(255,255,255,0.2); color: white; border: none;"><svg class="ic-14"><use href="#i-video"/></svg> Video</span>
+                </div>
+              </div>
+              <button class="icon-btn" style="background: rgba(255,255,255,0.2); color: white;"><svg class="ic-16"><use href="#i-chevron-right"/></svg></button>
+            </div>
+          </div>
+
+          <div class="row" style="gap: 8px; overflow: hidden;">
+            <span class="chip active">All</span>
+            <span class="chip">Cardio</span>
+            <span class="chip">Dental</span>
+            <span class="chip">Derma</span>
+          </div>
+
+          <div class="row between" style="margin-top: 4px;">
+            <span class="h4">Top rated doctors</span>
+            <a class="t-brand" style="font-size: 12px; font-weight: 600;">See all</a>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar md accent">SC</span>
+            <div class="body">
+              <div class="h4">Dr. Sarah Chen</div>
+              <div class="t-muted" style="font-size: 12px;">Cardiologist · 8 yrs</div>
+            </div>
+            <div class="col" style="align-items: flex-end; gap: 4px;">
+              <span class="chip" style="padding: 4px 8px; font-size: 11px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.9</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--brand-600);">$40</span>
+            </div>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar md violet">MR</span>
+            <div class="body">
+              <div class="h4">Dr. Marcus Reed</div>
+              <div class="t-muted" style="font-size: 12px;">Dermatologist · 5 yrs</div>
+            </div>
+            <div class="col" style="align-items: flex-end; gap: 4px;">
+              <span class="chip" style="padding: 4px 8px; font-size: 11px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.8</span>
+              <span style="font-size: 11px; font-weight: 600; color: var(--brand-600);">$35</span>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">08</span><span class="name">Patient dashboard</span><span class="desc">Greeting · search · next appointment · specialty filters · top doctors</span></div>
+    </div>
+
+    <!-- 09 · FIND DOCTORS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Find doctors</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-settings"/></svg></button></div>
+        <div class="body">
+          <div class="search"><svg class="ic-16"><use href="#i-search"/></svg><span>Search by name or specialty</span></div>
+          <div class="row" style="gap: 6px; overflow: hidden;">
+            <span class="chip active">All</span>
+            <span class="chip">Cardio</span>
+            <span class="chip">Derma</span>
+            <span class="chip">Peds</span>
+            <span class="chip">Neuro</span>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar lg accent">SC</span>
+            <div class="body">
+              <div class="h4">Dr. Sarah Chen</div>
+              <div class="t-muted" style="font-size: 12px;">Cardiologist · 8 yrs</div>
+              <div class="row" style="gap: 6px; margin-top: 6px;">
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.9</span>
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;">$40</span>
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;"><svg class="ic-14"><use href="#i-video"/></svg></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar lg violet">MR</span>
+            <div class="body">
+              <div class="h4">Dr. Marcus Reed</div>
+              <div class="t-muted" style="font-size: 12px;">Dermatologist · 5 yrs</div>
+              <div class="row" style="gap: 6px; margin-top: 6px;">
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.8</span>
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;">$35</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar lg rose">AP</span>
+            <div class="body">
+              <div class="h4">Dr. Aisha Patel</div>
+              <div class="t-muted" style="font-size: 12px;">Pediatrics · 12 yrs</div>
+              <div class="row" style="gap: 6px; margin-top: 6px;">
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.9</span>
+                <span class="chip" style="padding: 3px 8px; font-size: 11px;">$50</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar lg warn">JK</span>
+            <div class="body">
+              <div class="h4">Dr. James Kim</div>
+              <div class="t-muted" style="font-size: 12px;">Neurologist · 15 yrs</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item active"><svg><use href="#i-users"/></svg>Doctors</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">09 · 10</span><span class="name">Find doctors</span><span class="desc">List + specialty filter chips + fee &amp; rating badges</span></div>
+    </div>
+
+    <!-- 11 · DOCTOR PROFILE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Doctor profile</span><div class="spacer"></div><button class="icon-btn"><svg class="ic-16"><use href="#i-heart"/></svg></button></div>
+        <div class="body">
+          <div class="card" style="text-align: center; padding: 20px;">
+            <span class="avatar xl accent" style="margin: 0 auto;">SC</span>
+            <h3 style="margin-top: 12px; font-size: 18px;">Dr. Sarah Chen</h3>
+            <div class="t-muted" style="margin-top: 2px;">Cardiologist · MBBS, MD</div>
+            <div class="row" style="gap: 8px; justify-content: center; margin-top: 10px;">
+              <span class="badge success"><svg class="ic-14"><use href="#i-check-circle"/></svg> Verified</span>
+              <span class="chip" style="padding: 3px 10px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.9 (128)</span>
+            </div>
+          </div>
+
+          <div class="row" style="gap: 8px;">
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">128</div><div class="label">Patients</div></div>
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">8+</div><div class="label">Years</div></div>
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">4.9</div><div class="label">Rating</div></div>
+          </div>
+
+          <div class="row" style="gap: 6px;">
+            <span class="chip active">About</span>
+            <span class="chip">Reviews</span>
+            <span class="chip">Location</span>
+          </div>
+
+          <div class="card" style="padding: 14px;">
+            <div class="h4" style="margin-bottom: 6px;">About Dr. Chen</div>
+            <p class="t-muted" style="font-size: 13px; line-height: 1.5;">Interventional cardiologist with 8 years' experience treating heart disease, arrhythmias and hypertension. Speaks English &amp; Mandarin.</p>
+          </div>
+
+          <div class="row" style="gap: 10px;">
+            <span class="badge brand"><svg class="ic-14"><use href="#i-video"/></svg> Video</span>
+            <span class="badge brand"><svg class="ic-14"><use href="#i-map-pin"/></svg> Clinic</span>
+            <span class="badge neutral">$40 · consult</span>
+          </div>
+
+          <div style="flex: 1;"></div>
+          <div class="row" style="gap: 8px;">
+            <button class="btn outline grow"><svg class="ic-16"><use href="#i-message"/></svg> Message</button>
+            <button class="btn primary grow">Book <svg class="ic-16"><use href="#i-arrow-right"/></svg></button>
+          </div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">11</span><span class="name">Doctor profile</span><span class="desc">Bio · tabs (About / Reviews / Location) · book + message</span></div>
+    </div>
+
+    <!-- 12 · BOOK APPOINTMENT -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Book appointment</span></div>
+        <div class="body">
+          <div class="list-row">
+            <span class="avatar md accent">SC</span>
+            <div class="body">
+              <div class="h4">Dr. Sarah Chen</div>
+              <div class="t-muted" style="font-size: 12px;">Cardiologist · $40</div>
+            </div>
+          </div>
+
+          <div class="subhead">Select date</div>
+          <div class="date-strip">
+            <div class="date-pill"><div class="dow">Mon</div><div class="day">12</div></div>
+            <div class="date-pill active"><div class="dow">Tue</div><div class="day">13</div></div>
+            <div class="date-pill"><div class="dow">Wed</div><div class="day">14</div></div>
+            <div class="date-pill"><div class="dow">Thu</div><div class="day">15</div></div>
+            <div class="date-pill"><div class="dow">Fri</div><div class="day">16</div></div>
+          </div>
+
+          <div class="subhead">Available times</div>
+          <div class="time-grid">
+            <div class="time-chip">09:00</div>
+            <div class="time-chip active">09:30</div>
+            <div class="time-chip">10:00</div>
+            <div class="time-chip">10:30</div>
+            <div class="time-chip disabled">11:00</div>
+            <div class="time-chip">14:30</div>
+            <div class="time-chip">15:00</div>
+            <div class="time-chip">15:30</div>
+            <div class="time-chip">16:00</div>
+          </div>
+
+          <div class="subhead">Reason for visit</div>
+          <div class="field" style="padding: 10px 14px;">
+            <span class="value" style="font-weight: 400; color: var(--ink);">Follow-up on chest pain and medication review.</span>
+          </div>
+
+          <div style="flex: 1;"></div>
+          <div class="card" style="padding: 12px; background: var(--brand-50); border-color: var(--brand-100);">
+            <div class="row between">
+              <div>
+                <div style="font-size: 11px; text-transform: uppercase; color: var(--brand-700); font-weight: 600;">Summary</div>
+                <div style="font-weight: 600; margin-top: 2px;">Tue Sep 13 · 09:30 AM</div>
+              </div>
+              <div style="font-weight: 700; font-size: 18px; color: var(--brand-700);">$40</div>
+            </div>
+          </div>
+          <button class="btn primary lg block">Confirm booking</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">12</span><span class="name">Book appointment</span><span class="desc">Date strip + time chips + reason + summary CTA</span></div>
+    </div>
+
+    <!-- 13 · BOOKING CONFIRMATION -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="body white center" style="justify-content: flex-start; padding-top: 40px; gap: 16px;">
+          <div style="width: 96px; height: 96px; border-radius: 50%; background: var(--success-soft); display: grid; place-items: center;">
+            <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--success); color: white; display: grid; place-items: center;">
+              <svg class="ic-32"><use href="#i-check"/></svg>
+            </div>
+          </div>
+          <div>
+            <h2 style="font-size: 22px; letter-spacing: -0.01em;">Appointment requested</h2>
+            <p class="t-muted" style="margin-top: 6px;">You'll get a notification once Dr. Chen confirms.</p>
+          </div>
+          <div class="card" style="width: 100%; text-align: left;">
+            <div class="row between" style="margin-bottom: 10px;">
+              <span class="row" style="gap: 10px;">
+                <span class="avatar md accent">SC</span>
+                <div class="col" style="gap: 0;">
+                  <span class="h4">Dr. Sarah Chen</span>
+                  <span class="t-muted" style="font-size: 11px;">Cardiologist</span>
+                </div>
+              </span>
+              <span class="badge warning">Pending</span>
+            </div>
+            <div class="hairline" style="border-top: 1px solid var(--line-soft); margin: 10px 0;"></div>
+            <div class="row between" style="padding: 4px 0;"><span class="t-muted" style="font-size: 12px;">Date &amp; time</span><span style="font-weight: 600; font-size: 13px;">Tue Sep 13 · 09:30 AM</span></div>
+            <div class="row between" style="padding: 4px 0;"><span class="t-muted" style="font-size: 12px;">Consultation</span><span style="font-weight: 600; font-size: 13px;"><svg class="ic-14"><use href="#i-video"/></svg> Video call</span></div>
+            <div class="row between" style="padding: 4px 0;"><span class="t-muted" style="font-size: 12px;">Fee</span><span style="font-weight: 700; color: var(--brand-700);">$40.00</span></div>
+          </div>
+          <button class="btn primary lg block">View my appointments</button>
+          <button class="btn ghost block">Add to calendar</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">13</span><span class="name">Booking confirmation</span><span class="desc">Success moment · summary card · secondary CTA to calendar</span></div>
+    </div>
+
+    <!-- 14 · MY APPOINTMENTS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">My appointments</span></div>
+        <div class="body">
+          <div class="row" style="gap: 6px;">
+            <span class="chip active">Upcoming</span>
+            <span class="chip">Past</span>
+            <span class="chip">Cancelled</span>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="align-items: flex-start;">
+              <div class="row" style="gap: 10px;">
+                <span class="avatar md accent">SC</span>
+                <div class="col" style="gap: 2px;">
+                  <span class="h4">Dr. Sarah Chen</span>
+                  <span class="t-muted" style="font-size: 12px;">Cardiologist</span>
+                </div>
+              </div>
+              <span class="badge success">Confirmed</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-calendar"/></svg> Tue Sep 13</span>
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-clock"/></svg> 09:30</span>
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-video"/></svg></span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <button class="btn outline sm grow">Reschedule</button>
+              <button class="btn primary sm grow"><svg class="ic-14"><use href="#i-video"/></svg> Join call</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="align-items: flex-start;">
+              <div class="row" style="gap: 10px;">
+                <span class="avatar md violet">MR</span>
+                <div class="col" style="gap: 2px;">
+                  <span class="h4">Dr. Marcus Reed</span>
+                  <span class="t-muted" style="font-size: 12px;">Dermatologist</span>
+                </div>
+              </div>
+              <span class="badge warning">Pending</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-calendar"/></svg> Fri Sep 16</span>
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-clock"/></svg> 14:00</span>
+              <span class="chip" style="padding: 4px 10px;"><svg class="ic-14"><use href="#i-map-pin"/></svg> Clinic</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <button class="btn danger sm grow">Cancel</button>
+              <button class="btn outline sm grow">Details</button>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item active"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">14</span><span class="name">My appointments</span><span class="desc">Tabs · status badges · quick actions per card</span></div>
+    </div>
+
+    <!-- 15 · APPOINTMENT DETAILS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Appointment</span><div class="spacer"></div><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+        <div class="body">
+          <div class="card tinted" style="text-align: center;">
+            <span class="avatar lg accent" style="margin: 0 auto;">SC</span>
+            <h3 style="margin-top: 10px; font-size: 16px;">Dr. Sarah Chen</h3>
+            <div class="t-muted" style="font-size: 12px; margin-top: 2px;">Cardiologist · MBBS, MD</div>
+            <span class="badge success" style="margin-top: 8px;">Confirmed</span>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="padding: 6px 0;"><span class="t-muted" style="font-size: 12px;">Date &amp; time</span><span style="font-weight: 600; font-size: 13px;">Tue Sep 13 · 09:30 AM</span></div>
+            <div class="row between" style="padding: 6px 0;"><span class="t-muted" style="font-size: 12px;">Type</span><span style="font-weight: 600; font-size: 13px;"><svg class="ic-14"><use href="#i-video"/></svg> Video consultation</span></div>
+            <div class="row between" style="padding: 6px 0;"><span class="t-muted" style="font-size: 12px;">Duration</span><span style="font-weight: 600; font-size: 13px;">30 min</span></div>
+            <div class="row between" style="padding: 6px 0;"><span class="t-muted" style="font-size: 12px;">Fee</span><span style="font-weight: 700; color: var(--brand-700);">$40.00</span></div>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 6px;">Your reason</div>
+            <p class="t-muted" style="font-size: 13px; line-height: 1.5;">Follow-up on chest pain and medication review.</p>
+          </div>
+
+          <div style="flex: 1;"></div>
+          <div class="row" style="gap: 8px;">
+            <button class="btn outline grow"><svg class="ic-16"><use href="#i-message"/></svg> Message</button>
+            <button class="btn primary grow"><svg class="ic-16"><use href="#i-video"/></svg> Join call</button>
+          </div>
+          <button class="btn danger block">Cancel appointment</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">15</span><span class="name">Appointment details</span><span class="desc">Full details · primary actions · destructive cancel</span></div>
+    </div>
+
+    <!-- 16 · CHAT LIST -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Messages</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-search"/></svg></button></div>
+        <div class="body">
+          <div class="callout"><b>Chats appear here</b> once a doctor confirms your booking — you can then message them directly.</div>
+
+          <div class="list-row" style="align-items: flex-start;">
+            <span class="avatar md accent" style="position: relative;">SC<span style="position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: var(--success); border-radius: 50%; border: 2px solid white;"></span></span>
+            <div class="body">
+              <div class="row between"><span class="h4">Dr. Sarah Chen</span><span style="font-size: 11px; color: var(--brand-600); font-weight: 600;">2m</span></div>
+              <div class="row between">
+                <span class="t-muted" style="font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Understood, let's adjust the dose slig…</span>
+                <span class="badge dot">3</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="list-row" style="align-items: flex-start;">
+            <span class="avatar md violet">MR</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Dr. Marcus Reed</span><span style="font-size: 11px; color: var(--ink-muted);">Yesterday</span></div>
+              <span class="t-muted" style="font-size: 12px;">Photos received, will review shortly.</span>
+            </div>
+          </div>
+
+          <div class="list-row" style="align-items: flex-start;">
+            <span class="avatar md rose">AP</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Dr. Aisha Patel</span><span style="font-size: 11px; color: var(--ink-muted);">Mon</span></div>
+              <span class="t-muted" style="font-size: 12px;">Prescription sent to your pharmacy.</span>
+            </div>
+          </div>
+
+          <div class="list-row" style="align-items: flex-start;">
+            <span class="avatar md warn">JK</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Dr. James Kim</span><span style="font-size: 11px; color: var(--ink-muted);">Aug 28</span></div>
+              <span class="t-muted" style="font-size: 12px;">Thank you for the update.</span>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item active"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">16</span><span class="name">Chat list</span><span class="desc">Presence dot · unread pill · access rule callout</span></div>
+    </div>
+
+    <!-- 17 · CHAT SCREEN -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar">
+          <button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button>
+          <span class="avatar sm accent">SC</span>
+          <div class="col" style="gap: 0; flex: 1;">
+            <span style="font-weight: 600; font-size: 14px;">Dr. Sarah Chen</span>
+            <span style="font-size: 11px; color: var(--success); font-weight: 500;">● Online</span>
+          </div>
+          <button class="icon-btn"><svg class="ic-16"><use href="#i-video"/></svg></button>
+          <button class="icon-btn"><svg class="ic-16"><use href="#i-phone"/></svg></button>
+        </div>
+        <div class="body" style="gap: 10px; padding: 14px;">
+          <div class="chat-day">— Today · Sep 12 —</div>
+          <div class="bubble theirs">Hi John! How are you feeling today?</div>
+          <div class="bubble mine">Much better, thanks Dr. Chen. The pain is manageable now.</div>
+          <div class="bubble theirs">Great to hear. Any side effects from the new medication?</div>
+          <div class="bubble mine">Just a bit drowsy in the mornings.</div>
+          <div class="bubble theirs">Understood — let's adjust the dose slightly at your next visit.</div>
+          <span class="bubble-time" style="text-align: right;">9:41 AM · Read</span>
+        </div>
+        <div class="composer">
+          <button class="icon-btn"><svg class="ic-18"><use href="#i-plus"/></svg></button>
+          <div class="input">Type a message…</div>
+          <button class="icon-btn filled" style="width: 36px; height: 36px;"><svg class="ic-16"><use href="#i-send"/></svg></button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">17</span><span class="name">Chat screen</span><span class="desc">Presence in appbar · sender bubbles · read receipt · composer</span></div>
+    </div>
+
+    <!-- 18 · DRUG SEARCH -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Drug information</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-info"/></svg></button></div>
+        <div class="body">
+          <div class="search focused" style="border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(30,94,255,0.15);"><svg class="ic-16" style="color: var(--brand-500);"><use href="#i-search"/></svg><span style="color: var(--ink);">Paracetamol|</span></div>
+          <div class="callout"><b>Powered by OpenFDA.</b> Information only — not a substitute for medical advice.</div>
+
+          <div class="subhead">Recent searches</div>
+          <div class="list-row">
+            <span class="avatar md" style="background: var(--brand-50); color: var(--brand-500);"><svg class="ic"><use href="#i-pill"/></svg></span>
+            <div class="body"><span class="h4">Paracetamol</span><span class="t-muted" style="font-size: 12px;">Analgesic · Antipyretic</span></div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+          <div class="list-row">
+            <span class="avatar md" style="background: var(--accent-100); color: var(--accent-600);"><svg class="ic"><use href="#i-pill"/></svg></span>
+            <div class="body"><span class="h4">Ibuprofen</span><span class="t-muted" style="font-size: 12px;">NSAID · Anti-inflammatory</span></div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+          <div class="list-row">
+            <span class="avatar md warn"><svg class="ic"><use href="#i-pill"/></svg></span>
+            <div class="body"><span class="h4">Amoxicillin</span><span class="t-muted" style="font-size: 12px;">Antibiotic</span></div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+          <div class="list-row">
+            <span class="avatar md rose"><svg class="ic"><use href="#i-pill"/></svg></span>
+            <div class="body"><span class="h4">Metformin</span><span class="t-muted" style="font-size: 12px;">Diabetes · Type 2</span></div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item active"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">18</span><span class="name">Drug search</span><span class="desc">OpenFDA-powered search · recent items · medical disclaimer</span></div>
+    </div>
+
+    <!-- 19 · DRUG DETAIL -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Paracetamol</span><div class="spacer"></div><button class="icon-btn"><svg class="ic-16"><use href="#i-heart"/></svg></button></div>
+        <div class="body">
+          <div class="card tinted">
+            <div class="subhead" style="padding: 0; color: var(--brand-700);">Generic name</div>
+            <div style="font-weight: 700; font-size: 18px;">Acetaminophen</div>
+            <div class="subhead" style="padding: 12px 0 4px; color: var(--brand-700);">Brand names</div>
+            <div class="row" style="gap: 6px; flex-wrap: wrap;">
+              <span class="chip">Tylenol</span>
+              <span class="chip">Panadol</span>
+              <span class="chip">Calpol</span>
+              <span class="chip">Mapap</span>
+            </div>
+          </div>
+
+          <div class="row" style="gap: 6px; overflow: hidden;">
+            <span class="chip active">Purpose</span>
+            <span class="chip">Warnings</span>
+            <span class="chip">Dosage</span>
+            <span class="chip">Mfr</span>
+          </div>
+
+          <div class="card">
+            <div class="row" style="gap: 8px; margin-bottom: 8px;">
+              <span class="avatar sm" style="background: var(--brand-50); color: var(--brand-500);"><svg class="ic-16"><use href="#i-info"/></svg></span>
+              <div class="h4">Purpose &amp; indications</div>
+            </div>
+            <p class="t-muted" style="font-size: 13px; line-height: 1.5;">Temporarily reduces fever and relieves minor aches and pains due to headache, muscular aches, backache, minor arthritis pain, common cold and toothache.</p>
+          </div>
+
+          <div class="card" style="background: var(--warning-soft); border-color: #fcd34d;">
+            <div class="row" style="gap: 8px; margin-bottom: 8px;">
+              <span class="avatar sm warn"><svg class="ic-16"><use href="#i-alert"/></svg></span>
+              <div class="h4" style="color: #78350f;">Warnings</div>
+            </div>
+            <p style="font-size: 13px; line-height: 1.5; color: #78350f;">Liver warning. Do not use with other drugs containing acetaminophen. Adults should not exceed 3000mg in 24 hours.</p>
+          </div>
+
+          <div class="callout warn"><b>⚠ Not medical advice.</b> Always consult a licensed clinician or pharmacist before use.</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">19</span><span class="name">Drug information details</span><span class="desc">Generic / brands · tabbed sections · warning surface · disclaimer</span></div>
+    </div>
+
+    <!-- 20 · NOTIFICATIONS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Notifications</span><div class="spacer"></div><a class="t-brand" style="font-size: 13px; font-weight: 600;">Mark all read</a></div>
+        <div class="body">
+          <div class="notif unread">
+            <div class="ico" style="background: var(--success-soft); color: var(--success);"><svg class="ic-18"><use href="#i-check-circle"/></svg></div>
+            <div class="body"><div class="h4">Appointment confirmed</div><div class="t-muted" style="font-size: 12px;">Dr. Sarah Chen accepted your Tue 09:30 booking.</div><div style="font-size: 11px; color: var(--brand-600); margin-top: 2px; font-weight: 600;">2h ago</div></div>
+          </div>
+          <div class="notif unread">
+            <div class="ico" style="background: var(--brand-50); color: var(--brand-500);"><svg class="ic-18"><use href="#i-message"/></svg></div>
+            <div class="body"><div class="h4">New message from Dr. Chen</div><div class="t-muted" style="font-size: 12px;">"Understood, let's adjust the dose sli…"</div><div style="font-size: 11px; color: var(--brand-600); margin-top: 2px; font-weight: 600;">Today</div></div>
+          </div>
+          <div class="notif">
+            <div class="ico" style="background: var(--warning-soft); color: #92400e;"><svg class="ic-18"><use href="#i-calendar-clock"/></svg></div>
+            <div class="body"><div class="h4">Reminder — tomorrow 09:30</div><div class="t-muted" style="font-size: 12px;">Video consult with Dr. Sarah Chen.</div><div style="font-size: 11px; color: var(--ink-muted); margin-top: 2px;">Yesterday</div></div>
+          </div>
+          <div class="notif">
+            <div class="ico" style="background: var(--info-soft); color: var(--info);"><svg class="ic-18"><use href="#i-pill"/></svg></div>
+            <div class="body"><div class="h4">Prescription ready</div><div class="t-muted" style="font-size: 12px;">Your amoxicillin is ready for pickup.</div><div style="font-size: 11px; color: var(--ink-muted); margin-top: 2px;">Sep 8</div></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">20</span><span class="name">Notifications</span><span class="desc">Unread emphasis · categorized icons · time labels</span></div>
+    </div>
+
+    <!-- 21 · PATIENT PROFILE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Profile</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-settings"/></svg></button></div>
+        <div class="body">
+          <div class="card" style="text-align: center; padding: 20px;">
+            <span class="avatar xl" style="margin: 0 auto;">JD</span>
+            <h3 style="margin-top: 10px; font-size: 17px;">John Doe</h3>
+            <div class="t-muted" style="font-size: 12px; margin-top: 2px;">john.doe@email.com</div>
+            <span class="badge brand" style="margin-top: 8px;">Patient</span>
+          </div>
+
+          <div class="row" style="gap: 8px;">
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">12</div><div class="label">Appointments</div></div>
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">3</div><div class="label">Doctors</div></div>
+            <div class="stat grow" style="text-align: center; padding: 10px;"><div class="num">8</div><div class="label">Rx searches</div></div>
+          </div>
+
+          <div class="setting-list">
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-user"/></svg></div><span class="grow">Edit profile</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-shield"/></svg></div><span class="grow">Privacy &amp; security</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-bell"/></svg></div><span class="grow">Notifications</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-moon"/></svg></div><span class="grow">Appearance</span><span class="t-muted" style="font-size: 12px;">System</span></div>
+            <div class="setting-row danger"><div class="ico"><svg class="ic-16"><use href="#i-log-out"/></svg></div><span class="grow" style="color: var(--danger); font-weight: 600;">Log out</span></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item active"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">21</span><span class="name">Patient profile</span><span class="desc">Identity · usage stats · settings list</span></div>
+    </div>
+
+    <!-- 22 · EDIT PROFILE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Edit profile</span><div class="spacer"></div><button class="btn primary sm">Save</button></div>
+        <div class="body white">
+          <div style="text-align: center; padding: 8px 0;">
+            <div style="position: relative; display: inline-block;">
+              <span class="avatar xl">JD</span>
+              <button class="icon-btn filled" style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px;"><svg class="ic-14"><use href="#i-edit"/></svg></button>
+            </div>
+            <div class="t-brand" style="margin-top: 8px; font-size: 12px; font-weight: 600;">Change photo</div>
+          </div>
+
+          <div class="field"><span class="label">Full name</span><span class="value">John Doe</span></div>
+          <div class="field"><span class="label">Date of birth</span><span class="value">Aug 14, 1990</span></div>
+          <div class="field"><span class="label">Gender</span><span class="value">Male</span></div>
+          <div class="field"><span class="label">Phone</span><span class="value">+1 (555) 123-4567</span></div>
+          <div class="field"><span class="label">Blood group</span><span class="value">O+</span></div>
+          <div class="field"><span class="label">Known allergies</span><span class="value">Penicillin, peanuts</span></div>
+
+          <button class="btn primary lg block" style="margin-top: 8px;">Save changes</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">22</span><span class="name">Edit profile</span><span class="desc">Avatar editor · basic + medical fields</span></div>
+    </div>
+
+    <!-- 23 · SETTINGS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Settings</span></div>
+        <div class="body">
+          <div class="subhead">Preferences</div>
+          <div class="setting-list">
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-globe"/></svg></div><span class="grow">Language</span><span class="t-muted" style="font-size: 12px;">English</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-moon"/></svg></div><span class="grow">Dark mode</span><span class="t-muted" style="font-size: 12px;">System</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-bell"/></svg></div><span class="grow">Push notifications</span><div class="toggle on"></div></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-message"/></svg></div><span class="grow">Chat notifications</span><div class="toggle on"></div></div>
+          </div>
+
+          <div class="subhead" style="padding-top: 12px;">Account</div>
+          <div class="setting-list">
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-key"/></svg></div><span class="grow">Change password</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-download"/></svg></div><span class="grow">Export my data</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row danger"><div class="ico"><svg class="ic-16"><use href="#i-x"/></svg></div><span class="grow" style="color: var(--danger); font-weight: 600;">Delete account</span></div>
+          </div>
+
+          <div class="subhead" style="padding-top: 12px;">About</div>
+          <div class="setting-list">
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-file-text"/></svg></div><span class="grow">Terms &amp; privacy</span><svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg></div>
+            <div class="setting-row"><div class="ico"><svg class="ic-16"><use href="#i-info"/></svg></div><span class="grow">App version</span><span class="t-muted" style="font-size: 12px;">1.0.0</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">23</span><span class="name">Settings</span><span class="desc">Grouped preferences · toggles · destructive action</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>Next: <a href="doctor.html" class="t-brand" style="font-weight:600">Doctor screens →</a></div>
+</footer>
+
+</body>
+</html>

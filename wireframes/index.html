@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares — Wireframes</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-2: #4a4a4a;
+    --line: #999;
+    --line-2: #cfcfcf;
+    --bg: #f4f4f2;
+    --panel: #ffffff;
+    --muted: #ededed;
+    --box: #e6e6e6;
+    --dashed: #b3b3b3;
+    --hi: #d9d9d9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.4; }
+  a { color: var(--ink); }
+  header.doc {
+    padding: 28px 32px; border-bottom: 1px solid var(--line-2); background: #fff;
+    position: sticky; top: 0; z-index: 20;
+  }
+  header.doc h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: 0.5px; }
+  header.doc p { margin: 0; color: var(--ink-2); font-size: 12px; }
+  nav.toc { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; }
+  nav.toc a { text-decoration: none; padding: 4px 8px; border: 1px solid var(--line-2); background: var(--muted); }
+  nav.toc a:hover { background: #e2e2e2; }
+
+  section.group { padding: 32px; border-bottom: 1px dashed var(--line-2); }
+  section.group > h2 {
+    margin: 0 0 4px; font-size: 15px; text-transform: uppercase; letter-spacing: 1.5px;
+  }
+  section.group > .subtitle { color: var(--ink-2); margin-bottom: 20px; font-size: 12px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px 24px;
+    align-items: start;
+  }
+
+  .frame {
+    background: var(--panel);
+    border: 1px solid var(--ink);
+    border-radius: 22px;
+    padding: 6px;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.08);
+    width: 320px;
+    margin: 0 auto;
+  }
+  .frame.tablet { width: 460px; border-radius: 14px; }
+  .frame.desktop { width: 640px; border-radius: 8px; }
+  .screen {
+    background: #fff;
+    border: 1px solid var(--line-2);
+    border-radius: 16px;
+    height: 640px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+  .frame.tablet .screen { border-radius: 10px; height: 620px; }
+  .frame.desktop .screen { border-radius: 6px; height: 480px; }
+  .screen-title {
+    text-align: center;
+    font-size: 11px; letter-spacing: 1px; color: var(--ink-2);
+    margin-top: 10px; text-transform: uppercase;
+  }
+  .screen-num {
+    display: inline-block; background: var(--ink); color: #fff; font-size: 10px;
+    padding: 1px 6px; border-radius: 3px; margin-right: 6px;
+  }
+
+  /* Common wireframe primitives */
+  .statusbar {
+    height: 22px; border-bottom: 1px dashed var(--line-2);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; font-size: 10px; color: var(--ink-2);
+    flex: 0 0 auto;
+  }
+  .appbar {
+    height: 48px; border-bottom: 1px solid var(--line-2);
+    display: flex; align-items: center; padding: 0 14px; gap: 10px;
+    flex: 0 0 auto;
+  }
+  .appbar .title { font-weight: 600; font-size: 13px; }
+  .appbar .spacer { flex: 1; }
+  .icon-btn { width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+  .icon-sq { width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 5px;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+  .back { width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center; }
+
+  .body { flex: 1 1 auto; overflow: hidden; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .body.no-pad { padding: 0; }
+  .body.center { align-items: center; justify-content: center; text-align: center; }
+
+  .bottomnav {
+    height: 58px; border-top: 1px solid var(--line-2);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    padding: 6px 4px 8px; gap: 4px; flex: 0 0 auto; background: #fff;
+  }
+  .bottomnav .item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--ink-2); gap: 2px;
+  }
+  .bottomnav .item .dot { width: 18px; height: 18px; border: 1px solid var(--line); border-radius: 4px; }
+  .bottomnav .item.active { color: var(--ink); font-weight: 600; }
+  .bottomnav .item.active .dot { background: var(--ink); }
+
+  .box { background: var(--box); border-radius: 6px; }
+  .card { border: 1px solid var(--line-2); border-radius: 10px; padding: 10px; background: #fff; }
+  .card.tinted { background: var(--muted); }
+  .dashed { border: 1px dashed var(--dashed); border-radius: 8px; padding: 10px; color: var(--ink-2); font-style: italic; }
+
+  .line { height: 8px; background: var(--box); border-radius: 3px; }
+  .line.short { width: 55%; }
+  .line.mid { width: 75%; }
+  .line.tiny { width: 30%; height: 6px; }
+  .line.head { height: 12px; width: 65%; background: var(--hi); }
+
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--box);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 11px; color: var(--ink-2); flex-shrink: 0; }
+  .avatar.lg { width: 60px; height: 60px; }
+  .avatar.xl { width: 84px; height: 84px; }
+  .avatar.sq { border-radius: 8px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 8px 12px; border: 1px solid var(--ink); border-radius: 8px;
+    font-size: 11px; font-weight: 600; background: var(--ink); color: #fff;
+  }
+  .btn.ghost { background: #fff; color: var(--ink); }
+  .btn.block { width: 100%; padding: 10px; }
+  .btn.sm { padding: 4px 8px; font-size: 10px; }
+
+  .chip { display: inline-block; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; font-size: 10px; color: var(--ink-2); background: #fff; }
+  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .field { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--ink-2); background: #fff; }
+  .field .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--ink-2); }
+
+  .row { display: flex; gap: 8px; align-items: center; }
+  .row.between { justify-content: space-between; }
+  .col { display: flex; flex-direction: column; gap: 6px; }
+  .grow { flex: 1; }
+
+  .list { display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+  .list-item { display: flex; gap: 10px; align-items: center; padding: 8px; border: 1px solid var(--line-2); border-radius: 10px; background: #fff; }
+
+  .badge { display: inline-block; padding: 1px 6px; font-size: 9px; border-radius: 4px; border: 1px solid var(--line); color: var(--ink-2); background: #fff; }
+  .badge.dot { background: var(--ink); color: #fff; border-color: var(--ink); padding: 0 5px; }
+
+  .sidebar {
+    width: 130px; border-right: 1px solid var(--line-2); padding: 12px 10px; display: flex; flex-direction: column; gap: 6px;
+    background: var(--muted);
+  }
+  .sidebar .brand { font-weight: 700; font-size: 12px; margin-bottom: 12px; }
+  .sidebar .nav-item { padding: 6px 8px; border-radius: 6px; font-size: 11px; color: var(--ink-2); }
+  .sidebar .nav-item.active { background: var(--ink); color: #fff; }
+
+  .stat { border: 1px solid var(--line-2); border-radius: 10px; padding: 10px; background: #fff; display: flex; flex-direction: column; gap: 4px; }
+  .stat .num { font-size: 18px; font-weight: 700; }
+  .stat .lbl { font-size: 9px; text-transform: uppercase; color: var(--ink-2); letter-spacing: 0.8px; }
+
+  /* Chat bubbles */
+  .bubble { max-width: 75%; padding: 8px 10px; border-radius: 12px; font-size: 11px; }
+  .bubble.mine { background: var(--ink); color: #fff; margin-left: auto; border-bottom-right-radius: 3px; }
+  .bubble.theirs { background: var(--box); color: var(--ink); border-bottom-left-radius: 3px; }
+  .composer { border-top: 1px solid var(--line-2); padding: 8px 10px; display: flex; gap: 8px; align-items: center; }
+  .composer .input { flex: 1; height: 30px; border: 1px solid var(--line); border-radius: 999px; padding: 0 12px; font-size: 11px; color: var(--ink-2); display:flex; align-items:center; }
+
+  /* Splash / marketing */
+  .logo-mark { width: 72px; height: 72px; border: 2px solid var(--ink); border-radius: 18px;
+    display: inline-flex; align-items: center; justify-content: center; font-weight: 700; letter-spacing: 1px; }
+  .logo-mark.sm { width: 44px; height: 44px; border-radius: 10px; font-size: 12px; }
+
+  /* Legend / annotation */
+  .note {
+    font-size: 11px; color: var(--ink-2); background: #fff; border: 1px dashed var(--dashed);
+    padding: 8px 10px; border-radius: 6px; margin: 6px 0 0;
+  }
+  .callout { font-size: 11px; color: var(--ink-2); padding: 10px; background: var(--muted); border-radius: 6px; }
+
+  /* Utility */
+  .scroll-note { position: absolute; right: 8px; top: 34px; font-size: 9px; color: var(--ink-2); }
+  .h-8 { height: 8px; } .h-12 { height: 12px; } .h-16 { height: 16px; } .h-24 { height: 24px; } .h-40 { height: 40px; } .h-60 { height: 60px; } .h-80 { height: 80px; }
+  .p-2 { padding: 6px; } .p-3 { padding: 10px; }
+
+  footer { padding: 32px; color: var(--ink-2); font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="doc">
+  <h1>Doctor Cares — Low-Fi Wireframes v1</h1>
+  <p>Purpose: agree on layout, navigation and information hierarchy before we build the polished React UI. Style is intentionally grayscale — no color or brand yet.</p>
+  <nav class="toc">
+    <a href="#auth">Auth &amp; Onboarding</a>
+    <a href="#patient">Patient</a>
+    <a href="#doctor">Doctor</a>
+    <a href="#admin">Admin</a>
+    <a href="#system">System / PWA</a>
+    <a href="#design">Design notes</a>
+  </nav>
+</header>
+
+<!-- ============================================================ AUTH ============================================================ -->
+<section class="group" id="auth">
+  <h2>1 · Auth &amp; Onboarding</h2>
+  <div class="subtitle">Splash → Onboarding → Login/Register → Role choice → Forgot password. Full-screen, no bottom nav.</div>
+
+  <div class="grid">
+
+    <!-- 1. Splash -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body center">
+          <div class="logo-mark">DC</div>
+          <div class="h-16"></div>
+          <div class="line head" style="width:60%; margin: 0 auto;"></div>
+          <div class="line short" style="margin: 8px auto 0;"></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">01</span>Splash</div>
+    </div>
+
+    <!-- 2. Onboarding -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body">
+          <div class="box" style="height: 180px;"></div>
+          <div class="line head"></div>
+          <div class="line"></div><div class="line mid"></div>
+          <div class="row" style="justify-content:center; gap:6px; margin-top:6px;">
+            <span class="badge dot">●</span><span class="badge">○</span><span class="badge">○</span>
+          </div>
+          <div class="grow"></div>
+          <div class="row between"><span class="chip">Skip</span><span class="btn sm">Next →</span></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">02</span>Onboarding (3 slides)</div>
+    </div>
+
+    <!-- 3. Login -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body">
+          <div class="row"><div class="logo-mark sm">DC</div></div>
+          <div class="h-8"></div>
+          <div class="line head" style="width:40%"></div>
+          <div class="line short"></div>
+          <div class="h-8"></div>
+          <div class="field"><div class="lbl">Email</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Password</div><div class="line short"></div></div>
+          <div class="row between"><span class="chip">Remember me</span><span class="line tiny"></span></div>
+          <div class="btn block">Log in</div>
+          <div class="dashed">— or continue with —</div>
+          <div class="row" style="gap:6px"><div class="btn ghost grow">Google</div><div class="btn ghost grow">Apple</div></div>
+          <div class="grow"></div>
+          <div style="text-align:center; font-size:11px; color:var(--ink-2)">No account? <b>Register</b></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">03</span>Login</div>
+    </div>
+
+    <!-- 4. Register -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Create account</span></div>
+        <div class="body">
+          <div class="field"><div class="lbl">Full name</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Email</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Password</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Confirm password</div><div class="line short"></div></div>
+          <div class="chip">☐ I agree to Terms &amp; Privacy</div>
+          <div class="btn block">Continue</div>
+          <div style="text-align:center; font-size:11px; color:var(--ink-2)">Have an account? <b>Log in</b></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">04</span>Register</div>
+    </div>
+
+    <!-- 5. Role selection -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">I am a...</span></div>
+        <div class="body">
+          <div class="callout">Admin accounts are provisioned by the platform team. Users can only choose Patient or Doctor here.</div>
+          <div class="card" style="text-align:center; padding:20px">
+            <div class="avatar lg" style="margin:0 auto">👤</div>
+            <div class="h-8"></div><div class="line head" style="width:40%; margin:0 auto"></div>
+            <div class="line short" style="margin:6px auto"></div>
+            <div class="h-8"></div><div class="btn block">Continue as Patient</div>
+          </div>
+          <div class="card" style="text-align:center; padding:20px">
+            <div class="avatar lg" style="margin:0 auto">🩺</div>
+            <div class="h-8"></div><div class="line head" style="width:45%; margin:0 auto"></div>
+            <div class="line short" style="margin:6px auto"></div>
+            <div class="h-8"></div><div class="btn ghost block">Continue as Doctor</div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">06</span>Role selection</div>
+    </div>
+
+    <!-- 6. Forgot password -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Reset password</span></div>
+        <div class="body">
+          <div class="line head"></div>
+          <div class="line"></div><div class="line mid"></div>
+          <div class="h-8"></div>
+          <div class="field"><div class="lbl">Email</div><div class="line short"></div></div>
+          <div class="btn block">Send reset link</div>
+          <div class="callout">Once submitted: show success state with "Check your email" and a Resend link (60s cooldown).</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">05</span>Forgot password</div>
+    </div>
+
+    <!-- 7. Auth loading -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body center">
+          <div class="logo-mark sm">DC</div>
+          <div class="h-8"></div>
+          <div class="dashed">Verifying session…</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">07</span>Auth loading (route guard)</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================ PATIENT ============================================================ -->
+<section class="group" id="patient">
+  <h2>2 · Patient</h2>
+  <div class="subtitle">Bottom nav: Home · Appointments · Chat · Drugs · Profile. Mobile is primary; desktop uses left sidebar + wider cards.</div>
+
+  <div class="grid">
+
+    <!-- Patient Dashboard -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar">
+          <div class="avatar">JD</div>
+          <div class="col"><span style="font-size:10px; color:var(--ink-2)">Good morning,</span><span class="title">John</span></div>
+          <div class="spacer"></div>
+          <div class="icon-btn">🔔<span class="badge dot" style="position:relative; top:-8px; left:-4px">2</span></div>
+        </div>
+        <div class="body">
+          <div class="field"><div class="row"><span>🔍</span><span style="color:var(--ink-2); font-size:11px">Search doctors, specialties…</span></div></div>
+          <div class="row" style="gap:6px; overflow:hidden">
+            <span class="chip on">All</span><span class="chip">Cardio</span><span class="chip">Dental</span><span class="chip">Derma</span>
+          </div>
+          <div class="card tinted" style="display:flex; gap:10px; align-items:center">
+            <div class="avatar lg">🩺</div>
+            <div class="col grow">
+              <span style="font-size:10px; color:var(--ink-2)">NEXT APPOINTMENT</span>
+              <div class="line head"></div>
+              <div class="line short"></div>
+              <div class="row" style="gap:6px"><span class="badge">Tue 2:30 PM</span><span class="badge">Video</span></div>
+            </div>
+          </div>
+          <div class="row between"><b style="font-size:12px">Top doctors</b><span class="line tiny"></span></div>
+          <div class="list-item"><div class="avatar">DR</div><div class="col grow"><div class="line short"></div><div class="line tiny"></div></div><span class="badge">4.9★</span></div>
+          <div class="list-item"><div class="avatar">DR</div><div class="col grow"><div class="line short"></div><div class="line tiny"></div></div><span class="badge">4.8★</span></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item active"><div class="dot"></div>Home</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">08</span>Patient dashboard</div>
+    </div>
+
+    <!-- Find doctors -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Find doctors</span><div class="spacer"></div><span class="icon-sq">⚙︎</span></div>
+        <div class="body">
+          <div class="field"><div class="row"><span>🔍</span><span style="color:var(--ink-2); font-size:11px">Search by name or specialty</span></div></div>
+          <div class="row" style="gap:6px; flex-wrap:wrap">
+            <span class="chip on">All</span><span class="chip">Cardiologist</span><span class="chip">Dermatologist</span><span class="chip">Pediatrics</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar lg">DR</div>
+            <div class="col grow">
+              <b style="font-size:12px">Dr. ▬▬▬▬▬</b>
+              <span style="font-size:10px; color:var(--ink-2)">Cardiologist · 8 yrs</span>
+              <div class="row"><span class="badge">4.9★</span><span class="badge">$40</span><span class="badge">Video</span></div>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="avatar lg">DR</div>
+            <div class="col grow">
+              <b style="font-size:12px">Dr. ▬▬▬▬▬</b>
+              <span style="font-size:10px; color:var(--ink-2)">Dermatologist · 5 yrs</span>
+              <div class="row"><span class="badge">4.8★</span><span class="badge">$35</span></div>
+            </div>
+          </div>
+          <div class="list-item">
+            <div class="avatar lg">DR</div>
+            <div class="col grow"><b style="font-size:12px">Dr. ▬▬▬▬▬</b><span style="font-size:10px; color:var(--ink-2)">Pediatrics · 12 yrs</span></div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item active"><div class="dot"></div>Doctors</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">09-10</span>Find doctors · list + filters</div>
+    </div>
+
+    <!-- Doctor profile -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Doctor profile</span><div class="spacer"></div><span class="icon-btn">♡</span></div>
+        <div class="body">
+          <div style="display:flex; gap:12px; align-items:center">
+            <div class="avatar xl">DR</div>
+            <div class="col grow">
+              <b style="font-size:13px">Dr. ▬▬▬▬▬▬▬</b>
+              <span style="font-size:10px; color:var(--ink-2)">Cardiologist · MBBS, MD</span>
+              <div class="row"><span class="badge">4.9★ (128)</span><span class="badge">8 yrs</span></div>
+            </div>
+          </div>
+          <div class="row" style="gap:8px">
+            <div class="stat grow"><span class="num">128</span><span class="lbl">Patients</span></div>
+            <div class="stat grow"><span class="num">8+</span><span class="lbl">Years</span></div>
+            <div class="stat grow"><span class="num">4.9</span><span class="lbl">Rating</span></div>
+          </div>
+          <div class="row" style="gap:6px"><span class="chip on">About</span><span class="chip">Reviews</span><span class="chip">Location</span></div>
+          <div class="line"></div><div class="line mid"></div><div class="line short"></div>
+          <div class="grow"></div>
+          <div class="row" style="gap:8px"><div class="btn ghost grow">Message</div><div class="btn grow">Book appointment</div></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">11</span>Doctor profile</div>
+    </div>
+
+    <!-- Book appointment -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Book appointment</span></div>
+        <div class="body">
+          <div class="list-item"><div class="avatar">DR</div><div class="col grow"><div class="line short"></div><div class="line tiny"></div></div></div>
+          <b style="font-size:11px; margin-top:4px">Select date</b>
+          <div class="row" style="gap:6px; overflow:hidden">
+            <div class="card" style="padding:6px 10px; text-align:center; min-width:44px"><div style="font-size:9px; color:var(--ink-2)">MON</div><b>12</b></div>
+            <div class="card" style="padding:6px 10px; text-align:center; min-width:44px; background:var(--ink); color:#fff; border-color:var(--ink)"><div style="font-size:9px">TUE</div><b>13</b></div>
+            <div class="card" style="padding:6px 10px; text-align:center; min-width:44px"><div style="font-size:9px; color:var(--ink-2)">WED</div><b>14</b></div>
+            <div class="card" style="padding:6px 10px; text-align:center; min-width:44px"><div style="font-size:9px; color:var(--ink-2)">THU</div><b>15</b></div>
+            <div class="card" style="padding:6px 10px; text-align:center; min-width:44px"><div style="font-size:9px; color:var(--ink-2)">FRI</div><b>16</b></div>
+          </div>
+          <b style="font-size:11px; margin-top:4px">Available times</b>
+          <div class="row" style="gap:6px; flex-wrap:wrap">
+            <span class="chip">09:00</span><span class="chip on">09:30</span><span class="chip">10:00</span>
+            <span class="chip">10:30</span><span class="chip" style="opacity:.4">11:00</span><span class="chip">14:30</span>
+          </div>
+          <div class="field"><div class="lbl">Reason for visit</div><div class="line short"></div><div class="line tiny"></div></div>
+          <div class="grow"></div>
+          <div class="btn block">Confirm — Tue 13, 09:30</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">12</span>Book appointment</div>
+    </div>
+
+    <!-- Booking confirmation -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body center">
+          <div class="avatar xl">✓</div>
+          <b style="font-size:14px; margin-top:12px">Appointment requested</b>
+          <div class="line short" style="margin:6px auto"></div>
+          <div class="card" style="text-align:left; width:90%; margin-top:14px">
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">DOCTOR</span><span class="badge">Pending</span></div>
+            <div class="line short"></div>
+            <div class="h-8"></div>
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">DATE</span><span style="font-size:11px">Tue Sep 13, 09:30</span></div>
+            <div class="h-8"></div>
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">TYPE</span><span style="font-size:11px">Video consult</span></div>
+          </div>
+          <div class="h-16"></div>
+          <div class="btn ghost">View my appointments</div>
+          <div class="line tiny" style="margin-top:8px"></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">13</span>Booking confirmation</div>
+    </div>
+
+    <!-- My appointments -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">My appointments</span></div>
+        <div class="body">
+          <div class="row" style="gap:6px"><span class="chip on">Upcoming</span><span class="chip">Past</span><span class="chip">Cancelled</span></div>
+          <div class="card">
+            <div class="row between"><b style="font-size:12px">Dr. ▬▬▬▬▬</b><span class="badge">Confirmed</span></div>
+            <span style="font-size:10px; color:var(--ink-2)">Cardiologist</span>
+            <div class="row" style="margin-top:6px; gap:6px"><span class="badge">Tue Sep 13</span><span class="badge">09:30</span><span class="badge">Video</span></div>
+            <div class="row" style="gap:6px; margin-top:8px"><div class="btn ghost sm grow">Reschedule</div><div class="btn sm grow">Join call</div></div>
+          </div>
+          <div class="card">
+            <div class="row between"><b style="font-size:12px">Dr. ▬▬▬▬▬</b><span class="badge">Pending</span></div>
+            <span style="font-size:10px; color:var(--ink-2)">Dermatologist</span>
+            <div class="row" style="margin-top:6px; gap:6px"><span class="badge">Fri Sep 16</span><span class="badge">14:00</span></div>
+            <div class="row" style="gap:6px; margin-top:8px"><div class="btn ghost sm grow">Cancel</div></div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item active"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">14</span>My appointments</div>
+    </div>
+
+    <!-- Appointment detail -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Appointment</span><div class="spacer"></div><span class="icon-btn">⋯</span></div>
+        <div class="body">
+          <div class="card tinted" style="display:flex; gap:10px; align-items:center">
+            <div class="avatar lg">DR</div>
+            <div class="col grow"><b style="font-size:12px">Dr. ▬▬▬▬▬</b><span style="font-size:10px; color:var(--ink-2)">Cardiologist</span><span class="badge">Confirmed</span></div>
+          </div>
+          <div class="card">
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">DATE &amp; TIME</span><span style="font-size:11px">Tue Sep 13, 09:30</span></div>
+            <div class="h-8"></div>
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">TYPE</span><span style="font-size:11px">Video consultation</span></div>
+            <div class="h-8"></div>
+            <div class="row between"><span style="font-size:10px; color:var(--ink-2)">FEE</span><span style="font-size:11px">$40.00</span></div>
+          </div>
+          <div class="field"><div class="lbl">Your reason</div><div class="line short"></div><div class="line tiny"></div></div>
+          <div class="row" style="gap:8px"><div class="btn ghost grow">Message doctor</div><div class="btn grow">Join call</div></div>
+          <div class="btn ghost block" style="border-color:#a00; color:#a00">Cancel appointment</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">15</span>Appointment details</div>
+    </div>
+
+    <!-- Chat list -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Messages</span><div class="spacer"></div><span class="icon-sq">🔍</span></div>
+        <div class="body">
+          <div class="callout">Conversations exist only after a patient books or messages the doctor from their profile. Empty state = "No conversations yet."</div>
+          <div class="list-item">
+            <div class="avatar">DR</div>
+            <div class="col grow"><div class="row between"><b style="font-size:12px">Dr. ▬▬▬</b><span style="font-size:9px; color:var(--ink-2)">2m</span></div><div class="line short"></div></div>
+            <span class="badge dot">3</span>
+          </div>
+          <div class="list-item">
+            <div class="avatar">DR</div>
+            <div class="col grow"><div class="row between"><b style="font-size:12px">Dr. ▬▬▬</b><span style="font-size:9px; color:var(--ink-2)">Yesterday</span></div><div class="line short"></div></div>
+          </div>
+          <div class="list-item">
+            <div class="avatar">DR</div>
+            <div class="col grow"><div class="row between"><b style="font-size:12px">Dr. ▬▬▬</b><span style="font-size:9px; color:var(--ink-2)">Mon</span></div><div class="line short"></div></div>
+          </div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item active"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">16</span>Chat list</div>
+    </div>
+
+    <!-- Chat screen -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar">
+          <span class="back">←</span>
+          <div class="avatar">DR</div>
+          <div class="col grow"><b style="font-size:12px">Dr. ▬▬▬</b><span style="font-size:9px; color:var(--ink-2)">● Online</span></div>
+          <span class="icon-btn">📞</span>
+        </div>
+        <div class="body" style="gap:8px; overflow:hidden">
+          <div style="text-align:center; font-size:9px; color:var(--ink-2)">— Today —</div>
+          <div class="bubble theirs">Hi, how are you feeling today?</div>
+          <div class="bubble mine">Better, thanks. The pain is manageable.</div>
+          <div class="bubble theirs">Good. Any side effects from the medication?</div>
+          <div class="bubble mine">Just a bit drowsy in the mornings.</div>
+          <div class="bubble theirs">Understood, let's adjust the dose.</div>
+        </div>
+        <div class="composer"><span class="icon-btn">＋</span><div class="input">Type a message…</div><span class="icon-btn">➤</span></div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">17</span>Chat screen</div>
+    </div>
+
+    <!-- Drug search -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Drug information</span></div>
+        <div class="body">
+          <div class="field"><div class="row"><span>🔍</span><span style="color:var(--ink-2); font-size:11px">Search medications (e.g. Paracetamol)</span></div></div>
+          <div class="callout">Powered by OpenFDA · not a substitute for medical advice.</div>
+          <b style="font-size:11px">Recent</b>
+          <div class="list-item"><span class="icon-sq">💊</span><div class="col grow"><b style="font-size:12px">Paracetamol</b><span style="font-size:10px; color:var(--ink-2)">Analgesic</span></div><span>→</span></div>
+          <div class="list-item"><span class="icon-sq">💊</span><div class="col grow"><b style="font-size:12px">Ibuprofen</b><span style="font-size:10px; color:var(--ink-2)">NSAID</span></div><span>→</span></div>
+          <div class="list-item"><span class="icon-sq">💊</span><div class="col grow"><b style="font-size:12px">Amoxicillin</b><span style="font-size:10px; color:var(--ink-2)">Antibiotic</span></div><span>→</span></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item active"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">18</span>Drug search</div>
+    </div>
+
+    <!-- Drug detail -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Paracetamol</span><div class="spacer"></div><span class="icon-btn">♡</span></div>
+        <div class="body">
+          <div class="card tinted"><b style="font-size:12px">Generic name</b><div class="line short"></div><div class="h-8"></div><b style="font-size:12px">Brand names</b><div class="line mid"></div></div>
+          <div class="row" style="gap:6px"><span class="chip on">Purpose</span><span class="chip">Warnings</span><span class="chip">Dosage</span><span class="chip">Mfr</span></div>
+          <div class="card">
+            <b style="font-size:11px">Purpose &amp; indications</b>
+            <div class="line"></div><div class="line"></div><div class="line mid"></div>
+          </div>
+          <div class="card">
+            <b style="font-size:11px">Warnings</b>
+            <div class="line"></div><div class="line short"></div>
+          </div>
+          <div class="callout">⚠ Not medical advice. Consult a licensed clinician before use.</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">19</span>Drug information details</div>
+    </div>
+
+    <!-- Notifications -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Notifications</span><div class="spacer"></div><span class="icon-btn">⋯</span></div>
+        <div class="body">
+          <div class="list-item"><span class="icon-sq">✓</span><div class="col grow"><b style="font-size:11px">Appointment confirmed</b><div class="line short"></div><span style="font-size:9px; color:var(--ink-2)">2h ago</span></div></div>
+          <div class="list-item"><span class="icon-sq">💬</span><div class="col grow"><b style="font-size:11px">New message from Dr. ▬▬▬</b><div class="line short"></div><span style="font-size:9px; color:var(--ink-2)">Today</span></div></div>
+          <div class="list-item"><span class="icon-sq">📅</span><div class="col grow"><b style="font-size:11px">Reminder — tomorrow 09:30</b><div class="line short"></div><span style="font-size:9px; color:var(--ink-2)">Yesterday</span></div></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">20</span>Notifications</div>
+    </div>
+
+    <!-- Patient profile -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Profile</span><div class="spacer"></div><span class="icon-sq">⚙︎</span></div>
+        <div class="body">
+          <div style="display:flex; align-items:center; gap:12px">
+            <div class="avatar xl">JD</div>
+            <div class="col grow"><b style="font-size:13px">John Doe</b><span style="font-size:10px; color:var(--ink-2)">john@email.com</span><span class="badge">Patient</span></div>
+          </div>
+          <div class="row" style="gap:8px">
+            <div class="stat grow"><span class="num">12</span><span class="lbl">Appointments</span></div>
+            <div class="stat grow"><span class="num">3</span><span class="lbl">Doctors</span></div>
+            <div class="stat grow"><span class="num">8</span><span class="lbl">Rx searches</span></div>
+          </div>
+          <div class="list"><div class="list-item">👤 Edit profile <span class="grow"></span> ›</div>
+          <div class="list-item">🔒 Privacy &amp; security <span class="grow"></span> ›</div>
+          <div class="list-item">🔔 Notifications <span class="grow"></span> ›</div>
+          <div class="list-item">🌙 Appearance <span class="grow"></span> ›</div>
+          <div class="list-item" style="color:#a00">↪ Log out <span class="grow"></span></div></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item active"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">21</span>Patient profile</div>
+    </div>
+
+    <!-- Edit profile -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Edit profile</span><div class="spacer"></div><span class="line tiny">Save</span></div>
+        <div class="body">
+          <div style="text-align:center"><div class="avatar xl" style="margin:0 auto">JD</div><div class="line tiny" style="margin:6px auto">Change photo</div></div>
+          <div class="field"><div class="lbl">Full name</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Date of birth</div><div class="line tiny"></div></div>
+          <div class="field"><div class="lbl">Gender</div><div class="line tiny"></div></div>
+          <div class="field"><div class="lbl">Phone</div><div class="line short"></div></div>
+          <div class="field"><div class="lbl">Blood group / allergies</div><div class="line mid"></div></div>
+          <div class="btn block">Save changes</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">22</span>Edit profile</div>
+    </div>
+
+    <!-- Settings -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Settings</span></div>
+        <div class="body">
+          <b style="font-size:10px; color:var(--ink-2); text-transform:uppercase">Preferences</b>
+          <div class="list-item">Language <span class="grow"></span><span class="chip">EN</span></div>
+          <div class="list-item">Dark mode <span class="grow"></span><span class="chip">Auto</span></div>
+          <div class="list-item">Push notifications <span class="grow"></span><span class="chip on">On</span></div>
+          <b style="font-size:10px; color:var(--ink-2); text-transform:uppercase; margin-top:4px">Account</b>
+          <div class="list-item">Change password <span class="grow"></span>›</div>
+          <div class="list-item">Delete account <span class="grow"></span>›</div>
+          <b style="font-size:10px; color:var(--ink-2); text-transform:uppercase; margin-top:4px">About</b>
+          <div class="list-item">Terms &amp; privacy <span class="grow"></span>›</div>
+          <div class="list-item">App version <span class="grow"></span><span style="font-size:10px; color:var(--ink-2)">1.0.0</span></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">23</span>Settings</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================ DOCTOR ============================================================ -->
+<section class="group" id="doctor">
+  <h2>3 · Doctor</h2>
+  <div class="subtitle">Bottom nav: Dashboard · Appointments · Chat · Patients · Profile. Focus is time-of-day utility: today's schedule, quick actions.</div>
+
+  <div class="grid">
+
+    <!-- Doctor dashboard -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar">
+          <div class="avatar">DR</div>
+          <div class="col"><span style="font-size:10px; color:var(--ink-2)">Welcome back,</span><span class="title">Dr. Smith</span></div>
+          <div class="spacer"></div><span class="icon-btn">🔔</span>
+        </div>
+        <div class="body">
+          <div class="row" style="gap:8px">
+            <div class="stat grow"><span class="num">6</span><span class="lbl">Today</span></div>
+            <div class="stat grow"><span class="num">2</span><span class="lbl">Pending</span></div>
+            <div class="stat grow"><span class="num">18</span><span class="lbl">This week</span></div>
+          </div>
+          <div class="row between"><b style="font-size:12px">Today's schedule</b><span class="line tiny">See all</span></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">09:30 — John Doe</b><span class="badge">Video</span></div><span style="font-size:10px; color:var(--ink-2)">Follow-up · Cardio</span><div class="row" style="gap:6px; margin-top:6px"><div class="btn sm">Start</div><div class="btn ghost sm">Notes</div></div></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">10:15 — Jane R.</b><span class="badge">Clinic</span></div><span style="font-size:10px; color:var(--ink-2)">Consultation</span></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">11:00 — Alex P.</b><span class="badge">Video</span></div><span style="font-size:10px; color:var(--ink-2)">Review results</span></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item active"><div class="dot"></div>Dash</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Patients</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">24</span>Doctor dashboard</div>
+    </div>
+
+    <!-- Doctor appointments -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Appointments</span><div class="spacer"></div><span class="icon-sq">🔍</span></div>
+        <div class="body">
+          <div class="row" style="gap:6px"><span class="chip on">Today</span><span class="chip">Upcoming</span><span class="chip">Pending</span><span class="chip">Past</span></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">John Doe · 09:30</b><span class="badge">Pending</span></div><span style="font-size:10px; color:var(--ink-2)">Cardio · Follow-up</span><div class="row" style="gap:6px; margin-top:6px"><div class="btn sm grow">Accept</div><div class="btn ghost sm grow">Decline</div></div></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">Jane R. · 10:15</b><span class="badge">Confirmed</span></div><span style="font-size:10px; color:var(--ink-2)">Consultation</span><div class="row" style="gap:6px; margin-top:6px"><div class="btn sm grow">Start</div><div class="btn ghost sm grow">Reschedule</div></div></div>
+          <div class="card"><div class="row between"><b style="font-size:12px">Alex P. · 11:00</b><span class="badge">Confirmed</span></div><span style="font-size:10px; color:var(--ink-2)">Review results</span></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Dash</div>
+          <div class="item active"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Patients</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">25</span>Doctor appointments</div>
+    </div>
+
+    <!-- Appointment details (doctor view) -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Appointment</span><div class="spacer"></div><span class="icon-btn">⋯</span></div>
+        <div class="body">
+          <div class="card tinted" style="display:flex; gap:10px; align-items:center">
+            <div class="avatar lg">JD</div>
+            <div class="col grow"><b style="font-size:12px">John Doe · 34, M</b><span style="font-size:10px; color:var(--ink-2)">Patient · Tue 09:30</span><span class="badge">Pending</span></div>
+          </div>
+          <div class="card"><b style="font-size:11px">Reason for visit</b><div class="line"></div><div class="line mid"></div></div>
+          <div class="card"><b style="font-size:11px">Doctor notes</b><div class="dashed">Add clinical notes…</div></div>
+          <div class="row" style="gap:8px"><div class="btn ghost grow">Message patient</div><div class="btn grow">Accept &amp; start</div></div>
+          <div class="btn ghost block" style="border-color:#a00; color:#a00">Decline appointment</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">26</span>Appointment details (doctor)</div>
+    </div>
+
+    <!-- Patients -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">My patients</span><div class="spacer"></div><span class="icon-sq">🔍</span></div>
+        <div class="body">
+          <div class="callout">Doctors only see patients they've been in contact with (appointment or chat). Enforced by RLS.</div>
+          <div class="list-item"><div class="avatar">JD</div><div class="col grow"><b style="font-size:12px">John Doe</b><span style="font-size:10px; color:var(--ink-2)">Last visit · Sep 8</span></div>›</div>
+          <div class="list-item"><div class="avatar">JR</div><div class="col grow"><b style="font-size:12px">Jane R.</b><span style="font-size:10px; color:var(--ink-2)">Last visit · Aug 30</span></div>›</div>
+          <div class="list-item"><div class="avatar">AP</div><div class="col grow"><b style="font-size:12px">Alex P.</b><span style="font-size:10px; color:var(--ink-2)">Last visit · Aug 22</span></div>›</div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Dash</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item active"><div class="dot"></div>Patients</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">27</span>Patient list + details</div>
+    </div>
+
+    <!-- Doctor chat (same as patient with role swap) -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar">
+          <span class="back">←</span>
+          <div class="avatar">JD</div>
+          <div class="col grow"><b style="font-size:12px">John Doe</b><span style="font-size:9px; color:var(--ink-2)">Patient · ● Online</span></div>
+          <span class="icon-btn">📋</span>
+        </div>
+        <div class="body">
+          <div class="bubble theirs">Doctor, my chest pain has returned.</div>
+          <div class="bubble mine">When did it start? Any triggers?</div>
+          <div class="bubble theirs">About two hours ago, after climbing stairs.</div>
+          <div class="dashed">Quick reply templates ▸</div>
+        </div>
+        <div class="composer"><span class="icon-btn">＋</span><div class="input">Reply…</div><span class="icon-btn">➤</span></div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">28</span>Doctor chat</div>
+    </div>
+
+    <!-- Availability -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Availability</span><div class="spacer"></div><span class="line tiny">Save</span></div>
+        <div class="body">
+          <b style="font-size:11px">Weekly schedule</b>
+          <div class="row between"><span>Monday</span><span class="chip on">09–13, 14–17</span></div>
+          <div class="row between"><span>Tuesday</span><span class="chip on">09–13, 14–17</span></div>
+          <div class="row between"><span>Wednesday</span><span class="chip">Off</span></div>
+          <div class="row between"><span>Thursday</span><span class="chip on">09–13</span></div>
+          <div class="row between"><span>Friday</span><span class="chip on">14–17</span></div>
+          <div class="row between"><span>Sat / Sun</span><span class="chip">Off</span></div>
+          <b style="font-size:11px; margin-top:6px">Slot length</b>
+          <div class="row" style="gap:6px"><span class="chip">15m</span><span class="chip on">30m</span><span class="chip">45m</span></div>
+          <b style="font-size:11px; margin-top:6px">Blocked dates</b>
+          <div class="dashed">＋ Add date range (holidays, leave)</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">29</span>Availability settings</div>
+    </div>
+
+    <!-- Doctor pro profile -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Profile</span><div class="spacer"></div><span class="icon-sq">✎</span></div>
+        <div class="body">
+          <div style="display:flex; gap:12px; align-items:center">
+            <div class="avatar xl">DR</div>
+            <div class="col grow"><b style="font-size:13px">Dr. Smith</b><span style="font-size:10px; color:var(--ink-2)">Cardiologist · MBBS, MD</span><span class="badge">Verified ✓</span></div>
+          </div>
+          <div class="card"><b style="font-size:11px">About</b><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+          <div class="card"><b style="font-size:11px">Qualifications</b><div class="line short"></div><div class="line short"></div></div>
+          <div class="card"><b style="font-size:11px">Consultation</b><div class="row between"><span style="font-size:11px">Fee</span><span class="badge">$40</span></div><div class="row between"><span style="font-size:11px">Modes</span><span class="badge">Video · Clinic</span></div></div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Dash</div>
+          <div class="item"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Patients</div>
+          <div class="item active"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">30-31</span>Professional profile · view/edit</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================ ADMIN ============================================================ -->
+<section class="group" id="admin">
+  <h2>4 · Admin (desktop-first, works on mobile)</h2>
+  <div class="subtitle">Left sidebar navigation on desktop. On mobile, collapses to a hamburger drawer with the same items.</div>
+
+  <div class="grid" style="grid-template-columns: 1fr;">
+
+    <!-- Admin dashboard desktop -->
+    <div>
+      <div class="frame desktop"><div class="screen" style="flex-direction:row">
+        <div class="sidebar">
+          <div class="brand">DC · Admin</div>
+          <div class="nav-item active">■ Dashboard</div>
+          <div class="nav-item">■ Doctors</div>
+          <div class="nav-item">■ Patients</div>
+          <div class="nav-item">■ Appointments</div>
+          <div class="nav-item">■ Reports</div>
+          <div class="nav-item">■ Settings</div>
+          <div class="grow"></div>
+          <div class="nav-item">↪ Log out</div>
+        </div>
+        <div class="col grow" style="padding:14px; gap:12px">
+          <div class="row between"><b style="font-size:14px">Overview</b><span class="chip">Last 30 days</span></div>
+          <div class="row" style="gap:10px">
+            <div class="stat grow"><span class="num">1,248</span><span class="lbl">Patients</span></div>
+            <div class="stat grow"><span class="num">86</span><span class="lbl">Doctors</span></div>
+            <div class="stat grow"><span class="num">3,910</span><span class="lbl">Appointments</span></div>
+            <div class="stat grow"><span class="num">14</span><span class="lbl">Open reports</span></div>
+          </div>
+          <div class="row" style="gap:10px">
+            <div class="card grow" style="height:120px"><b style="font-size:11px">Appointments over time</b><div class="dashed" style="height:80px; margin-top:6px">[ line chart ]</div></div>
+            <div class="card" style="width:180px; height:120px"><b style="font-size:11px">By status</b><div class="dashed" style="height:80px; margin-top:6px">[ donut ]</div></div>
+          </div>
+          <div class="card">
+            <div class="row between"><b style="font-size:12px">Recent activity</b><span class="line tiny">See all</span></div>
+            <div class="list-item">✓ New doctor registered <span class="grow"></span><span class="badge">2m</span></div>
+            <div class="list-item">⚠ Report filed against user #4212 <span class="grow"></span><span class="badge">18m</span></div>
+            <div class="list-item">◎ 84 appointments booked today <span class="grow"></span><span class="badge">1h</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">34</span>Admin dashboard (desktop)</div>
+    </div>
+
+    <!-- Manage doctors table -->
+    <div>
+      <div class="frame desktop"><div class="screen" style="flex-direction:row">
+        <div class="sidebar">
+          <div class="brand">DC · Admin</div>
+          <div class="nav-item">■ Dashboard</div>
+          <div class="nav-item active">■ Doctors</div>
+          <div class="nav-item">■ Patients</div>
+          <div class="nav-item">■ Appointments</div>
+          <div class="nav-item">■ Reports</div>
+          <div class="nav-item">■ Settings</div>
+        </div>
+        <div class="col grow" style="padding:14px; gap:10px">
+          <div class="row between"><b style="font-size:14px">Doctors</b><div class="row" style="gap:6px"><span class="chip">All</span><span class="chip on">Verified</span><span class="chip">Pending</span><div class="btn sm">＋ Invite</div></div></div>
+          <div class="field"><div class="row"><span>🔍</span><span style="color:var(--ink-2); font-size:11px">Search doctors…</span></div></div>
+          <div class="card">
+            <div class="row" style="font-size:10px; color:var(--ink-2); text-transform:uppercase; padding-bottom:6px; border-bottom:1px solid var(--line-2)">
+              <span style="width:30%">Doctor</span><span style="width:20%">Specialty</span><span style="width:15%">Status</span><span style="width:15%">Patients</span><span style="width:15%">Joined</span><span style="width:5%"></span>
+            </div>
+            <div class="row" style="padding:8px 0; border-bottom:1px dashed var(--line-2); align-items:center; font-size:11px">
+              <span style="width:30%; display:flex; gap:6px; align-items:center"><span class="avatar" style="width:24px; height:24px; font-size:9px">DR</span>Dr. ▬▬▬</span><span style="width:20%">Cardiologist</span><span style="width:15%"><span class="badge">Verified</span></span><span style="width:15%">128</span><span style="width:15%">Aug 12</span><span style="width:5%">⋯</span>
+            </div>
+            <div class="row" style="padding:8px 0; border-bottom:1px dashed var(--line-2); align-items:center; font-size:11px">
+              <span style="width:30%; display:flex; gap:6px; align-items:center"><span class="avatar" style="width:24px; height:24px; font-size:9px">DR</span>Dr. ▬▬▬</span><span style="width:20%">Dermatologist</span><span style="width:15%"><span class="badge">Pending</span></span><span style="width:15%">—</span><span style="width:15%">Sep 3</span><span style="width:5%">⋯</span>
+            </div>
+            <div class="row" style="padding:8px 0; align-items:center; font-size:11px">
+              <span style="width:30%; display:flex; gap:6px; align-items:center"><span class="avatar" style="width:24px; height:24px; font-size:9px">DR</span>Dr. ▬▬▬</span><span style="width:20%">Pediatrics</span><span style="width:15%"><span class="badge">Suspended</span></span><span style="width:15%">42</span><span style="width:15%">Jun 1</span><span style="width:5%">⋯</span>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">35</span>Manage doctors</div>
+    </div>
+
+    <!-- Manage patients -->
+    <div>
+      <div class="frame desktop"><div class="screen" style="flex-direction:row">
+        <div class="sidebar">
+          <div class="brand">DC · Admin</div>
+          <div class="nav-item">■ Dashboard</div>
+          <div class="nav-item">■ Doctors</div>
+          <div class="nav-item active">■ Patients</div>
+          <div class="nav-item">■ Appointments</div>
+          <div class="nav-item">■ Reports</div>
+          <div class="nav-item">■ Settings</div>
+        </div>
+        <div class="col grow" style="padding:14px; gap:10px">
+          <div class="row between"><b style="font-size:14px">Patients</b><div class="row" style="gap:6px"><span class="chip">All</span><span class="chip on">Active</span><span class="chip">Suspended</span></div></div>
+          <div class="field"><div class="row"><span>🔍</span><span style="color:var(--ink-2); font-size:11px">Search patients…</span></div></div>
+          <div class="card">
+            <div class="row" style="font-size:10px; color:var(--ink-2); text-transform:uppercase; padding-bottom:6px; border-bottom:1px solid var(--line-2)">
+              <span style="width:35%">Patient</span><span style="width:25%">Email</span><span style="width:15%">Status</span><span style="width:15%">Appointments</span><span style="width:10%">Joined</span>
+            </div>
+            <div class="row" style="padding:8px 0; border-bottom:1px dashed var(--line-2); align-items:center; font-size:11px">
+              <span style="width:35%">John Doe</span><span style="width:25%">j***@email.com</span><span style="width:15%"><span class="badge">Active</span></span><span style="width:15%">12</span><span style="width:10%">Jul 04</span>
+            </div>
+            <div class="row" style="padding:8px 0; border-bottom:1px dashed var(--line-2); align-items:center; font-size:11px">
+              <span style="width:35%">Jane Roe</span><span style="width:25%">j***@email.com</span><span style="width:15%"><span class="badge">Active</span></span><span style="width:15%">5</span><span style="width:10%">Aug 22</span>
+            </div>
+            <div class="row" style="padding:8px 0; align-items:center; font-size:11px">
+              <span style="width:35%">Alex P.</span><span style="width:25%">a***@email.com</span><span style="width:15%"><span class="badge">Suspended</span></span><span style="width:15%">1</span><span style="width:10%">Sep 09</span>
+            </div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">36-38</span>Manage patients · details drawer</div>
+    </div>
+
+    <!-- Reports -->
+    <div>
+      <div class="frame desktop"><div class="screen" style="flex-direction:row">
+        <div class="sidebar">
+          <div class="brand">DC · Admin</div>
+          <div class="nav-item">■ Dashboard</div>
+          <div class="nav-item">■ Doctors</div>
+          <div class="nav-item">■ Patients</div>
+          <div class="nav-item">■ Appointments</div>
+          <div class="nav-item active">■ Reports</div>
+          <div class="nav-item">■ Settings</div>
+        </div>
+        <div class="col grow" style="padding:14px; gap:10px">
+          <div class="row between"><b style="font-size:14px">Reports</b><div class="row" style="gap:6px"><span class="chip on">Open</span><span class="chip">Resolved</span></div></div>
+          <div class="card">
+            <div class="row between"><b style="font-size:11px">Report #4212</b><span class="badge">Open</span></div>
+            <div class="line"></div><div class="line mid"></div>
+            <div class="row" style="gap:6px; margin-top:6px"><div class="btn sm">Suspend user</div><div class="btn ghost sm">Dismiss</div><div class="btn ghost sm">Contact reporter</div></div>
+          </div>
+          <div class="card">
+            <div class="row between"><b style="font-size:11px">Report #4198</b><span class="badge">Open</span></div>
+            <div class="line short"></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">39</span>Reports queue</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================ SYSTEM ============================================================ -->
+<section class="group" id="system">
+  <h2>5 · System / PWA states</h2>
+  <div class="subtitle">Install prompt, offline fallback, network error, 404, empty and loading states, generic error.</div>
+
+  <div class="grid">
+
+    <!-- PWA install -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body" style="justify-content:flex-end">
+          <div class="dashed" style="text-align:center">…content behind…</div>
+          <div class="grow"></div>
+          <div class="card" style="display:flex; gap:10px; align-items:center">
+            <div class="logo-mark sm">DC</div>
+            <div class="col grow"><b style="font-size:12px">Install Doctor Cares</b><span style="font-size:10px; color:var(--ink-2)">Faster access, offline support, home-screen icon.</span></div>
+            <div class="col" style="gap:4px"><div class="btn sm">Install</div><span class="chip sm">Later</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">41</span>Install PWA prompt</div>
+    </div>
+
+    <!-- Offline -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body center">
+          <div class="avatar xl">⌾</div>
+          <b style="font-size:14px; margin-top:10px">You're offline</b>
+          <div class="line short" style="margin:6px auto"></div><div class="line tiny" style="margin:0 auto"></div>
+          <div class="btn" style="margin-top:14px">Try again</div>
+          <div class="callout" style="margin-top:12px">Cached: recent appointments &amp; profile · Chat &amp; new bookings need a connection.</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">42</span>Offline fallback</div>
+    </div>
+
+    <!-- Network error -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="back">←</span><span class="title">Something went wrong</span></div>
+        <div class="body center">
+          <div class="avatar xl">!</div>
+          <b style="font-size:13px; margin-top:8px">Could not load</b>
+          <div class="line short" style="margin:6px auto"></div>
+          <div class="row" style="gap:8px; margin-top:12px"><div class="btn">Retry</div><div class="btn ghost">Go home</div></div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">43</span>Network / server error</div>
+    </div>
+
+    <!-- 404 -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="body center">
+          <b style="font-size:32px">404</b>
+          <div class="line short" style="margin:6px auto"></div><div class="line tiny" style="margin:0 auto"></div>
+          <div class="btn" style="margin-top:12px">Take me home</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">44</span>404</div>
+    </div>
+
+    <!-- Empty states -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">My appointments</span></div>
+        <div class="body center">
+          <div class="avatar xl">📅</div>
+          <b style="font-size:13px; margin-top:8px">No appointments yet</b>
+          <div class="line short" style="margin:6px auto"></div>
+          <div class="btn" style="margin-top:12px">Find a doctor</div>
+        </div>
+        <div class="bottomnav">
+          <div class="item"><div class="dot"></div>Home</div>
+          <div class="item active"><div class="dot"></div>Appts</div>
+          <div class="item"><div class="dot"></div>Chat</div>
+          <div class="item"><div class="dot"></div>Drugs</div>
+          <div class="item"><div class="dot"></div>Profile</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">45</span>Empty state (pattern)</div>
+    </div>
+
+    <!-- Loading skeleton -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span>▪ ▪ ▪</span></div>
+        <div class="appbar"><span class="title">Loading…</span></div>
+        <div class="body">
+          <div class="card"><div class="row" style="gap:10px"><div class="avatar"></div><div class="col grow"><div class="line short"></div><div class="line tiny"></div></div></div></div>
+          <div class="card"><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+          <div class="card"><div class="line"></div><div class="line mid"></div></div>
+          <div class="callout">Skeletons for lists, cards, chat. Never a bare white screen.</div>
+        </div>
+      </div></div>
+      <div class="screen-title"><span class="screen-num">46</span>Loading skeleton (pattern)</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================ DESIGN NOTES ============================================================ -->
+<section class="group" id="design">
+  <h2>6 · Design notes for Phase 1</h2>
+  <div class="subtitle">Direction for the polished UI once wireframes are approved.</div>
+
+  <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+    <div class="card">
+      <b>Color</b>
+      <p>Calm healthcare palette: soft white surface, deep-blue primary (~ #1E5EFF), muted teal secondary, warm neutrals. Semantic: success #16A34A, warning #F59E0B, danger #DC2626. Dark mode = deep slate surface with reduced blue saturation.</p>
+    </div>
+    <div class="card">
+      <b>Typography</b>
+      <p>Single sans-serif family (Inter). Sizes: 12 / 14 / 16 / 18 / 20 / 24 / 30. Line-heights 1.4–1.5. Numeric weights: 400 / 500 / 600 / 700.</p>
+    </div>
+    <div class="card">
+      <b>Spacing &amp; radius</b>
+      <p>4px base grid. Cards: radius 12–16px, subtle shadow (0 1px 2px rgba(0,0,0,.06)). Buttons: 44px min touch target on mobile.</p>
+    </div>
+    <div class="card">
+      <b>Navigation</b>
+      <p>Mobile: fixed bottom nav (5 items, role-dependent). Tablet ≥ 768px: same but wider. Desktop ≥ 1024px: left sidebar for Doctor + Admin, top nav for Patient marketing pages.</p>
+    </div>
+    <div class="card">
+      <b>Component library</b>
+      <p>Own components (Button, Input, Card, DoctorCard, AppointmentCard, MessageBubble, EmptyState, LoadingSpinner, ErrorState, BottomNavigation, Sidebar, Header, NotificationItem). Icons from lucide-react.</p>
+    </div>
+    <div class="card">
+      <b>Accessibility</b>
+      <p>Semantic HTML, labels for all fields, visible focus ring on interactive elements, prefers-reduced-motion respected, minimum 4.5:1 text contrast in both themes.</p>
+    </div>
+    <div class="card">
+      <b>Data &amp; auth</b>
+      <p>All data comes from Supabase (Postgres + RLS + Realtime + Storage). No hardcoded lists. Frontend never uses the service-role key. OpenFDA fetched directly from the browser (no key required).</p>
+    </div>
+    <div class="card">
+      <b>Screen count reconciliation</b>
+      <p>47 required screens are covered by these wireframes as combined flows (e.g. Find doctors + filter = one flow, Professional profile view + edit share layout). Explicit numbers on each frame map to the spec.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Doctor Cares wireframes v1 · low-fidelity, layout only · next: design system + Phase 1 project setup.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+export { AdminDashboardPage }    from './DashboardPage';
+export { AdminDoctorsPage }      from './DoctorsPage';
+export { AdminPatientsPage }     from './PatientsPage';
+export { AdminAppointmentsPage } from './AppointmentsPage';
+export { AdminReportsPage }      from './ReportsPage';
+export { AdminUserDetailsPage }  from './UserDetailsPage';
+export { AdminSettingsPage }     from './SettingsPage';
+export { AdminHealthTipsPage }   from './HealthTipsPage';

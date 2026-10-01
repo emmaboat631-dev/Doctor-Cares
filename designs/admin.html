@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares · Admin designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+<script src="icons.js"></script>
+
+<header class="page-header">
+  <h1>Admin experience</h1>
+  <p>Desktop-first with a persistent left sidebar. Same layout gracefully collapses to a drawer + bottom nav on mobile.</p>
+  <div class="crumbs">
+    <a href="index.html">← All designs</a>
+    <a href="auth.html">Auth</a>
+    <a href="patient.html">Patient</a>
+    <a href="doctor.html">Doctor</a>
+    <a href="admin.html" class="active">Admin</a>
+    <a href="system.html">System / PWA</a>
+  </div>
+</header>
+
+<div class="section">
+  <div class="grid" style="grid-template-columns: 1fr; gap: 60px;">
+
+    <!-- 34 · ADMIN DASHBOARD -->
+    <div>
+      <div class="frame desktop">
+        <div class="browser-bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#4ade80"></span><span class="url">doctor-cares.app/admin</span></div>
+        <div class="screen" style="flex-direction: row; background: var(--surface-muted);">
+          <aside class="sidebar">
+            <div class="brand"><img class="logo" src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 36px; height: 36px; object-fit: contain; background: transparent;" /><div><div class="brand-name">Doctor Cares</div><div class="brand-sub">Admin console</div></div></div>
+            <div class="nav-item active"><svg><use href="#i-layout"/></svg>Overview</div>
+            <div class="nav-item"><svg><use href="#i-stethoscope"/></svg>Doctors</div>
+            <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+            <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appointments</div>
+            <div class="nav-item"><svg><use href="#i-flag"/></svg>Reports <span class="badge dot" style="margin-left: auto; width: 20px; height: 20px; font-size: 10px;">3</span></div>
+            <div class="section-label">Platform</div>
+            <div class="nav-item"><svg><use href="#i-settings"/></svg>Settings</div>
+            <div style="flex: 1;"></div>
+            <div class="nav-item"><svg><use href="#i-log-out"/></svg>Log out</div>
+          </aside>
+          <div style="flex: 1; padding: 24px; overflow: auto;">
+            <div class="row between" style="margin-bottom: 20px;">
+              <div>
+                <h2 style="margin: 0; font-size: 22px; letter-spacing: -0.01em;">Overview</h2>
+                <div class="t-muted" style="font-size: 13px; margin-top: 2px;">Sep 12, 2025 · Wednesday</div>
+              </div>
+              <div class="row" style="gap: 8px;">
+                <span class="chip">Last 30 days</span>
+                <button class="btn outline sm"><svg class="ic-14"><use href="#i-download"/></svg> Export</button>
+                <button class="btn primary sm"><svg class="ic-14"><use href="#i-plus"/></svg> Invite doctor</button>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;">
+              <div class="stat"><div class="row" style="gap: 6px;"><span class="avatar sm" style="background: var(--brand-50); color: var(--brand-500);"><svg class="ic-16"><use href="#i-users"/></svg></span><span class="label">Patients</span></div><div class="num" style="margin-top: 8px;">1,248</div><div class="row" style="gap: 4px;"><span style="color: var(--success); font-size: 11px; font-weight: 600;">+12%</span><span style="font-size: 11px;" class="t-muted">this month</span></div></div>
+              <div class="stat"><div class="row" style="gap: 6px;"><span class="avatar sm accent"><svg class="ic-16"><use href="#i-stethoscope"/></svg></span><span class="label">Doctors</span></div><div class="num" style="margin-top: 8px;">86</div><div class="row" style="gap: 4px;"><span style="color: var(--success); font-size: 11px; font-weight: 600;">+4</span><span style="font-size: 11px;" class="t-muted">this month</span></div></div>
+              <div class="stat"><div class="row" style="gap: 6px;"><span class="avatar sm" style="background: var(--warning-soft); color: #92400e;"><svg class="ic-16"><use href="#i-calendar-check"/></svg></span><span class="label">Appointments</span></div><div class="num" style="margin-top: 8px;">3,910</div><div class="row" style="gap: 4px;"><span style="color: var(--success); font-size: 11px; font-weight: 600;">+18%</span><span style="font-size: 11px;" class="t-muted">vs last</span></div></div>
+              <div class="stat"><div class="row" style="gap: 6px;"><span class="avatar sm" style="background: var(--danger-soft); color: var(--danger);"><svg class="ic-16"><use href="#i-flag"/></svg></span><span class="label">Open reports</span></div><div class="num" style="margin-top: 8px; color: var(--danger);">14</div><div class="row" style="gap: 4px;"><span style="color: var(--danger); font-size: 11px; font-weight: 600;">3 new</span><span style="font-size: 11px;" class="t-muted">today</span></div></div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 20px;">
+              <div class="card">
+                <div class="row between" style="margin-bottom: 8px;"><span class="h4">Appointments over time</span><span class="t-muted" style="font-size: 11px;">Bookings per day</span></div>
+                <div class="chart">
+                  <div class="bar" style="height: 40%"></div>
+                  <div class="bar" style="height: 55%"></div>
+                  <div class="bar" style="height: 45%"></div>
+                  <div class="bar" style="height: 70%"></div>
+                  <div class="bar" style="height: 62%"></div>
+                  <div class="bar" style="height: 80%"></div>
+                  <div class="bar" style="height: 68%"></div>
+                  <div class="bar" style="height: 85%"></div>
+                  <div class="bar" style="height: 92%"></div>
+                  <div class="bar" style="height: 76%"></div>
+                  <div class="bar" style="height: 88%"></div>
+                  <div class="bar" style="height: 95%"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="row between" style="margin-bottom: 12px;"><span class="h4">By status</span></div>
+                <div class="row" style="gap: 16px; align-items: center;">
+                  <div class="donut"><div class="donut-inner">3,910<br/>total</div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                    <div class="row" style="gap: 8px;"><span style="width: 10px; height: 10px; background: var(--brand-500); border-radius: 3px;"></span><span style="font-size: 12px;" class="grow">Confirmed</span><span style="font-size: 12px; font-weight: 600;">62%</span></div>
+                    <div class="row" style="gap: 8px;"><span style="width: 10px; height: 10px; background: var(--accent-500); border-radius: 3px;"></span><span style="font-size: 12px;" class="grow">Completed</span><span style="font-size: 12px; font-weight: 600;">16%</span></div>
+                    <div class="row" style="gap: 8px;"><span style="width: 10px; height: 10px; background: var(--warning); border-radius: 3px;"></span><span style="font-size: 12px;" class="grow">Pending</span><span style="font-size: 12px; font-weight: 600;">14%</span></div>
+                    <div class="row" style="gap: 8px;"><span style="width: 10px; height: 10px; background: var(--danger); border-radius: 3px;"></span><span style="font-size: 12px;" class="grow">Cancelled</span><span style="font-size: 12px; font-weight: 600;">8%</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="row between" style="margin-bottom: 12px;"><span class="h4">Recent activity</span><a class="t-brand" style="font-size: 12px; font-weight: 600;">See all</a></div>
+              <div class="setting-list" style="border: none; border-top: 1px solid var(--line-soft); border-radius: 0;">
+                <div class="setting-row"><div class="ico" style="background: var(--success-soft); color: var(--success);"><svg class="ic-16"><use href="#i-user-plus"/></svg></div><div class="body"><div class="h4">New doctor registered — Dr. James Kim</div><div class="t-muted" style="font-size: 12px;">Neurology · pending verification</div></div><span class="t-muted" style="font-size: 11px;">2m ago</span></div>
+                <div class="setting-row"><div class="ico" style="background: var(--danger-soft); color: var(--danger);"><svg class="ic-16"><use href="#i-flag"/></svg></div><div class="body"><div class="h4">Report filed against user #4212</div><div class="t-muted" style="font-size: 12px;">Reason: inappropriate message</div></div><span class="t-muted" style="font-size: 11px;">18m ago</span></div>
+                <div class="setting-row"><div class="ico" style="background: var(--brand-50); color: var(--brand-500);"><svg class="ic-16"><use href="#i-trending"/></svg></div><div class="body"><div class="h4">84 appointments booked today</div><div class="t-muted" style="font-size: 12px;">Peak hour: 14:00–15:00</div></div><span class="t-muted" style="font-size: 11px;">1h ago</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><span class="num">34</span><span class="name">Admin dashboard</span><span class="desc">KPIs · appointments-over-time chart · status donut · recent activity feed</span></div>
+    </div>
+
+    <!-- 35 · MANAGE DOCTORS -->
+    <div>
+      <div class="frame desktop">
+        <div class="browser-bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#4ade80"></span><span class="url">doctor-cares.app/admin/doctors</span></div>
+        <div class="screen" style="flex-direction: row; background: var(--surface-muted);">
+          <aside class="sidebar">
+            <div class="brand"><img class="logo" src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 36px; height: 36px; object-fit: contain; background: transparent;" /><div><div class="brand-name">Doctor Cares</div><div class="brand-sub">Admin console</div></div></div>
+            <div class="nav-item"><svg><use href="#i-layout"/></svg>Overview</div>
+            <div class="nav-item active"><svg><use href="#i-stethoscope"/></svg>Doctors</div>
+            <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+            <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appointments</div>
+            <div class="nav-item"><svg><use href="#i-flag"/></svg>Reports</div>
+            <div class="section-label">Platform</div>
+            <div class="nav-item"><svg><use href="#i-settings"/></svg>Settings</div>
+          </aside>
+          <div style="flex: 1; padding: 24px; overflow: auto;">
+            <div class="row between" style="margin-bottom: 16px;">
+              <div>
+                <h2 style="margin: 0; font-size: 22px;">Doctors</h2>
+                <div class="t-muted" style="font-size: 13px; margin-top: 2px;">86 doctors · 4 pending verification</div>
+              </div>
+              <div class="row" style="gap: 8px;">
+                <button class="btn outline sm"><svg class="ic-14"><use href="#i-download"/></svg> Export CSV</button>
+                <button class="btn primary sm"><svg class="ic-14"><use href="#i-plus"/></svg> Invite doctor</button>
+              </div>
+            </div>
+
+            <div class="row" style="gap: 8px; margin-bottom: 16px;">
+              <div class="search grow" style="max-width: 320px;"><svg class="ic-16"><use href="#i-search"/></svg><span>Search doctors, specialties…</span></div>
+              <span class="chip">All (86)</span>
+              <span class="chip active">Verified (73)</span>
+              <span class="chip">Pending (4)</span>
+              <span class="chip">Suspended (9)</span>
+            </div>
+
+            <div class="table">
+              <div class="th"><span>Doctor</span><span>Specialty</span><span>Status</span><span>Patients</span><span>Joined</span><span></span></div>
+              <div class="tr">
+                <span class="row" style="gap: 10px;"><span class="avatar sm accent">SC</span><div class="col" style="gap: 0;"><span style="font-weight: 600;">Dr. Sarah Chen</span><span class="t-muted" style="font-size: 11px;">sarah.chen@dc.com</span></div></span>
+                <span>Cardiology</span>
+                <span><span class="badge success">Verified</span></span>
+                <span>128</span>
+                <span class="t-muted">Aug 12</span>
+                <button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button>
+              </div>
+              <div class="tr">
+                <span class="row" style="gap: 10px;"><span class="avatar sm violet">MR</span><div class="col" style="gap: 0;"><span style="font-weight: 600;">Dr. Marcus Reed</span><span class="t-muted" style="font-size: 11px;">marcus.reed@dc.com</span></div></span>
+                <span>Dermatology</span>
+                <span><span class="badge warning">Pending</span></span>
+                <span class="t-muted">—</span>
+                <span class="t-muted">Sep 3</span>
+                <button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button>
+              </div>
+              <div class="tr">
+                <span class="row" style="gap: 10px;"><span class="avatar sm rose">AP</span><div class="col" style="gap: 0;"><span style="font-weight: 600;">Dr. Aisha Patel</span><span class="t-muted" style="font-size: 11px;">aisha.patel@dc.com</span></div></span>
+                <span>Pediatrics</span>
+                <span><span class="badge success">Verified</span></span>
+                <span>212</span>
+                <span class="t-muted">Jun 22</span>
+                <button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button>
+              </div>
+              <div class="tr">
+                <span class="row" style="gap: 10px;"><span class="avatar sm warn">JK</span><div class="col" style="gap: 0;"><span style="font-weight: 600;">Dr. James Kim</span><span class="t-muted" style="font-size: 11px;">james.kim@dc.com</span></div></span>
+                <span>Neurology</span>
+                <span><span class="badge warning">Pending</span></span>
+                <span class="t-muted">—</span>
+                <span class="t-muted">Sep 12</span>
+                <button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button>
+              </div>
+              <div class="tr">
+                <span class="row" style="gap: 10px;"><span class="avatar sm">RD</span><div class="col" style="gap: 0;"><span style="font-weight: 600;">Dr. Rachel Diaz</span><span class="t-muted" style="font-size: 11px;">rachel.diaz@dc.com</span></div></span>
+                <span>Psychiatry</span>
+                <span><span class="badge danger">Suspended</span></span>
+                <span>42</span>
+                <span class="t-muted">Jun 1</span>
+                <button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><span class="num">35</span><span class="name">Manage doctors</span><span class="desc">Data table · status pills · row actions · filter tabs</span></div>
+    </div>
+
+    <!-- 36–38 · MANAGE PATIENTS + DETAILS DRAWER -->
+    <div>
+      <div class="frame desktop">
+        <div class="browser-bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#4ade80"></span><span class="url">doctor-cares.app/admin/patients</span></div>
+        <div class="screen" style="flex-direction: row; background: var(--surface-muted);">
+          <aside class="sidebar">
+            <div class="brand"><img class="logo" src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 36px; height: 36px; object-fit: contain; background: transparent;" /><div><div class="brand-name">Doctor Cares</div><div class="brand-sub">Admin console</div></div></div>
+            <div class="nav-item"><svg><use href="#i-layout"/></svg>Overview</div>
+            <div class="nav-item"><svg><use href="#i-stethoscope"/></svg>Doctors</div>
+            <div class="nav-item active"><svg><use href="#i-users"/></svg>Patients</div>
+            <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appointments</div>
+            <div class="nav-item"><svg><use href="#i-flag"/></svg>Reports</div>
+            <div class="section-label">Platform</div>
+            <div class="nav-item"><svg><use href="#i-settings"/></svg>Settings</div>
+          </aside>
+          <div style="flex: 1; padding: 24px; overflow: auto; display: grid; grid-template-columns: 1fr 320px; gap: 16px;">
+            <div>
+              <div class="row between" style="margin-bottom: 16px;">
+                <div>
+                  <h2 style="margin: 0; font-size: 22px;">Patients</h2>
+                  <div class="t-muted" style="font-size: 13px; margin-top: 2px;">1,248 patients</div>
+                </div>
+                <div class="row" style="gap: 8px;">
+                  <div class="search" style="width: 220px;"><svg class="ic-16"><use href="#i-search"/></svg><span>Search…</span></div>
+                </div>
+              </div>
+              <div class="row" style="gap: 8px; margin-bottom: 16px;">
+                <span class="chip">All</span>
+                <span class="chip active">Active</span>
+                <span class="chip">Suspended</span>
+              </div>
+              <div class="table">
+                <div class="th"><span>Patient</span><span>Email</span><span>Status</span><span>Appts</span><span>Joined</span><span></span></div>
+                <div class="tr" style="background: var(--brand-50);"><span class="row" style="gap: 10px;"><span class="avatar sm">JD</span><span style="font-weight: 600;">John Doe</span></span><span class="t-muted">j***@email.com</span><span><span class="badge success">Active</span></span><span>12</span><span class="t-muted">Jul 04</span><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+                <div class="tr"><span class="row" style="gap: 10px;"><span class="avatar sm rose">JR</span><span style="font-weight: 600;">Jane Roe</span></span><span class="t-muted">j***@email.com</span><span><span class="badge success">Active</span></span><span>5</span><span class="t-muted">Aug 22</span><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+                <div class="tr"><span class="row" style="gap: 10px;"><span class="avatar sm violet">AP</span><span style="font-weight: 600;">Alex Perry</span></span><span class="t-muted">a***@email.com</span><span><span class="badge danger">Suspended</span></span><span>1</span><span class="t-muted">Sep 09</span><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+                <div class="tr"><span class="row" style="gap: 10px;"><span class="avatar sm warn">MS</span><span style="font-weight: 600;">Maria Silva</span></span><span class="t-muted">m***@email.com</span><span><span class="badge success">Active</span></span><span>3</span><span class="t-muted">Sep 10</span><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+              </div>
+            </div>
+
+            <!-- Details drawer -->
+            <div class="card" style="padding: 20px; height: fit-content;">
+              <div class="row between" style="margin-bottom: 12px;"><span class="t-tiny">Patient details</span><button class="icon-btn"><svg class="ic-16"><use href="#i-x"/></svg></button></div>
+              <div style="text-align: center;">
+                <span class="avatar xl" style="margin: 0 auto;">JD</span>
+                <h3 style="margin-top: 10px; font-size: 16px;">John Doe</h3>
+                <div class="t-muted" style="font-size: 12px;">john.doe@email.com</div>
+                <div class="row" style="gap: 6px; justify-content: center; margin-top: 8px;">
+                  <span class="badge success">Active</span>
+                  <span class="badge brand">Patient</span>
+                </div>
+              </div>
+              <div class="hairline" style="border-top: 1px solid var(--line-soft); margin: 14px 0;"></div>
+              <div class="row between" style="padding: 4px 0; font-size: 12px;"><span class="t-muted">Joined</span><span>Jul 04, 2024</span></div>
+              <div class="row between" style="padding: 4px 0; font-size: 12px;"><span class="t-muted">Appointments</span><span>12 · 8 completed</span></div>
+              <div class="row between" style="padding: 4px 0; font-size: 12px;"><span class="t-muted">Doctors</span><span>3 active</span></div>
+              <div class="row between" style="padding: 4px 0; font-size: 12px;"><span class="t-muted">Reports filed</span><span>0</span></div>
+              <div class="row between" style="padding: 4px 0; font-size: 12px;"><span class="t-muted">Reports against</span><span>0</span></div>
+              <div class="col" style="gap: 8px; margin-top: 16px;">
+                <button class="btn outline block sm"><svg class="ic-14"><use href="#i-message"/></svg> Contact user</button>
+                <button class="btn danger block sm">Suspend account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><span class="num">36 · 37 · 38</span><span class="name">Manage patients + details drawer</span><span class="desc">Table with row selection · slide-in details · destructive suspension</span></div>
+    </div>
+
+    <!-- 39 · REPORTS -->
+    <div>
+      <div class="frame desktop">
+        <div class="browser-bar"><span class="dot" style="background:#f87171"></span><span class="dot" style="background:#fbbf24"></span><span class="dot" style="background:#4ade80"></span><span class="url">doctor-cares.app/admin/reports</span></div>
+        <div class="screen" style="flex-direction: row; background: var(--surface-muted);">
+          <aside class="sidebar">
+            <div class="brand"><img class="logo" src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 36px; height: 36px; object-fit: contain; background: transparent;" /><div><div class="brand-name">Doctor Cares</div><div class="brand-sub">Admin console</div></div></div>
+            <div class="nav-item"><svg><use href="#i-layout"/></svg>Overview</div>
+            <div class="nav-item"><svg><use href="#i-stethoscope"/></svg>Doctors</div>
+            <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+            <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appointments</div>
+            <div class="nav-item active"><svg><use href="#i-flag"/></svg>Reports <span class="badge dot" style="margin-left: auto; width: 20px; height: 20px; font-size: 10px;">3</span></div>
+            <div class="section-label">Platform</div>
+            <div class="nav-item"><svg><use href="#i-settings"/></svg>Settings</div>
+          </aside>
+          <div style="flex: 1; padding: 24px; overflow: auto;">
+            <div class="row between" style="margin-bottom: 16px;">
+              <div><h2 style="margin: 0; font-size: 22px;">Reports</h2><div class="t-muted" style="font-size: 13px; margin-top: 2px;">14 open · 3 need action today</div></div>
+              <div class="row" style="gap: 8px;">
+                <span class="chip active">Open (14)</span>
+                <span class="chip">Resolved</span>
+              </div>
+            </div>
+
+            <div style="display: grid; gap: 12px;">
+              <div class="card" style="border-left: 3px solid var(--danger);">
+                <div class="row between" style="margin-bottom: 8px;">
+                  <div class="row" style="gap: 10px;"><span class="badge danger">High priority</span><span class="badge neutral">Report #4212</span></div>
+                  <span class="t-muted" style="font-size: 12px;">2h ago</span>
+                </div>
+                <div class="h4">Inappropriate message from Dr. J. Kim</div>
+                <div class="t-muted" style="font-size: 13px; margin-top: 4px; line-height: 1.5;">Reported by patient #128. Message contained unsolicited personal contact request outside consultation.</div>
+                <div class="row" style="gap: 8px; margin-top: 12px;">
+                  <button class="btn danger sm">Suspend user</button>
+                  <button class="btn outline sm">Review evidence</button>
+                  <button class="btn ghost sm">Dismiss</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="row between" style="margin-bottom: 8px;">
+                  <div class="row" style="gap: 10px;"><span class="badge warning">Medium</span><span class="badge neutral">Report #4198</span></div>
+                  <span class="t-muted" style="font-size: 12px;">Yesterday</span>
+                </div>
+                <div class="h4">Doctor no-show for scheduled appointment</div>
+                <div class="t-muted" style="font-size: 13px; margin-top: 4px; line-height: 1.5;">Patient reported that Dr. R. Diaz did not join the scheduled video call.</div>
+                <div class="row" style="gap: 8px; margin-top: 12px;">
+                  <button class="btn primary sm">Contact doctor</button>
+                  <button class="btn outline sm">Issue refund</button>
+                  <button class="btn ghost sm">Dismiss</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="row between" style="margin-bottom: 8px;">
+                  <div class="row" style="gap: 10px;"><span class="badge info">Low</span><span class="badge neutral">Report #4176</span></div>
+                  <span class="t-muted" style="font-size: 12px;">Sep 8</span>
+                </div>
+                <div class="h4">Spam messages from patient account</div>
+                <div class="t-muted" style="font-size: 13px; margin-top: 4px;">3 doctors flagged the same patient account.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><span class="num">39</span><span class="name">Reports queue</span><span class="desc">Priority tags · quick moderation actions · evidence links</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>Next: <a href="system.html" class="t-brand" style="font-weight:600">System / PWA states →</a></div>
+</footer>
+
+</body>
+</html>

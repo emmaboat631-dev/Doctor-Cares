@@ -1,0 +1,51 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+dist-ssr
+build
+*.local
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# PWA build artifacts
+dev-dist
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+.vercel
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Windows / editor cruft
+desktop.ini
+Thumbs.db
+
+# Claude Code session config (personal, not shared)
+.claude/

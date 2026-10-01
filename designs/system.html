@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares · System &amp; PWA designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+<script src="icons.js"></script>
+
+<header class="page-header">
+  <h1>System &amp; PWA states</h1>
+  <p>Install prompt, offline fallback, network / server errors, 404, empty and loading states. Every important async operation gets one of these.</p>
+  <div class="crumbs">
+    <a href="index.html">← All designs</a>
+    <a href="auth.html">Auth</a>
+    <a href="patient.html">Patient</a>
+    <a href="doctor.html">Doctor</a>
+    <a href="admin.html">Admin</a>
+    <a href="system.html" class="active">System / PWA</a>
+  </div>
+</header>
+
+<div class="section">
+  <div class="grid">
+
+    <!-- 41 · PWA INSTALL PROMPT -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar" style="padding: 10px 16px; height: auto;">
+          <span class="avatar md">JD</span>
+          <div class="col" style="gap: 0;"><span style="font-size: 11px; color: var(--ink-muted);">Good morning,</span><span style="font-size: 15px; font-weight: 700;">John</span></div>
+          <div class="spacer"></div>
+          <button class="icon-btn"><svg class="ic"><use href="#i-bell"/></svg></button>
+        </div>
+        <div class="body" style="filter: brightness(0.7); pointer-events: none;">
+          <div class="search"><svg class="ic-16"><use href="#i-search"/></svg><span>Search…</span></div>
+          <div class="card gradient" style="padding: 16px;"><div style="font-size: 11px; text-transform: uppercase;" class="muted">Next appointment</div><div style="font-weight: 700; font-size: 16px; margin-top: 6px;">Dr. Sarah Chen</div></div>
+          <div class="card compact">List item</div>
+          <div class="card compact">List item</div>
+        </div>
+        <div style="position: absolute; left: 12px; right: 12px; bottom: 90px; background: white; border: 1px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--shadow-pop); display: flex; gap: 12px; align-items: flex-start; z-index: 10;">
+          <img src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 44px; height: 44px; object-fit: contain; flex-shrink: 0;" />
+          <div style="flex: 1;">
+            <div class="row between"><span class="h4">Install Doctor Cares</span><button class="icon-btn" style="width: 24px; height: 24px;"><svg class="ic-14"><use href="#i-x"/></svg></button></div>
+            <div class="t-muted" style="font-size: 12px; margin-top: 4px;">Faster access, offline support and a home-screen icon.</div>
+            <div class="row" style="gap: 8px; margin-top: 10px;">
+              <button class="btn primary sm"><svg class="ic-14"><use href="#i-download"/></svg> Install</button>
+              <button class="btn ghost sm">Not now</button>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">41</span><span class="name">Install PWA prompt</span><span class="desc">Non-blocking sheet above bottom nav · dismissible with cooldown</span></div>
+    </div>
+
+    <!-- 42 · OFFLINE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-wifi-off"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div style="background: var(--warning); color: white; padding: 8px 16px; text-align: center; font-size: 12px; font-weight: 600;">
+          <span class="row" style="gap: 6px; justify-content: center;"><svg class="ic-14"><use href="#i-wifi-off"/></svg> You're offline — cached content still works</span>
+        </div>
+        <div class="body white center" style="justify-content: center; padding: 32px 24px;">
+          <div style="width: 96px; height: 96px; border-radius: 28px; background: var(--warning-soft); display: grid; place-items: center; color: var(--warning);">
+            <svg class="ic-48"><use href="#i-wifi-off"/></svg>
+          </div>
+          <h2 style="font-size: 22px; margin-top: 20px; letter-spacing: -0.01em;">You're offline</h2>
+          <p class="t-muted" style="margin-top: 8px; line-height: 1.5; max-width: 240px;">Doctor Cares needs a connection to load new appointments, messages and drug information.</p>
+          <button class="btn primary" style="margin-top: 20px;"><svg class="ic-16"><use href="#i-refresh"/></svg> Try again</button>
+          <div class="callout" style="margin-top: 20px; text-align: left; max-width: 260px;">
+            <b>Still available offline:</b><br/>
+            · Cached appointments &amp; profile<br/>
+            · Recent drug searches<br/>
+            <br/>
+            <b>Needs connection:</b><br/>
+            · New bookings · Chat · New searches
+          </div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">42</span><span class="name">Offline fallback</span><span class="desc">Banner + full screen · retry CTA · what's cached explanation</span></div>
+    </div>
+
+    <!-- 43 · NETWORK / SERVER ERROR -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Something went wrong</span></div>
+        <div class="body white center" style="justify-content: center; padding: 32px 24px;">
+          <div style="width: 96px; height: 96px; border-radius: 28px; background: var(--danger-soft); display: grid; place-items: center; color: var(--danger);">
+            <svg class="ic-48"><use href="#i-alert"/></svg>
+          </div>
+          <h2 style="font-size: 22px; margin-top: 20px; letter-spacing: -0.01em;">Couldn't load</h2>
+          <p class="t-muted" style="margin-top: 8px; line-height: 1.5; max-width: 260px;">We hit an unexpected error while loading your appointments. Please try again in a moment.</p>
+          <div class="row" style="gap: 12px; margin-top: 20px;">
+            <button class="btn outline">Go home</button>
+            <button class="btn primary"><svg class="ic-16"><use href="#i-refresh"/></svg> Retry</button>
+          </div>
+          <div class="t-muted" style="margin-top: 20px; font-size: 11px; font-family: monospace;">Error ID: 8f2c4d — if this keeps happening, contact support.</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">43</span><span class="name">Network / server error</span><span class="desc">Recovery CTAs · error ID for support</span></div>
+    </div>
+
+    <!-- 44 · 404 -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="body white center" style="justify-content: center; padding: 32px 24px;">
+          <div style="font-size: 96px; font-weight: 800; letter-spacing: -0.04em; color: var(--brand-500); line-height: 1;">404</div>
+          <h2 style="font-size: 22px; margin-top: 16px; letter-spacing: -0.01em;">Page not found</h2>
+          <p class="t-muted" style="margin-top: 8px; line-height: 1.5; max-width: 260px;">The page you're looking for doesn't exist or was moved.</p>
+          <button class="btn primary" style="margin-top: 20px;"><svg class="ic-16"><use href="#i-home"/></svg> Take me home</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">44</span><span class="name">404</span><span class="desc">Big brand-blue numeral · single primary CTA</span></div>
+    </div>
+
+    <!-- 45 · EMPTY STATE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">My appointments</span></div>
+        <div class="body white center" style="justify-content: center; padding: 32px 24px;">
+          <div style="width: 96px; height: 96px; border-radius: 28px; background: var(--brand-50); display: grid; place-items: center; color: var(--brand-500);">
+            <svg class="ic-48"><use href="#i-calendar"/></svg>
+          </div>
+          <h2 style="font-size: 20px; margin-top: 20px; letter-spacing: -0.01em;">No appointments yet</h2>
+          <p class="t-muted" style="margin-top: 8px; line-height: 1.5; max-width: 240px;">When you book with a doctor it'll appear here — you can join, reschedule or cancel from this screen.</p>
+          <button class="btn primary" style="margin-top: 20px;"><svg class="ic-16"><use href="#i-search"/></svg> Find a doctor</button>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-home"/></svg>Home</div>
+          <div class="nav-item active"><svg><use href="#i-calendar"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-pill"/></svg>Drugs</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">45</span><span class="name">Empty state (pattern)</span><span class="desc">Friendly illustration slot · explanation · primary CTA to next step</span></div>
+    </div>
+
+    <!-- 46 · LOADING SKELETON -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><div class="skl" style="width:120px; height:16px"></div></div>
+        <div class="body">
+          <div class="card">
+            <div class="row" style="gap: 12px;">
+              <div class="skl" style="width: 48px; height: 48px; border-radius: 50%;"></div>
+              <div class="col grow" style="gap: 8px;"><div class="skl text mid"></div><div class="skl text short"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="skl text" style="width: 90%; margin-bottom: 8px;"></div>
+            <div class="skl text mid" style="margin-bottom: 8px;"></div>
+            <div class="skl text short"></div>
+          </div>
+          <div class="card">
+            <div class="row" style="gap: 12px;">
+              <div class="skl" style="width: 48px; height: 48px; border-radius: 12px;"></div>
+              <div class="col grow" style="gap: 8px;"><div class="skl text mid"></div><div class="skl text short"></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="skl text mid" style="margin-bottom: 10px;"></div>
+            <div class="skl text short"></div>
+          </div>
+          <div class="callout" style="margin-top: auto;">Every list, card and chat renders a skeleton — never a bare white screen while loading.</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">46</span><span class="name">Loading skeleton (pattern)</span><span class="desc">Placeholder shapes that match the real layout · reduced-motion respected</span></div>
+    </div>
+
+    <!-- 47 · GENERIC ERROR TOAST -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Book appointment</span></div>
+        <div class="body">
+          <div class="list-row"><span class="avatar md accent">SC</span><div class="body"><div class="h4">Dr. Sarah Chen</div><div class="t-muted" style="font-size: 12px;">Cardiologist</div></div></div>
+          <div class="card compact">Content behind the toast</div>
+          <div class="card compact">Content behind the toast</div>
+        </div>
+        <!-- Toast overlay -->
+        <div style="position: absolute; left: 16px; right: 16px; top: 84px; background: white; border: 1px solid var(--danger); border-left: 4px solid var(--danger); border-radius: 12px; padding: 14px; box-shadow: var(--shadow-pop); display: flex; gap: 12px; align-items: flex-start;">
+          <span class="avatar sm" style="background: var(--danger-soft); color: var(--danger);"><svg class="ic-16"><use href="#i-alert"/></svg></span>
+          <div style="flex: 1;">
+            <div class="h4" style="color: var(--ink);">Couldn't confirm booking</div>
+            <div class="t-muted" style="font-size: 12px; margin-top: 2px;">The time slot was just taken. Please pick another time.</div>
+          </div>
+          <button class="icon-btn" style="width: 28px; height: 28px;"><svg class="ic-14"><use href="#i-x"/></svg></button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">—</span><span class="name">Error toast (pattern)</span><span class="desc">Non-blocking recoverable-error surface for form failures</span></div>
+    </div>
+
+    <!-- 48 · SUCCESS TOAST -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Edit profile</span></div>
+        <div class="body">
+          <div class="card">Profile fields…</div>
+          <div class="card compact">More content</div>
+        </div>
+        <!-- Toast overlay -->
+        <div style="position: absolute; left: 16px; right: 16px; top: 84px; background: white; border: 1px solid var(--success); border-left: 4px solid var(--success); border-radius: 12px; padding: 14px; box-shadow: var(--shadow-pop); display: flex; gap: 12px; align-items: flex-start;">
+          <span class="avatar sm" style="background: var(--success-soft); color: var(--success);"><svg class="ic-16"><use href="#i-check"/></svg></span>
+          <div style="flex: 1;">
+            <div class="h4" style="color: var(--ink);">Profile saved</div>
+            <div class="t-muted" style="font-size: 12px; margin-top: 2px;">Your changes are live.</div>
+          </div>
+          <button class="icon-btn" style="width: 28px; height: 28px;"><svg class="ic-14"><use href="#i-x"/></svg></button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">—</span><span class="name">Success toast (pattern)</span><span class="desc">Confirms save/update actions without a full-screen modal</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>All screens covered. <a href="index.html" class="t-brand" style="font-weight:600">← Back to index</a> · Once approved, we start Phase 2 (Supabase schema + RLS).</div>
+</footer>
+
+</body>
+</html>

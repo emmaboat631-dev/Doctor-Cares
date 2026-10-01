@@ -1,0 +1,108 @@
+<!--
+  Doctor Cares — Confirm sign-up email
+  Paste this into Supabase → Authentication → Emails → Templates → "Confirm signup"
+  Subject: Welcome to Doctor Cares — confirm your email
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Confirm your Doctor Cares email</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#0f172a;">
+  <!-- Preview text (hidden — shows next to subject in the inbox) -->
+  <div style="display:none;font-size:1px;color:#f5f7fb;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    You're one click away from booking appointments, chatting with doctors, and looking up medications.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f7fb;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 14px rgba(15,23,42,0.06);">
+
+          <!-- Brand header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#1E5EFF 0%,#122F87 100%);padding:32px 32px 28px;text-align:center;">
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                <tr>
+                  <td style="background:#ffffff;border-radius:18px;width:64px;height:64px;text-align:center;vertical-align:middle;">
+                    <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:26px;font-weight:800;color:#1E5EFF;letter-spacing:1px;line-height:64px;">DC</span>
+                  </td>
+                </tr>
+              </table>
+              <div style="color:#ffffff;font-size:20px;font-weight:700;margin-top:16px;letter-spacing:-0.01em;">Doctor Cares</div>
+              <div style="color:rgba(255,255,255,0.85);font-size:13px;margin-top:4px;">Healthcare. Anytime. Anywhere.</div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px 32px 8px;">
+              <h1 style="margin:0 0 12px;font-size:22px;font-weight:700;color:#0f172a;letter-spacing:-0.01em;">Welcome aboard 👋</h1>
+              <p style="margin:0 0 18px;font-size:15px;line-height:1.55;color:#334155;">
+                You're one click away from booking appointments, chatting privately with doctors, and looking up medications — all from your Doctor Cares account.
+              </p>
+              <p style="margin:0 0 24px;font-size:15px;line-height:1.55;color:#334155;">
+                Confirm your email address to activate your account.
+              </p>
+
+              <!-- CTA button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 24px;">
+                <tr>
+                  <td align="center" style="border-radius:14px;background:#1E5EFF;">
+                    <a href="{{ .ConfirmationURL }}"
+                       style="display:inline-block;padding:14px 32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:14px;">
+                      Confirm my email &rarr;
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback URL -->
+              <p style="margin:0 0 8px;font-size:12px;color:#64748b;line-height:1.5;">
+                Button not working? Copy and paste this link into your browser:
+              </p>
+              <p style="margin:0 0 24px;font-size:12px;color:#1E5EFF;word-break:break-all;line-height:1.4;">
+                <a href="{{ .ConfirmationURL }}" style="color:#1E5EFF;text-decoration:underline;">{{ .ConfirmationURL }}</a>
+              </p>
+
+              <!-- Feature strip -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 8px;border-top:1px solid #eef1f7;padding-top:20px;">
+                <tr>
+                  <td style="width:33%;text-align:center;padding:8px 4px;font-size:12px;color:#334155;">
+                    <div style="font-size:22px;margin-bottom:4px;">📅</div>
+                    <div style="font-weight:600;">Book visits</div>
+                  </td>
+                  <td style="width:33%;text-align:center;padding:8px 4px;font-size:12px;color:#334155;">
+                    <div style="font-size:22px;margin-bottom:4px;">💬</div>
+                    <div style="font-weight:600;">Chat privately</div>
+                  </td>
+                  <td style="width:33%;text-align:center;padding:8px 4px;font-size:12px;color:#334155;">
+                    <div style="font-size:22px;margin-bottom:4px;">💊</div>
+                    <div style="font-weight:600;">Drug info</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:16px 32px 28px;text-align:center;">
+              <p style="margin:0 0 8px;font-size:12px;color:#64748b;line-height:1.5;">
+                This link expires in 24 hours. If you didn't sign up for Doctor Cares, you can safely ignore this email — no account will be created.
+              </p>
+              <p style="margin:16px 0 0;font-size:11px;color:#94a3b8;">
+                © Doctor Cares · Healthcare. Anytime. Anywhere.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

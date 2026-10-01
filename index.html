@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+    <meta name="theme-color" content="#F5F7FB" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Doctor Cares — Healthcare. Anytime. Anywhere. Book doctors, chat privately, and find drug information." />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Doctor Cares" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" type="image/png" href="/brand-illustration.png" />
+    <link rel="apple-touch-icon" href="/brand-illustration.png" />
+    <!-- iOS home-screen icon sizes so it doesn't get downscaled from anywhere -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/brand-illustration.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/brand-illustration.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/brand-illustration.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/brand-illustration.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Doctor Cares — Healthcare. Anytime. Anywhere.</title>
+    <script>
+      // Apply theme synchronously before first paint to avoid FOUC.
+      // Priority: user's saved choice → device preference (system).
+      (function () {
+        try {
+          var stored = localStorage.getItem('dc:theme');
+          var mode = stored || 'system';
+          var isDark = mode === 'dark' ||
+            (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) document.documentElement.classList.add('dark');
+        } catch (_) { /* SSR/private-mode safety */ }
+      })();
+    </script>
+  </head>
+  <body class="bg-surface-muted text-ink dark:bg-slate-950 dark:text-slate-100 font-sans antialiased">
+    <div id="root"></div>
+    <noscript>You need to enable JavaScript to run Doctor Cares.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

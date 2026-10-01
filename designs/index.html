@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares — High-fidelity designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+<style>
+  .cover { padding: 60px 32px 40px; background: linear-gradient(180deg, var(--brand-50) 0%, transparent 100%); }
+  .cover-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 24px; }
+  .cover h1 { font-size: 40px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .cover p { font-size: 16px; color: var(--ink-muted); margin: 0 0 20px; max-width: 620px; }
+  .cover .nav { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cover .nav a { padding: 10px 16px; background: white; border: 1px solid var(--line); border-radius: 12px;
+    font-size: 14px; font-weight: 600; color: var(--ink); box-shadow: var(--shadow-card); display: inline-flex; align-items: center; gap: 8px; transition: all .15s; }
+  .cover .nav a:hover { border-color: var(--brand-300); color: var(--brand-700); transform: translateY(-1px); }
+  .cover .nav a.primary { background: var(--brand-500); border-color: var(--brand-500); color: white; }
+  .ds-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+  .ds-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .ds-card h3 { margin: 0 0 12px; font-size: 15px; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  .type-row { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .type-row:last-child { border-bottom: none; }
+  .type-row .size { font-size: 11px; color: var(--ink-muted); font-family: monospace; width: 44px; }
+</style>
+</head>
+<body>
+<script src="icons.js"></script>
+
+<div class="cover">
+  <div class="cover-inner">
+    <img src="../public/brand-illustration.png" alt="Doctor Cares" style="width: 96px; height: 96px; object-fit: contain;" />
+    <div style="flex:1">
+      <h1>Doctor Cares — high-fidelity designs</h1>
+      <p>Polished visual mockups of every screen in the platform, built with the exact tokens (Inter, brand blue #1E5EFF, semantic colors, 12–16px radii) that Phase 1 established. Each page shows one role's flows in device frames — mobile at 375×640, desktop at 1120px browser frame for admin.</p>
+      <div class="nav">
+        <a href="auth.html" class="primary"><svg class="ic-16"><use href="#i-log-in"/></svg> Auth &amp; Onboarding</a>
+        <a href="patient.html"><svg class="ic-16"><use href="#i-user"/></svg> Patient</a>
+        <a href="doctor.html"><svg class="ic-16"><use href="#i-stethoscope"/></svg> Doctor</a>
+        <a href="admin.html"><svg class="ic-16"><use href="#i-shield"/></svg> Admin</a>
+        <a href="system.html"><svg class="ic-16"><use href="#i-settings"/></svg> System / PWA</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Design system at a glance</h2>
+  <div class="sub">Reference for every screen in this document. Tokens live in <code>tailwind.config.js</code> and <code>designs/tokens.css</code>.</div>
+
+  <div class="ds-grid">
+
+    <div class="ds-card">
+      <h3>Brand palette</h3>
+      <div class="swatch-grid">
+        <div class="swatch light" style="background:var(--brand-50)">50</div>
+        <div class="swatch light" style="background:var(--brand-100)">100</div>
+        <div class="swatch" style="background:var(--brand-300)">300</div>
+        <div class="swatch" style="background:var(--brand-500)">500</div>
+        <div class="swatch" style="background:var(--brand-700)">700</div>
+      </div>
+      <div style="margin-top:12px; font-size: 12px; color: var(--ink-muted)">Primary: <code>#1E5EFF</code> — calm, medical, high-contrast on white and dark.</div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Semantic colors</h3>
+      <div class="swatch-grid">
+        <div class="swatch" style="background:var(--success)">Success</div>
+        <div class="swatch" style="background:var(--warning)">Warning</div>
+        <div class="swatch" style="background:var(--danger)">Danger</div>
+        <div class="swatch" style="background:var(--info)">Info</div>
+        <div class="swatch" style="background:var(--accent-500)">Accent</div>
+      </div>
+      <div style="margin-top:12px" class="row">
+        <span class="badge success">Confirmed</span>
+        <span class="badge warning">Pending</span>
+        <span class="badge danger">Cancelled</span>
+        <span class="badge info">Info</span>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Ink (text)</h3>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div style="color: var(--ink); font-weight: 700">Ink · Headings &amp; primary text</div>
+        <div style="color: var(--ink-soft); font-weight: 500">Ink soft · Body text</div>
+        <div style="color: var(--ink-muted)">Ink muted · Supporting text</div>
+        <div style="color: var(--ink-faint)">Ink faint · Placeholder</div>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Typography — Inter</h3>
+      <div class="type-row"><span class="size">30px</span><span style="font-size:30px; font-weight:700; letter-spacing: -0.02em">Doctor Cares</span></div>
+      <div class="type-row"><span class="size">22px</span><span style="font-size:22px; font-weight:700">Section title</span></div>
+      <div class="type-row"><span class="size">16px</span><span style="font-size:16px; font-weight:600">Card heading</span></div>
+      <div class="type-row"><span class="size">14px</span><span style="font-size:14px">Body copy — regular</span></div>
+      <div class="type-row"><span class="size">12px</span><span style="font-size:12px; color: var(--ink-muted)">Meta &amp; helper text</span></div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Buttons</h3>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="btn primary block"><svg class="ic-16"><use href="#i-check"/></svg> Primary action</button>
+        <button class="btn outline block">Outline</button>
+        <button class="btn secondary block">Secondary</button>
+        <div class="row" style="gap: 8px">
+          <button class="btn ghost sm">Ghost</button>
+          <button class="btn danger sm">Danger</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Chips &amp; badges</h3>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span class="chip">Default</span>
+        <span class="chip active">Active</span>
+        <span class="chip brand">Brand</span>
+        <span class="chip"><svg class="ic-14"><use href="#i-star"/></svg> 4.9</span>
+        <span class="badge brand">Verified</span>
+        <span class="badge dot">3</span>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Cards &amp; surfaces</h3>
+      <div class="card compact" style="margin-bottom: 10px">Default white card</div>
+      <div class="card compact tinted" style="margin-bottom: 10px">Tinted brand-50 card</div>
+      <div class="card compact gradient">Gradient hero card</div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Field &amp; search</h3>
+      <div class="field" style="margin-bottom: 10px">
+        <span class="label">Full name</span>
+        <span class="value">John Doe</span>
+      </div>
+      <div class="field focused" style="margin-bottom: 10px">
+        <span class="label">Email</span>
+        <span class="placeholder">you@example.com</span>
+      </div>
+      <div class="search">
+        <svg class="ic-16"><use href="#i-search"/></svg>
+        <span>Search doctors, specialties…</span>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Avatars</h3>
+      <div class="row" style="gap: 10px; flex-wrap: wrap">
+        <span class="avatar xs">JD</span>
+        <span class="avatar sm accent">AR</span>
+        <span class="avatar md">DS</span>
+        <span class="avatar lg violet">MR</span>
+        <span class="avatar xl rose">SP</span>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Icons — Lucide subset</h3>
+      <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; color: var(--ink-soft);">
+        <svg class="ic-24"><use href="#i-home"/></svg>
+        <svg class="ic-24"><use href="#i-calendar"/></svg>
+        <svg class="ic-24"><use href="#i-message"/></svg>
+        <svg class="ic-24"><use href="#i-pill"/></svg>
+        <svg class="ic-24"><use href="#i-user"/></svg>
+        <svg class="ic-24"><use href="#i-stethoscope"/></svg>
+        <svg class="ic-24"><use href="#i-bell"/></svg>
+        <svg class="ic-24"><use href="#i-search"/></svg>
+        <svg class="ic-24"><use href="#i-heart"/></svg>
+        <svg class="ic-24"><use href="#i-video"/></svg>
+        <svg class="ic-24"><use href="#i-map-pin"/></svg>
+        <svg class="ic-24"><use href="#i-shield"/></svg>
+        <svg class="ic-24"><use href="#i-settings"/></svg>
+        <svg class="ic-24"><use href="#i-flag"/></svg>
+        <svg class="ic-24"><use href="#i-clipboard"/></svg>
+        <svg class="ic-24"><use href="#i-trending"/></svg>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Radius &amp; shadow</h3>
+      <div class="row" style="gap: 12px; align-items: flex-end">
+        <div style="width:60px;height:60px;border-radius:8px;background:white;box-shadow:var(--shadow-card);display:grid;place-items:center;font-size:10px;color:var(--ink-muted)">card</div>
+        <div style="width:60px;height:60px;border-radius:16px;background:white;box-shadow:var(--shadow-pop);display:grid;place-items:center;font-size:10px;color:var(--ink-muted)">pop</div>
+        <div style="width:60px;height:60px;border-radius:999px;background:var(--brand-500);color:white;display:grid;place-items:center;font-size:10px">pill</div>
+      </div>
+    </div>
+
+    <div class="ds-card">
+      <h3>Spacing scale</h3>
+      <div class="col">
+        <div class="row" style="gap: 6px"><div style="width:4px;height:12px;background:var(--brand-500)"></div><span class="t-muted">4px · base</span></div>
+        <div class="row" style="gap: 6px"><div style="width:8px;height:12px;background:var(--brand-500)"></div><span class="t-muted">8px</span></div>
+        <div class="row" style="gap: 6px"><div style="width:16px;height:12px;background:var(--brand-500)"></div><span class="t-muted">16px · card padding</span></div>
+        <div class="row" style="gap: 6px"><div style="width:24px;height:12px;background:var(--brand-500)"></div><span class="t-muted">24px · section gap</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>Doctor Cares · high-fidelity designs · light &amp; dark themes both supported in build</div>
+  <div style="margin-top:8px">Next: <a href="auth.html" class="t-brand" style="font-weight:600">start with Auth flows →</a></div>
+</footer>
+
+</body>
+</html>

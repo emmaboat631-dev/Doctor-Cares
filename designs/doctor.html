@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Doctor Cares · Doctor designs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="tokens.css" />
+</head>
+<body>
+<script src="icons.js"></script>
+
+<header class="page-header">
+  <h1>Doctor experience</h1>
+  <p>Time-of-day utility: today's schedule, quick accept/decline, patient context, chat, availability, professional profile.</p>
+  <div class="crumbs">
+    <a href="index.html">← All designs</a>
+    <a href="auth.html">Auth</a>
+    <a href="patient.html">Patient</a>
+    <a href="doctor.html" class="active">Doctor</a>
+    <a href="admin.html">Admin</a>
+    <a href="system.html">System / PWA</a>
+  </div>
+</header>
+
+<div class="section">
+  <div class="grid">
+
+    <!-- 24 · DOCTOR DASHBOARD -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar" style="padding: 10px 16px; height: auto;">
+          <span class="avatar md accent">SC</span>
+          <div class="col" style="gap: 0;"><span style="font-size: 11px; color: var(--ink-muted);">Welcome back,</span><span style="font-size: 15px; font-weight: 700;">Dr. Chen</span></div>
+          <div class="spacer"></div>
+          <button class="icon-btn" style="position: relative;"><svg class="ic"><use href="#i-bell"/></svg><span class="badge dot" style="position: absolute; top: 4px; right: 4px;">4</span></button>
+        </div>
+        <div class="body">
+          <div class="row" style="gap: 8px;">
+            <div class="stat grow"><div class="num" style="color: var(--brand-600);">6</div><div class="label">Today</div></div>
+            <div class="stat grow"><div class="num" style="color: var(--warning);">2</div><div class="label">Pending</div></div>
+            <div class="stat grow"><div class="num">18</div><div class="label">This week</div></div>
+          </div>
+
+          <div class="row between" style="margin-top: 4px;">
+            <span class="h4">Today's schedule</span>
+            <a class="t-brand" style="font-size: 12px; font-weight: 600;">See all</a>
+          </div>
+
+          <div class="card" style="border-left: 3px solid var(--brand-500);">
+            <div class="row between" style="align-items: flex-start;">
+              <div>
+                <div class="row" style="gap: 6px;"><span style="font-weight: 700;">09:30</span><span class="t-muted" style="font-size: 12px;">— now</span></div>
+                <div style="font-weight: 600; margin-top: 2px;">John Doe · 34, M</div>
+                <div class="t-muted" style="font-size: 12px;">Follow-up · Cardiology</div>
+              </div>
+              <span class="badge success"><svg class="ic-14"><use href="#i-video"/></svg> Video</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 10px;">
+              <button class="btn primary sm grow"><svg class="ic-14"><use href="#i-video"/></svg> Start visit</button>
+              <button class="btn outline sm"><svg class="ic-14"><use href="#i-clipboard"/></svg> Notes</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row between"><div><b style="font-size: 14px;">10:15 · Jane Roe</b><div class="t-muted" style="font-size: 12px;">Consultation</div></div><span class="badge neutral"><svg class="ic-14"><use href="#i-map-pin"/></svg> Clinic</span></div>
+          </div>
+
+          <div class="card">
+            <div class="row between"><div><b style="font-size: 14px;">11:00 · Alex Perry</b><div class="t-muted" style="font-size: 12px;">Review results</div></div><span class="badge success"><svg class="ic-14"><use href="#i-video"/></svg> Video</span></div>
+          </div>
+
+          <div class="card">
+            <div class="row between"><div><b style="font-size: 14px;">14:00 · Maria Silva</b><div class="t-muted" style="font-size: 12px;">Initial visit</div></div><span class="badge warning">Pending</span></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item active"><svg><use href="#i-layout"/></svg>Dash</div>
+          <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">24</span><span class="name">Doctor dashboard</span><span class="desc">Day stats · current-slot highlighted · quick start visit</span></div>
+    </div>
+
+    <!-- 25 · DOCTOR APPOINTMENTS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Appointments</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-search"/></svg></button></div>
+        <div class="body">
+          <div class="row" style="gap: 6px; overflow: hidden;">
+            <span class="chip active">Today</span>
+            <span class="chip">Upcoming</span>
+            <span class="chip">Pending <span class="badge dot" style="width: 16px; height: 16px; font-size: 10px; margin-left: 4px;">2</span></span>
+            <span class="chip">Past</span>
+          </div>
+
+          <div class="card" style="border-color: var(--warning); border-left-width: 3px;">
+            <div class="row between" style="align-items: flex-start;">
+              <div class="row" style="gap: 10px;">
+                <span class="avatar md">JD</span>
+                <div class="col" style="gap: 2px;">
+                  <span class="h4">John Doe · 09:30</span>
+                  <span class="t-muted" style="font-size: 12px;">Cardio · Follow-up</span>
+                </div>
+              </div>
+              <span class="badge warning">Pending</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <button class="btn primary sm grow">Accept</button>
+              <button class="btn outline sm grow">Decline</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="align-items: flex-start;">
+              <div class="row" style="gap: 10px;">
+                <span class="avatar md rose">JR</span>
+                <div class="col" style="gap: 2px;">
+                  <span class="h4">Jane Roe · 10:15</span>
+                  <span class="t-muted" style="font-size: 12px;">Consultation</span>
+                </div>
+              </div>
+              <span class="badge success">Confirmed</span>
+            </div>
+            <div class="row" style="gap: 8px; margin-top: 12px;">
+              <button class="btn primary sm grow"><svg class="ic-14"><use href="#i-video"/></svg> Start</button>
+              <button class="btn outline sm grow">Reschedule</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="align-items: flex-start;">
+              <div class="row" style="gap: 10px;">
+                <span class="avatar md violet">AP</span>
+                <div class="col" style="gap: 2px;">
+                  <span class="h4">Alex Perry · 11:00</span>
+                  <span class="t-muted" style="font-size: 12px;">Review results</span>
+                </div>
+              </div>
+              <span class="badge success">Confirmed</span>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-layout"/></svg>Dash</div>
+          <div class="nav-item active"><svg><use href="#i-calendar-clock"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">25</span><span class="name">Doctor appointments</span><span class="desc">Filter tabs · pending emphasis · quick accept/decline</span></div>
+    </div>
+
+    <!-- 26 · APPOINTMENT DETAILS (DOCTOR VIEW) -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Appointment</span><div class="spacer"></div><button class="icon-btn"><svg class="ic-16"><use href="#i-more"/></svg></button></div>
+        <div class="body">
+          <div class="card tinted">
+            <div class="row" style="gap: 12px;">
+              <span class="avatar lg">JD</span>
+              <div class="col grow">
+                <span style="font-weight: 700; font-size: 16px;">John Doe</span>
+                <span class="t-muted" style="font-size: 12px;">34 y · Male · Patient since Jul 2024</span>
+                <div class="row" style="gap: 6px; margin-top: 4px;">
+                  <span class="badge warning">Pending</span>
+                  <span class="badge neutral">Tue 09:30</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 6px;">Reason for visit</div>
+            <p class="t-muted" style="font-size: 13px; line-height: 1.5;">Follow-up on chest pain and medication review. Symptoms improved but experiencing morning drowsiness.</p>
+          </div>
+
+          <div class="card">
+            <div class="row between" style="margin-bottom: 6px;">
+              <div class="h4">Clinical notes</div>
+              <a class="t-brand" style="font-size: 12px; font-weight: 600;">Edit</a>
+            </div>
+            <div style="padding: 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 12px; color: var(--ink-faint); text-align: center;">＋ Add clinical notes for this visit</div>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 8px;">Patient history</div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Blood group</span><span>O+</span></div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Allergies</span><span>Penicillin, peanuts</span></div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Last visit</span><span>Aug 22, 2025</span></div>
+          </div>
+
+          <div class="row" style="gap: 8px;">
+            <button class="btn outline grow"><svg class="ic-16"><use href="#i-message"/></svg> Message</button>
+            <button class="btn primary grow">Accept &amp; start</button>
+          </div>
+          <button class="btn danger block">Decline appointment</button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">26</span><span class="name">Appointment details (doctor)</span><span class="desc">Patient snapshot · reason · notes · history · accept/decline</span></div>
+    </div>
+
+    <!-- 27 · PATIENTS -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">My patients</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-search"/></svg></button></div>
+        <div class="body">
+          <div class="callout"><b>Doctors only see patients</b> they've been in contact with (appointment or chat). Enforced by RLS.</div>
+
+          <div class="list-row">
+            <span class="avatar md">JD</span>
+            <div class="body">
+              <div class="row between"><span class="h4">John Doe</span><span class="badge success">Active</span></div>
+              <span class="t-muted" style="font-size: 12px;">Last visit · Sep 8 · 4 appointments</span>
+            </div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar md rose">JR</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Jane Roe</span><span class="badge neutral">Follow-up due</span></div>
+              <span class="t-muted" style="font-size: 12px;">Last visit · Aug 30 · 2 appointments</span>
+            </div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar md violet">AP</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Alex Perry</span><span class="badge success">Active</span></div>
+              <span class="t-muted" style="font-size: 12px;">Last visit · Aug 22 · 7 appointments</span>
+            </div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+
+          <div class="list-row">
+            <span class="avatar md warn">MS</span>
+            <div class="body">
+              <div class="row between"><span class="h4">Maria Silva</span><span class="badge warning">New</span></div>
+              <span class="t-muted" style="font-size: 12px;">First visit · Sep 14</span>
+            </div>
+            <svg class="ic-16" style="color: var(--ink-muted);"><use href="#i-chevron-right"/></svg>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-layout"/></svg>Dash</div>
+          <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item active"><svg><use href="#i-users"/></svg>Patients</div>
+          <div class="nav-item"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">27</span><span class="name">My patients</span><span class="desc">Access rule callout · status pills · visit history</span></div>
+    </div>
+
+    <!-- 28 · DOCTOR CHAT -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar">
+          <button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button>
+          <span class="avatar sm">JD</span>
+          <div class="col" style="gap: 0; flex: 1;">
+            <span style="font-weight: 600; font-size: 14px;">John Doe</span>
+            <span style="font-size: 11px; color: var(--ink-muted);">Patient · ● Online</span>
+          </div>
+          <button class="icon-btn"><svg class="ic-16"><use href="#i-clipboard"/></svg></button>
+        </div>
+        <div class="body" style="gap: 10px; padding: 14px;">
+          <div class="chat-day">— Today · Sep 12 —</div>
+          <div class="bubble theirs">Doctor, my chest pain has returned.</div>
+          <div class="bubble mine">When did it start? Any triggers?</div>
+          <div class="bubble theirs">About two hours ago, after climbing stairs.</div>
+          <div class="bubble mine">Please rest and monitor. If it worsens or you feel dizzy — go to the ER immediately.</div>
+          <div class="card compact" style="border: 1px dashed var(--brand-200); background: var(--brand-50); padding: 10px;">
+            <div class="row" style="gap: 6px;">
+              <svg class="ic-14" style="color: var(--brand-500);"><use href="#i-plus"/></svg>
+              <span style="font-size: 12px; color: var(--brand-700); font-weight: 600;">Quick replies</span>
+            </div>
+            <div class="row" style="gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+              <span class="chip" style="font-size: 11px;">Send prescription</span>
+              <span class="chip" style="font-size: 11px;">Book follow-up</span>
+              <span class="chip" style="font-size: 11px;">Request labs</span>
+            </div>
+          </div>
+        </div>
+        <div class="composer">
+          <button class="icon-btn"><svg class="ic-18"><use href="#i-plus"/></svg></button>
+          <div class="input">Reply to John…</div>
+          <button class="icon-btn filled" style="width: 36px; height: 36px;"><svg class="ic-16"><use href="#i-send"/></svg></button>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">28</span><span class="name">Doctor chat</span><span class="desc">Patient chip in appbar · quick reply templates for clinicians</span></div>
+    </div>
+
+    <!-- 29 · AVAILABILITY -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><button class="icon-btn circle"><svg class="ic-16"><use href="#i-arrow-left"/></svg></button><span class="title">Availability</span><div class="spacer"></div><button class="btn primary sm">Save</button></div>
+        <div class="body">
+          <div class="subhead">Weekly schedule</div>
+          <div class="setting-list">
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Monday</span><span class="badge brand">09–13 · 14–17</span></div>
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Tuesday</span><span class="badge brand">09–13 · 14–17</span></div>
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Wednesday</span><span class="badge neutral">Off</span></div>
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Thursday</span><span class="badge brand">09–13</span></div>
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Friday</span><span class="badge brand">14–17</span></div>
+            <div class="setting-row"><span class="grow" style="font-weight: 500;">Sat / Sun</span><span class="badge neutral">Off</span></div>
+          </div>
+
+          <div class="subhead" style="padding-top: 12px;">Slot length</div>
+          <div class="row" style="gap: 8px;">
+            <span class="chip">15 min</span>
+            <span class="chip active">30 min</span>
+            <span class="chip">45 min</span>
+            <span class="chip">60 min</span>
+          </div>
+
+          <div class="subhead" style="padding-top: 12px;">Blocked dates</div>
+          <div class="card compact">
+            <div class="row between"><div><b style="font-size: 13px;">Sep 20 → Sep 24</b><div class="t-muted" style="font-size: 12px;">Personal leave</div></div><button class="icon-btn"><svg class="ic-16"><use href="#i-x"/></svg></button></div>
+          </div>
+          <div style="padding: 14px; border: 1px dashed var(--line); border-radius: 12px; text-align: center; color: var(--brand-600); font-weight: 600; font-size: 13px;">＋ Add date range</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">29</span><span class="name">Availability settings</span><span class="desc">Weekly hours · slot length · blocked dates</span></div>
+    </div>
+
+    <!-- 30 · DOCTOR PROFILE -->
+    <div>
+      <div class="frame"><div class="screen">
+        <div class="status-bar"><span>9:41</span><span class="indicators"><svg class="ic-14"><use href="#i-signal"/></svg><svg class="ic-14"><use href="#i-battery"/></svg></span></div>
+        <div class="appbar"><span class="title">Profile</span><div class="spacer"></div><button class="icon-btn circle"><svg class="ic-16"><use href="#i-edit"/></svg></button></div>
+        <div class="body">
+          <div class="card" style="text-align: center; padding: 20px;">
+            <span class="avatar xl accent" style="margin: 0 auto;">SC</span>
+            <h3 style="margin-top: 10px; font-size: 17px;">Dr. Sarah Chen</h3>
+            <div class="t-muted" style="font-size: 12px; margin-top: 2px;">Cardiologist · MBBS, MD</div>
+            <div class="row" style="gap: 8px; justify-content: center; margin-top: 8px;">
+              <span class="badge success"><svg class="ic-14"><use href="#i-check-circle"/></svg> Verified</span>
+              <span class="chip" style="padding: 3px 10px;"><svg class="ic-14" style="color: var(--warning);"><use href="#i-star"/></svg> 4.9 (128)</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 6px;">About</div>
+            <p class="t-muted" style="font-size: 13px; line-height: 1.5;">Interventional cardiologist with 8 years' experience treating heart disease, arrhythmias and hypertension.</p>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 8px;">Qualifications</div>
+            <div class="row" style="gap: 8px; padding: 4px 0;"><svg class="ic-16" style="color: var(--brand-500);"><use href="#i-check"/></svg><span style="font-size: 13px;">MBBS · Harvard Medical School (2012)</span></div>
+            <div class="row" style="gap: 8px; padding: 4px 0;"><svg class="ic-16" style="color: var(--brand-500);"><use href="#i-check"/></svg><span style="font-size: 13px;">MD Cardiology · Johns Hopkins (2016)</span></div>
+            <div class="row" style="gap: 8px; padding: 4px 0;"><svg class="ic-16" style="color: var(--brand-500);"><use href="#i-check"/></svg><span style="font-size: 13px;">Board certified — ABIM Cardiovascular</span></div>
+          </div>
+
+          <div class="card">
+            <div class="h4" style="margin-bottom: 8px;">Consultation</div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Fee</span><span style="font-weight: 700; color: var(--brand-700);">$40</span></div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Modes</span><div class="row" style="gap: 4px;"><span class="badge brand"><svg class="ic-14"><use href="#i-video"/></svg> Video</span><span class="badge brand"><svg class="ic-14"><use href="#i-map-pin"/></svg> Clinic</span></div></div>
+            <div class="row between" style="padding: 4px 0; font-size: 13px;"><span class="t-muted">Languages</span><span>English, Mandarin</span></div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item"><svg><use href="#i-layout"/></svg>Dash</div>
+          <div class="nav-item"><svg><use href="#i-calendar-clock"/></svg>Appts</div>
+          <div class="nav-item"><svg><use href="#i-message"/></svg>Chat</div>
+          <div class="nav-item"><svg><use href="#i-users"/></svg>Patients</div>
+          <div class="nav-item active"><svg><use href="#i-user"/></svg>Profile</div>
+        </div>
+      </div></div>
+      <div class="caption"><span class="num">30 · 31</span><span class="name">Professional profile</span><span class="desc">Bio · qualifications · consultation modes · verify badge</span></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div>Next: <a href="admin.html" class="t-brand" style="font-weight:600">Admin (desktop) →</a></div>
+</footer>
+
+</body>
+</html>

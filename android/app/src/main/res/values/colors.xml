@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand blue — tints the monochrome notification icon in the status bar
+         and the small notification swatch so it reads as a Doctor Cares push. -->
+    <color name="notification_tint">#1E5EFF</color>
+</resources>

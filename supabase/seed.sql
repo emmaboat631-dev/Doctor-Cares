@@ -1,0 +1,42 @@
+-- ============================================================================
+-- Doctor Cares — OPTIONAL seed data
+-- ============================================================================
+-- Run this AFTER the migrations AND after you've created at least one auth
+-- user for each of the emails below (via Supabase Auth UI or `signUp`).
+-- Then re-run this file to populate the doctor + patient profiles.
+--
+-- To find the auth user id you need, run:
+--   select id, email from auth.users;
+--
+-- Then replace the placeholder emails / ids with real values, or use the
+-- lookup pattern shown below.
+-- ============================================================================
+
+-- Example: promote the first doctor's data ----------------------------------
+-- Replace 'sarah.chen@example.com' with a real seeded auth user.
+--
+-- update public.profiles set role = 'doctor', full_name = 'Dr. Sarah Chen'
+--   where id = (select id from auth.users where email = 'sarah.chen@example.com');
+--
+-- insert into public.doctor_profiles (id, specialty, qualifications, bio, years_experience, consultation_fee, modes, is_verified, rating, rating_count, languages)
+-- select id, 'Cardiology', 'MBBS, MD Cardiology', 'Interventional cardiologist with 8 years experience.', 8, 40.00, '{video,clinic}', true, 4.9, 128, '{English,Mandarin}'
+--   from auth.users where email = 'sarah.chen@example.com'
+--   on conflict (id) do update set
+--     specialty = excluded.specialty,
+--     qualifications = excluded.qualifications,
+--     bio = excluded.bio,
+--     years_experience = excluded.years_experience,
+--     consultation_fee = excluded.consultation_fee,
+--     modes = excluded.modes,
+--     is_verified = true;
+--
+-- Availability (Mon 9-13, Tue 9-13/14-17, Thu 9-13, Fri 14-17):
+-- insert into public.doctor_availability (doctor_id, weekday, start_time, end_time, slot_minutes) values
+--   ((select id from auth.users where email = 'sarah.chen@example.com'), 1, '09:00', '13:00', 30),
+--   ((select id from auth.users where email = 'sarah.chen@example.com'), 2, '09:00', '13:00', 30),
+--   ((select id from auth.users where email = 'sarah.chen@example.com'), 2, '14:00', '17:00', 30),
+--   ((select id from auth.users where email = 'sarah.chen@example.com'), 4, '09:00', '13:00', 30),
+--   ((select id from auth.users where email = 'sarah.chen@example.com'), 5, '14:00', '17:00', 30)
+-- on conflict (doctor_id, weekday, start_time) do nothing;
+
+select 'Seed template — see comments inside for how to use.' as info;
