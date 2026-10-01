@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Bell, Calendar, CalendarCheck, ChevronRight, Heart,
+  Bell, Calendar, CalendarCheck, ChevronRight, Heart, HeartPulse,
   MessageSquare, Pill, Search, Siren, Sparkles, Stethoscope, Thermometer,
   TrendingUp, Video, Wind,
 } from 'lucide-react';
@@ -158,9 +158,12 @@ export function PatientDashboardPage() {
           </div>
           <div className="grid grid-cols-4 gap-2.5">
             <ServiceTile to="/doctors"       icon={<Stethoscope className="h-5 w-5" />}   label="Find doctor" tone="brand" />
+            <ServiceTile to="/doctors?role=nurse" icon={<HeartPulse className="h-5 w-5" />} label="Find nurse" tone="rose" />
             <ServiceTile to="/appointments"  icon={<CalendarCheck className="h-5 w-5" />} label="My visits"   tone="accent" />
-            <ServiceTile to="/chat"          icon={<MessageSquare className="h-5 w-5" />} label="Messages"    tone="rose" />
-            <ServiceTile to="/drugs"         icon={<Pill className="h-5 w-5" />}          label="Drug info"   tone="violet" />
+            <ServiceTile to="/chat"          icon={<MessageSquare className="h-5 w-5" />} label="Messages"    tone="violet" />
+          </div>
+          <div className="grid grid-cols-4 gap-2.5 mt-2.5">
+            <ServiceTile to="/drugs"         icon={<Pill className="h-5 w-5" />}          label="Drug info"   tone="brand" />
           </div>
         </section>
 

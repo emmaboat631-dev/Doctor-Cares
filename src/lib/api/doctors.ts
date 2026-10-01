@@ -66,14 +66,46 @@ export async function getDoctor(id: string): Promise<DoctorListItem | null> {
     .eq('id', id)
     .maybeSingle();
   if (error) throw error;
-  return (data as unknown as DoctorListItem | null);
+  if (data) return data as unknown as DoctorListItem;
+
+  // Fallback: this id might be a nurse. Query nurse_profiles the same way
+  // and normalize specialization → specialty so the shared profile UI works.
+  const { data: nurse, error: nErr } = await sb
+    .from('nurse_profiles')
+    .select('*, profile:profiles!nurse_profiles_id_fkey(id, full_name, avatar_url, status)')
+    .eq('id', id)
+    .maybeSingle();
+  if (nErr) throw nErr;
+  if (!nurse) return null;
+  const n = nurse as unknown as (DoctorListItem & { specialization?: string | null });
+  if (!n.specialty && n.specialization) n.specialty = n.specialization;
+  return n;
 }
 
 // -- Doctor self-service --------------------------------------------------
 
 /** Same as getDoctor but not filtered by is_verified — doctors can read their own. */
-export async function getMyDoctorProfile(id: string) {
-  return getDoctor(id);
+/**
+ * Returns the current user's own provider profile — doctor_profiles for
+ * doctors, nurse_profiles for nurses — normalized to the DoctorListItem
+ * shape so the shared doctor-side UI can render either without branching.
+ */
+export async function getMyDoctorProfile(id: string): Promise<DoctorListItem | null> {
+  const sb = requireClient();
+  const doc = await getDoctor(id);
+  if (doc) return doc;
+  const { data, error } = await sb
+    .from('nurse_profiles')
+    .select('*, profile:profiles!nurse_profiles_id_fkey(id, full_name, avatar_url, status)')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const n = data as unknown as (DoctorListItem & { specialization?: string | null });
+  // Nurse table uses `specialization`; doctor table uses `specialty`.
+  // Normalize so the UI reads one field.
+  if (!n.specialty && n.specialization) n.specialty = n.specialization;
+  return n;
 }
 
 export async function updateMyDoctorProfile(id: string, patch: Partial<{
@@ -87,6 +119,18 @@ export async function updateMyDoctorProfile(id: string, patch: Partial<{
   languages: string[];
 }>): Promise<void> {
   const sb = requireClient();
-  const { error } = await sb.from('doctor_profiles').update(patch).eq('id', id);
+  // Try doctor_profiles first; if nothing updates (nurse user), fall through
+  // to nurse_profiles — specialty maps to specialization.
+  const { data: upd, error } = await sb
+    .from('doctor_profiles').update(patch).eq('id', id).select('id');
   if (error) throw error;
+  if ((upd ?? []).length > 0) return;
+
+  const nursePatch: Record<string, unknown> = { ...patch };
+  if ('specialty' in patch) {
+    nursePatch.specialization = patch.specialty;
+    delete nursePatch.specialty;
+  }
+  const { error: nurseErr } = await sb.from('nurse_profiles').update(nursePatch).eq('id', id);
+  if (nurseErr) throw nurseErr;
 }

@@ -76,7 +76,10 @@ function RoleRouter() {
     );
   }
 
-  if (role === 'doctor') {
+  // Doctors and nurses share the same route tree (both are independent
+  // clinicians in Doctor Cares' Independent Clinician model). The pages
+  // themselves branch on role where the copy/behavior differs.
+  if (role === 'doctor' || role === 'nurse') {
     return (
       <Routes>
         <Route element={<DoctorLayout />}>
@@ -158,7 +161,7 @@ export function AppRoutes() {
       <Route
         path="/*"
         element={
-          <ProtectedRoute allow={['patient', 'doctor', 'admin']}>
+          <ProtectedRoute allow={['patient', 'doctor', 'nurse', 'admin']}>
             <RoleRouter />
           </ProtectedRoute>
         }

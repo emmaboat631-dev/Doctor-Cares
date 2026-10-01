@@ -22,7 +22,7 @@ interface AuthContextValue {
   /** True when the current session came from a "reset password" email link. */
   passwordRecovery: boolean;
   refreshProfile: () => Promise<void>;
-  signUp: (params: { email: string; password: string; fullName: string; role: 'patient' | 'doctor' }) => Promise<AsyncResult>;
+  signUp: (params: { email: string; password: string; fullName: string; role: 'patient' | 'doctor' | 'nurse' }) => Promise<AsyncResult>;
   signIn: (params: { email: string; password: string }) => Promise<AsyncResult>;
   signInWithOAuth: (provider: 'google' | 'apple') => Promise<AsyncResult>;
   signOut: () => Promise<void>;

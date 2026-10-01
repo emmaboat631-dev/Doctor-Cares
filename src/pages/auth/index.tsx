@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { LogIn, UserPlus, KeyRound, Mail, User as UserIcon, Stethoscope, CheckCircle2 } from 'lucide-react';
+import { LogIn, UserPlus, KeyRound, Mail, User as UserIcon, Stethoscope, HeartPulse, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -204,7 +204,7 @@ export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
-  const [role, setRole] = useState<'patient' | 'doctor'>('patient');
+  const [role, setRole] = useState<'patient' | 'doctor' | 'nurse'>('patient');
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -265,13 +265,16 @@ export function RegisterPage() {
         {/* Role selector */}
         <div>
           <span className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">I am a…</span>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <RoleTile active={role === 'patient'} onClick={() => setRole('patient')}
               icon={<UserIcon className="h-5 w-5" />} label="Patient"
-              hint="Book, chat, look up drugs" />
+              hint="Book + chat" />
             <RoleTile active={role === 'doctor'} onClick={() => setRole('doctor')}
               icon={<Stethoscope className="h-5 w-5" />} label="Doctor"
-              hint="Manage practice + patients" />
+              hint="See patients" />
+            <RoleTile active={role === 'nurse'} onClick={() => setRole('nurse')}
+              icon={<HeartPulse className="h-5 w-5" />} label="Nurse"
+              hint="Vitals + care" />
           </div>
           <p className="mt-1.5 text-xs text-ink-muted">Admin accounts are provisioned by the platform team.</p>
         </div>

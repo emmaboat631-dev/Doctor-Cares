@@ -534,7 +534,7 @@ function VoiceBubble({
 function ChatHeader({
   onBack, name, role, avatarUrl, loading, onProfileClick,
 }: {
-  onBack: () => void; name: string | null; role: 'patient' | 'doctor' | 'admin' | null;
+  onBack: () => void; name: string | null; role: 'patient' | 'doctor' | 'nurse' | 'admin' | null;
   avatarUrl?: string; loading?: boolean; onProfileClick?: () => void;
 }) {
   const identity = (

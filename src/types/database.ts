@@ -13,7 +13,7 @@ export type Json =
   | Json[];
 
 // Enum types (must match SQL) -------------------------------------------------
-export type UserRole = 'patient' | 'doctor' | 'admin';
+export type UserRole = 'patient' | 'doctor' | 'nurse' | 'admin';
 export type AccountStatus = 'active' | 'suspended' | 'pending';
 export type AppointmentStatus =
   | 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'rejected';
