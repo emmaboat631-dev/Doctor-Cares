@@ -71,19 +71,19 @@ export function DoctorPatientDetailsPage() {
 
         <VitalsCard vitals={vitals.data ?? {}} loading={vitals.loading} />
 
-        {m && (m.date_of_birth || m.gender || m.blood_group || m.allergies) ? (
+        {m && (m.date_of_birth || m.gender || m.blood_group || m.height_cm) ? (
           <Card>
-            <div className="text-sm font-semibold mb-2">Medical profile</div>
+            <div className="text-sm font-semibold mb-2">Demographics</div>
             <div className="grid gap-1.5 text-sm">
               {m.date_of_birth && <Row label="Date of birth" value={fmtDate(m.date_of_birth, { year: 'numeric', month: 'short', day: 'numeric' })} />}
-              {m.gender       && <Row label="Gender" value={m.gender} />}
-              {m.blood_group  && <Row label="Blood group" value={m.blood_group} />}
-              {m.allergies    && <Row label="Allergies" value={m.allergies} />}
+              {m.gender        && <Row label="Gender" value={m.gender} />}
+              {m.blood_group   && <Row label="Blood group" value={m.blood_group} />}
+              {m.height_cm != null && <Row label="Height" value={`${m.height_cm} cm`} />}
             </div>
           </Card>
-        ) : (
-          <Card><div className="text-sm text-ink-muted">Patient hasn't filled in their medical profile yet.</div></Card>
-        )}
+        ) : null}
+
+        <MedicalHistoryCard m={m} />
 
         <div>
           <div className="mb-2 flex items-center justify-between">
@@ -120,6 +120,102 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
     <div className="flex items-center justify-between gap-3 py-1">
       <span className="text-ink-muted">{label}</span>
       <span className="font-semibold text-right">{value}</span>
+    </div>
+  );
+}
+
+type Med = {
+  allergies?: string | null;
+  chronic_conditions?: string[] | null;
+  current_medications?: string[] | null;
+  immunizations?: string[] | null;
+  past_surgeries?: string | null;
+  family_history?: string | null;
+  smoking_status?: string | null;
+  alcohol_use?: string | null;
+};
+
+function MedicalHistoryCard({ m }: { m: Med | null | undefined }) {
+  if (!m) return null;
+  const hasAny =
+    m.allergies ||
+    (m.chronic_conditions?.length ?? 0) > 0 ||
+    (m.current_medications?.length ?? 0) > 0 ||
+    (m.immunizations?.length ?? 0) > 0 ||
+    m.past_surgeries ||
+    m.family_history ||
+    m.smoking_status ||
+    m.alcohol_use;
+
+  if (!hasAny) {
+    return (
+      <Card>
+        <div className="text-sm font-semibold mb-1">Medical history</div>
+        <div className="text-xs text-ink-muted">Patient hasn't filled in their medical history yet.</div>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <div className="text-sm font-semibold mb-2">Medical history</div>
+      <div className="space-y-3 text-sm">
+        {m.allergies && <Section label="Allergies">{m.allergies}</Section>}
+        {(m.chronic_conditions?.length ?? 0) > 0 && (
+          <ChipList label="Chronic conditions" items={m.chronic_conditions!} tone="rose" />
+        )}
+        {(m.current_medications?.length ?? 0) > 0 && (
+          <ChipList label="Current medications" items={m.current_medications!} tone="brand" />
+        )}
+        {(m.immunizations?.length ?? 0) > 0 && (
+          <ChipList label="Immunizations" items={m.immunizations!} tone="emerald" />
+        )}
+        {m.past_surgeries   && <Section label="Past surgeries">{m.past_surgeries}</Section>}
+        {m.family_history   && <Section label="Family history">{m.family_history}</Section>}
+        {(m.smoking_status || m.alcohol_use) && (
+          <div className="grid grid-cols-2 gap-2">
+            {m.smoking_status && <KeyValue label="Smoking" value={m.smoking_status} />}
+            {m.alcohol_use    && <KeyValue label="Alcohol"  value={m.alcohol_use} />}
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function Section({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="mt-0.5 text-sm">{children}</div>
+    </div>
+  );
+}
+
+const CHIP_TONES = {
+  rose:    'bg-rose-50 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300',
+  brand:   'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300',
+  emerald: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
+} as const;
+
+function ChipList({ label, items, tone }: { label: string; items: string[]; tone: keyof typeof CHIP_TONES }) {
+  return (
+    <div>
+      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="mt-1 flex flex-wrap gap-1.5">
+        {items.map((it, i) => (
+          <span key={`${it}-${i}`} className={cn('inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold', CHIP_TONES[tone])}>{it}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function KeyValue({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-xl bg-slate-50 dark:bg-slate-800/50 p-2">
+      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="mt-0.5 text-sm font-semibold capitalize">{value}</div>
     </div>
   );
 }

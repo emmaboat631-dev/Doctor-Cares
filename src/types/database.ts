@@ -46,6 +46,14 @@ export interface PatientProfileRow {
   emergency_contact_name: string | null;
   emergency_contact_phone: string | null;
   emergency_contact_relation: string | null;
+  height_cm: number | null;
+  chronic_conditions: string[];
+  current_medications: string[];
+  past_surgeries: string | null;
+  immunizations: string[];
+  family_history: string | null;
+  smoking_status: 'never' | 'former' | 'current' | null;
+  alcohol_use: 'none' | 'occasional' | 'regular' | 'heavy' | null;
   updated_at: string;
 }
 
@@ -177,7 +185,7 @@ export type Database = {
       };
       patient_profiles: {
         Row: PatientProfileRow;
-        Insert: Insertable<PatientProfileRow, 'updated_at' | 'date_of_birth' | 'gender' | 'blood_group' | 'allergies' | 'emergency_contact_name' | 'emergency_contact_phone' | 'emergency_contact_relation'>;
+        Insert: Insertable<PatientProfileRow, 'updated_at' | 'date_of_birth' | 'gender' | 'blood_group' | 'allergies' | 'emergency_contact_name' | 'emergency_contact_phone' | 'emergency_contact_relation' | 'height_cm' | 'chronic_conditions' | 'current_medications' | 'past_surgeries' | 'immunizations' | 'family_history' | 'smoking_status' | 'alcohol_use'>;
         Update: Updatable<PatientProfileRow>;
       };
       doctor_profiles: {

@@ -8,6 +8,7 @@ export { MyAppointmentsPage }       from './MyAppointmentsPage';
 export { AppointmentDetailsPage }   from './AppointmentDetailsPage';
 export { RateVisitPage }            from './RateVisitPage';
 export { HealthMetricsPage }        from './HealthMetricsPage';
+export { MedicalHistoryPage }       from './MedicalHistoryPage';
 export { HealthTipsPage }           from './HealthTipsPage';
 export { HealthTipDetailPage }      from './HealthTipDetailPage';
 export { NotificationsPage }        from './NotificationsPage';
