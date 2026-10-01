@@ -11,6 +11,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { VideoCallPage } from '@/pages/VideoCallPage';
+import { CallPage } from '@/pages/CallPage';
 
 import {
   SplashPage, OnboardingPage, LoginPage, RegisterPage, ForgotPasswordPage,
@@ -59,6 +60,7 @@ function RoleRouter() {
           <Route path="appointments/:id/confirmed" element={<BookingConfirmationPage />} />
           <Route path="appointments/:id/review" element={<RateVisitPage />} />
           <Route path="appointments/:id/call" element={<VideoCallPage />} />
+          <Route path="call/:conversationId" element={<CallPage />} />
           <Route path="metrics" element={<HealthMetricsPage />} />
           <Route path="tips" element={<HealthTipsPage />} />
           <Route path="tips/:id" element={<HealthTipDetailPage />} />
@@ -89,6 +91,7 @@ function RoleRouter() {
           <Route path="appointments" element={<DoctorAppointmentsPage />} />
           <Route path="appointments/:id" element={<DoctorAppointmentDetailsPage />} />
           <Route path="appointments/:id/call" element={<VideoCallPage />} />
+          <Route path="call/:conversationId" element={<CallPage />} />
           <Route path="patients" element={<DoctorPatientsPage />} />
           <Route path="patients/:id" element={<DoctorPatientDetailsPage />} />
           <Route path="chat" element={<DoctorChatListPage />} />

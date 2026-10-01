@@ -263,6 +263,8 @@ export function ChatDetailPage() {
         onProfileClick={otherId && other?.role === 'doctor'
           ? () => navigate(`/doctors/${otherId}`)
           : undefined}
+        onVoiceCall={() => navigate(`/call/${conversationId}?mode=audio`)}
+        onVideoCall={() => navigate(`/call/${conversationId}?mode=video`)}
       />
 
       <div ref={scrollerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
@@ -532,10 +534,11 @@ function VoiceBubble({
 // Header
 // ---------------------------------------------------------------------------
 function ChatHeader({
-  onBack, name, role, avatarUrl, loading, onProfileClick,
+  onBack, name, role, avatarUrl, loading, onProfileClick, onVoiceCall, onVideoCall,
 }: {
   onBack: () => void; name: string | null; role: 'patient' | 'doctor' | 'nurse' | 'admin' | null;
   avatarUrl?: string; loading?: boolean; onProfileClick?: () => void;
+  onVoiceCall?: () => void; onVideoCall?: () => void;
 }) {
   const identity = (
     <>
@@ -569,10 +572,10 @@ function ChatHeader({
         ) : (
           <div className="flex items-center gap-3 flex-1 min-w-0">{identity}</div>
         )}
-        <button className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-ink-soft" aria-label="Video call">
+        <button type="button" onClick={onVideoCall} className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-ink-soft hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/15 dark:hover:text-brand-300 transition" aria-label="Video call">
           <Video className="h-4 w-4" />
         </button>
-        <button className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-ink-soft" aria-label="Voice call">
+        <button type="button" onClick={onVoiceCall} className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-ink-soft hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-500/15 dark:hover:text-brand-300 transition" aria-label="Voice call">
           <Phone className="h-4 w-4" />
         </button>
       </div>
