@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Bell, ChevronRight, ClipboardList, LogOut, Moon, Settings, Shield, User } from 'lucide-react';
+import { Bell, ChevronRight, ClipboardList, LogOut, Moon, Settings, Share2, Shield, User } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -31,6 +31,7 @@ export function PatientProfilePage() {
         <div className="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
           <MenuRow href="/profile/edit" icon={<User className="h-4 w-4" />} label="Edit profile" />
           <MenuRow href="/profile/medical-history" icon={<ClipboardList className="h-4 w-4" />} label="Medical history" />
+          <MenuRow href="/referrals" icon={<Share2 className="h-4 w-4" />} label="Referrals" />
           <MenuRow href="/settings"     icon={<Shield className="h-4 w-4" />} label="Privacy & security" />
           <MenuRow href="/notifications" icon={<Bell className="h-4 w-4" />} label="Notifications" />
           <MenuRow href="/settings"     icon={<Moon className="h-4 w-4" />} label="Appearance" />

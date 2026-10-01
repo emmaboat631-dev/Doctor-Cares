@@ -9,6 +9,7 @@ export { DoctorPatientDetailsPage }      from './PatientDetailsPage';
 export { DoctorAvailabilityPage }        from './AvailabilityPage';
 export { DoctorProfilePage }             from './ProfilePage';
 export { DoctorEditProfilePage }         from './EditProfilePage';
+export { DoctorReferralsPage }           from './ReferralsPage';
 
 // Reused from the patient side — same UI, role-agnostic (uses useAuth). ------
 export { NotificationsPage as DoctorNotificationsPage } from '../patient/NotificationsPage';

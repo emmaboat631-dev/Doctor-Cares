@@ -19,7 +19,7 @@ import {
 import {
   PatientDashboardPage, FindDoctorsPage, DoctorProfilePage as PatientDoctorProfilePage,
   BookAppointmentPage, BookingConfirmationPage, MyAppointmentsPage, AppointmentDetailsPage,
-  RateVisitPage, HealthMetricsPage, HealthTipsPage, HealthTipDetailPage, MedicalHistoryPage,
+  RateVisitPage, HealthMetricsPage, HealthTipsPage, HealthTipDetailPage, MedicalHistoryPage, PatientReferralsPage,
   ChatListPage, ChatDetailPage, DrugSearchPage, DrugDetailPage, NotificationsPage,
   PatientProfilePage, EditProfilePage, SettingsPage,
 } from '@/pages/patient';
@@ -28,7 +28,7 @@ import {
   DoctorDashboardPage, DoctorAppointmentsPage, DoctorAppointmentDetailsPage,
   DoctorPatientsPage, DoctorPatientDetailsPage, DoctorChatListPage, DoctorChatDetailPage,
   DoctorAvailabilityPage, DoctorProfilePage as DoctorSelfProfilePage,
-  DoctorEditProfilePage, DoctorNotificationsPage, DoctorSettingsPage,
+  DoctorEditProfilePage, DoctorNotificationsPage, DoctorSettingsPage, DoctorReferralsPage,
 } from '@/pages/doctor';
 
 import {
@@ -68,6 +68,7 @@ function RoleRouter() {
           <Route path="profile" element={<PatientProfilePage />} />
           <Route path="profile/edit" element={<EditProfilePage />} />
           <Route path="profile/medical-history" element={<MedicalHistoryPage />} />
+          <Route path="referrals" element={<PatientReferralsPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
@@ -87,6 +88,7 @@ function RoleRouter() {
           <Route path="chat" element={<DoctorChatListPage />} />
           <Route path="chat/:conversationId" element={<DoctorChatDetailPage />} />
           <Route path="availability" element={<DoctorAvailabilityPage />} />
+          <Route path="referrals" element={<DoctorReferralsPage />} />
           <Route path="profile" element={<DoctorSelfProfilePage />} />
           <Route path="profile/edit" element={<DoctorEditProfilePage />} />
           <Route path="notifications" element={<DoctorNotificationsPage />} />

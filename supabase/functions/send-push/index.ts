@@ -244,6 +244,40 @@ serve(async (req) => {
       return new Response('ok');
     }
 
+    // Referral events: notify the target doctor on new referral; notify the
+    // patient when the target doctor accepts.
+    if (payload.table === 'referrals') {
+      const r = payload.record as {
+        id: string; patient_id: string; from_doctor_id: string;
+        to_doctor_id: string; reason: string; status: string;
+      };
+      const old = payload.old_record as { status?: string } | undefined;
+
+      if (payload.type === 'INSERT') {
+        const { data: from } = await supabase
+          .from('profiles').select('full_name').eq('id', r.from_doctor_id).single();
+        await sendPush(
+          r.to_doctor_id,
+          'New referral',
+          `Dr. ${from?.full_name ?? 'A colleague'}: ${r.reason}`,
+          '/referrals',
+        );
+        return new Response('ok');
+      }
+      if (payload.type === 'UPDATE' && old?.status !== r.status && r.status === 'accepted') {
+        const { data: to } = await supabase
+          .from('profiles').select('full_name').eq('id', r.to_doctor_id).single();
+        await sendPush(
+          r.patient_id,
+          'Referral accepted',
+          `Dr. ${to?.full_name ?? 'The specialist'} accepted your referral — you can book now.`,
+          '/referrals',
+        );
+        return new Response('ok');
+      }
+      return new Response('nochange');
+    }
+
     // Health tip broadcast — one push to EVERY patient when a tip is newly
     // published (either an INSERT with is_published=true, or an UPDATE that
     // flips is_published from false → true). Driven by migration 0018's

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Activity, Droplet, Heart, MessageSquare, Scale, Thermometer, Wind } from 'lucide-react';
+import { Activity, Droplet, Heart, MessageSquare, Scale, Share2, Thermometer, Wind } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
@@ -16,6 +16,11 @@ import { openConversationWith } from '@/lib/api/chat';
 import {
   METRIC_SPEC, formatMetric, latestMetricsByType, type HealthMetric, type MetricType,
 } from '@/lib/api/healthMetrics';
+import {
+  listOutgoingReferrals, STATUS_LABEL, STATUS_TONE, type Referral,
+} from '@/lib/api/referrals';
+import { Badge } from '@/components/ui/Badge';
+import { ReferralModal } from '@/components/doctor/ReferralModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { fmtDate, fmtTime } from '@/lib/format';
 import { cn } from '@/lib/cn';
@@ -35,6 +40,12 @@ export function DoctorPatientDetailsPage() {
 
   const [messaging, setMessaging] = useState(false);
   const [msgError, setMsgError] = useState<string | undefined>();
+  const [referOpen, setReferOpen] = useState(false);
+  const referrals = useAsync(
+    async () => (user ? listOutgoingReferrals(user.id) : []),
+    [user?.id],
+  );
+  const patientReferrals = (referrals.data ?? []).filter((r) => r.patient_id === id);
   const handleMessage = async () => {
     if (!id) return;
     setMsgError(undefined);
@@ -105,13 +116,55 @@ export function DoctorPatientDetailsPage() {
           )}
         </div>
 
+        <ReferralsCard referrals={patientReferrals} />
+
         {msgError && <Alert tone="error">{msgError}</Alert>}
-        <Button variant="outline" fullWidth loading={messaging} onClick={handleMessage}
-          leftIcon={<MessageSquare className="h-4 w-4" />}>
-          Message patient
-        </Button>
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" fullWidth loading={messaging} onClick={handleMessage}
+            leftIcon={<MessageSquare className="h-4 w-4" />}>
+            Message
+          </Button>
+          <Button variant="outline" fullWidth onClick={() => setReferOpen(true)}
+            leftIcon={<Share2 className="h-4 w-4" />}>
+            Refer
+          </Button>
+        </div>
       </div>
+
+      {user && id && (
+        <ReferralModal
+          open={referOpen}
+          onClose={() => setReferOpen(false)}
+          patientId={id}
+          patientName={p.full_name}
+          fromDoctorId={user.id}
+          onCreated={referrals.refetch}
+        />
+      )}
     </>
+  );
+}
+
+function ReferralsCard({ referrals }: { referrals: Referral[] }) {
+  if (referrals.length === 0) return null;
+  return (
+    <Card>
+      <div className="text-sm font-semibold mb-2">Your referrals for this patient</div>
+      <div className="space-y-2">
+        {referrals.map((r) => (
+          <div key={r.id} className="rounded-xl border border-slate-200 dark:border-slate-800 p-2.5">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-bold truncate flex-1">
+                → Dr. {r.to_doctor?.full_name ?? '—'}
+              </span>
+              <Badge tone={STATUS_TONE[r.status]}>{STATUS_LABEL[r.status]}</Badge>
+            </div>
+            <div className="mt-1 text-xs text-ink-soft dark:text-slate-300">{r.reason}</div>
+            <div className="mt-0.5 text-[10px] text-ink-muted">{fmtDate(r.created_at)}</div>
+          </div>
+        ))}
+      </div>
+    </Card>
   );
 }
 

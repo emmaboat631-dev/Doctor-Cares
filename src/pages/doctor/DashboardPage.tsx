@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Calendar, CheckCircle2 } from 'lucide-react';
+import { Bell, Calendar, CheckCircle2, Share2 } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { Card } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -15,6 +15,7 @@ import {
   setAppointmentStatus,
 } from '@/lib/api/appointments';
 import { unreadNotificationCount } from '@/lib/api/notifications';
+import { listIncomingReferrals } from '@/lib/api/referrals';
 import { greetingFor } from '@/lib/format';
 
 export function DoctorDashboardPage() {
@@ -24,6 +25,8 @@ export function DoctorDashboardPage() {
   const stats = useAsync(async () => (userId ? getDoctorTodayStats(userId) : { today: 0, pending: 0, week: 0 }), [userId]);
   const appts = useAsync(async () => (userId ? listDoctorAppointments(userId) : []), [userId]);
   const unread = useAsync(async () => (userId ? unreadNotificationCount(userId) : 0), [userId]);
+  const incomingRefs = useAsync(async () => (userId ? listIncomingReferrals(userId) : []), [userId]);
+  const pendingReferrals = (incomingRefs.data ?? []).filter((r) => r.status === 'pending');
 
   const [busy, setBusy] = useState<string | null>(null);
 
@@ -133,6 +136,27 @@ export function DoctorDashboardPage() {
             </div>
           </Card>
         )}
+
+        <Link to="/referrals" className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-4 hover:shadow-pop transition">
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-300">
+              <Share2 className="h-5 w-5" />
+            </span>
+            <div className="flex-1">
+              <div className="text-sm font-bold">Incoming referrals</div>
+              <div className="text-xs text-ink-muted mt-0.5">
+                {pendingReferrals.length === 0
+                  ? 'No new referrals from colleagues.'
+                  : `${pendingReferrals.length} pending — tap to review.`}
+              </div>
+            </div>
+            {pendingReferrals.length > 0 && (
+              <span className="grid min-h-[22px] min-w-[22px] place-items-center rounded-full bg-rose-500 px-1.5 text-[11px] font-bold text-white">
+                {pendingReferrals.length}
+              </span>
+            )}
+          </div>
+        </Link>
       </div>
     </>
   );
