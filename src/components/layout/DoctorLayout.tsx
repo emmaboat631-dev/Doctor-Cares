@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { CalendarClock, LayoutDashboard, MessageSquare, Users, User } from 'lucide-react';
 import { BottomNavigation, type NavItem } from './BottomNavigation';
 import { Sidebar, type SidebarItem } from './Sidebar';
@@ -10,26 +11,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { listMyConversations } from '@/lib/api/chat';
 
-const baseItems: (NavItem & SidebarItem)[] = [
-  { to: '/', label: 'Dash', icon: LayoutDashboard, end: true },
-  { to: '/appointments', label: 'Appts', icon: CalendarClock },
-  { to: '/chat', label: 'Chat', icon: MessageSquare },
-  { to: '/patients', label: 'Patients', icon: Users },
-  { to: '/profile', label: 'Profile', icon: User },
-];
-
 export function DoctorLayout() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const convs = useAsync(async () => (user ? listMyConversations(user.id) : []), [user?.id]);
   const unreadTotal = useMemo(
     () => (convs.data ?? []).reduce((s, c) => s + (c.unread_count ?? 0), 0),
     [convs.data],
   );
 
-  const items = useMemo(
-    () => baseItems.map((it) => (it.to === '/chat' ? { ...it, badge: unreadTotal } : it)),
-    [unreadTotal],
-  );
+  const items: (NavItem & SidebarItem)[] = useMemo(() => [
+    { to: '/',             label: t('nav.dashboard'),    icon: LayoutDashboard, end: true },
+    { to: '/appointments', label: t('nav.appointments'), icon: CalendarClock },
+    { to: '/chat',         label: t('nav.chat'),         icon: MessageSquare, badge: unreadTotal },
+    { to: '/patients',     label: t('nav.patients'),     icon: Users },
+    { to: '/profile',      label: t('nav.profile'),      icon: User },
+  ], [t, unreadTotal]);
 
   // Chat thread pages skip the pill-nav bottom padding — see PatientLayout.
   const inChat = useMatch('/chat/:conversationId');

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Bell, Calendar, CalendarCheck, ChevronRight, Heart, HeartPulse,
   MessageSquare, Pill, Search, Siren, Sparkles, Stethoscope, Thermometer,
@@ -18,11 +19,12 @@ import { listPatientAppointments } from '@/lib/api/appointments';
 import { unreadNotificationCount } from '@/lib/api/notifications';
 import { METRIC_SPEC, formatMetric, latestMetricsByType, type MetricType } from '@/lib/api/healthMetrics';
 import { listPublishedTips } from '@/lib/api/healthTips';
-import { fmtDate, fmtMoney, fmtTime, greetingFor } from '@/lib/format';
+import { fmtDate, fmtMoney, fmtTime, greetingKeyFor } from '@/lib/format';
 import { cn } from '@/lib/cn';
 
 export function PatientDashboardPage() {
   const { user, profile } = useAuth();
+  const { t } = useTranslation();
   const userId = user?.id;
 
   const doctors = useAsync(() => listDoctors({ limit: 5 }), []);
@@ -56,7 +58,7 @@ export function PatientDashboardPage() {
         <div className="flex items-start gap-3">
           <Avatar name={profile?.full_name} src={profile?.avatar_url ?? undefined} size="md" />
           <div className="min-w-0 flex-1">
-            <div className="text-xs text-ink-muted">{greetingFor()},</div>
+            <div className="text-xs text-ink-muted">{t(`greeting.${greetingKeyFor()}`)},</div>
             <div className="flex items-center gap-1.5">
               <span className="truncate text-lg font-bold tracking-tight">{firstName}</span>
               <span className="text-lg" aria-hidden>👋</span>
@@ -84,9 +86,9 @@ export function PatientDashboardPage() {
           className="flex items-center gap-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 pl-4 pr-1.5 h-12 text-sm text-ink-muted shadow-sm hover:shadow-md transition"
         >
           <Search className="h-4 w-4" aria-hidden />
-          <span className="flex-1">Search doctors, specialties…</span>
+          <span className="flex-1">{t('home.searchPlaceholder')}</span>
           <span className="inline-flex h-9 items-center rounded-full bg-brand-500 px-4 text-xs font-bold text-white">
-            Go
+            {t('home.goButton')}
           </span>
         </Link>
 
@@ -97,15 +99,15 @@ export function PatientDashboardPage() {
           <div className="relative flex items-start gap-4">
             <div className="min-w-0 flex-1">
               <div className="inline-flex items-center gap-1.5 rounded-full bg-white/18 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest">
-                <Sparkles className="h-3 w-3" /> Better care, better life
+                <Sparkles className="h-3 w-3" /> {t('home.heroTag')}
               </div>
-              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight">Book your next<br />appointment</h2>
-              <p className="mt-1 text-sm opacity-90 max-w-[16rem]">Consult trusted doctors anytime, from anywhere.</p>
+              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight whitespace-pre-line">{t('home.heroTitle')}</h2>
+              <p className="mt-1 text-sm opacity-90 max-w-[16rem]">{t('home.heroSubtitle')}</p>
               <Link
                 to="/doctors"
                 className="mt-4 inline-flex items-center gap-2 rounded-full bg-white text-brand-700 h-10 px-4 text-sm font-bold shadow-sm hover:bg-brand-50 transition"
               >
-                Book now <ChevronRight className="h-4 w-4" />
+                {t('home.heroButton')} <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
             <div aria-hidden className="relative shrink-0 h-24 w-24">
@@ -121,59 +123,41 @@ export function PatientDashboardPage() {
         {/* Health snapshot — real readings; tap tile to log a new one */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">Health snapshot</h2>
+            <h2 className="text-[15px] font-bold tracking-tight">{t('home.healthSnapshot')}</h2>
             <Link to="/metrics" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
-              Log <ChevronRight className="h-3.5 w-3.5" />
+              {t('home.logLink')} <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
           <div className="grid grid-cols-3 gap-2.5">
-            <VitalTile
-              type="heart_rate"
-              icon={<Heart className="h-4 w-4" />}
-              tone="rose"
-              label="Heart"
-              reading={vitals.data?.heart_rate}
-            />
-            <VitalTile
-              type="temperature"
-              icon={<Thermometer className="h-4 w-4" />}
-              tone="warning"
-              label="Temp"
-              reading={vitals.data?.temperature}
-            />
-            <VitalTile
-              type="bp"
-              icon={<Wind className="h-4 w-4" />}
-              tone="brand"
-              label="BP"
-              reading={vitals.data?.bp}
-            />
+            <VitalTile type="heart_rate"  icon={<Heart       className="h-4 w-4" />} tone="rose"    label={t('home.heart')} reading={vitals.data?.heart_rate} />
+            <VitalTile type="temperature" icon={<Thermometer className="h-4 w-4" />} tone="warning" label={t('home.temp')}  reading={vitals.data?.temperature} />
+            <VitalTile type="bp"          icon={<Wind        className="h-4 w-4" />} tone="brand"   label={t('home.bp')}    reading={vitals.data?.bp} />
           </div>
         </section>
 
         {/* Services */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">Our services</h2>
+            <h2 className="text-[15px] font-bold tracking-tight">{t('home.services')}</h2>
           </div>
           <div className="grid grid-cols-4 gap-2.5">
-            <ServiceTile to="/doctors"       icon={<Stethoscope className="h-5 w-5" />}   label="Find doctor" tone="brand" />
-            <ServiceTile to="/doctors?role=nurse" icon={<HeartPulse className="h-5 w-5" />} label="Find nurse" tone="rose" />
-            <ServiceTile to="/appointments"  icon={<CalendarCheck className="h-5 w-5" />} label="My visits"   tone="accent" />
-            <ServiceTile to="/chat"          icon={<MessageSquare className="h-5 w-5" />} label="Messages"    tone="violet" />
+            <ServiceTile to="/doctors"            icon={<Stethoscope className="h-5 w-5" />}   label={t('home.findDoctor')} tone="brand" />
+            <ServiceTile to="/doctors?role=nurse" icon={<HeartPulse  className="h-5 w-5" />}   label={t('home.findNurse')}  tone="rose" />
+            <ServiceTile to="/appointments"       icon={<CalendarCheck className="h-5 w-5" />} label={t('home.myVisits')}   tone="accent" />
+            <ServiceTile to="/chat"               icon={<MessageSquare className="h-5 w-5" />} label={t('home.messages')}   tone="violet" />
           </div>
           <div className="grid grid-cols-4 gap-2.5 mt-2.5">
-            <ServiceTile to="/drugs"         icon={<Pill className="h-5 w-5" />}          label="Drug info"   tone="brand" />
+            <ServiceTile to="/drugs"              icon={<Pill className="h-5 w-5" />}          label={t('home.drugInfo')}   tone="brand" />
           </div>
         </section>
 
         {/* Next appointment */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">Upcoming appointment</h2>
+            <h2 className="text-[15px] font-bold tracking-tight">{t('home.upcomingAppointment')}</h2>
             {appts.data && appts.data.length > 0 && (
               <Link to="/appointments" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
-                View all <ChevronRight className="h-3.5 w-3.5" />
+                {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             )}
           </div>
@@ -217,10 +201,10 @@ export function PatientDashboardPage() {
               <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-500/15">
                 <Calendar className="h-5 w-5" />
               </div>
-              <div className="mt-3 text-sm font-semibold">No upcoming appointments</div>
-              <p className="mt-1 text-xs text-ink-muted">When you book with a doctor, it'll show up here.</p>
+              <div className="mt-3 text-sm font-semibold">{t('home.noUpcoming')}</div>
+              <p className="mt-1 text-xs text-ink-muted">{t('home.noUpcomingHint')}</p>
               <Link to="/doctors" className="mt-3 inline-flex h-9 items-center rounded-xl bg-brand-500 px-4 text-xs font-bold text-white hover:bg-brand-600">
-                Find a doctor
+                {t('home.findADoctor')}
               </Link>
             </div>
           )}
@@ -229,9 +213,9 @@ export function PatientDashboardPage() {
         {/* Top doctors */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">Top rated doctors</h2>
+            <h2 className="text-[15px] font-bold tracking-tight">{t('home.topRated')}</h2>
             <Link to="/doctors" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
-              View all <ChevronRight className="h-3.5 w-3.5" />
+              {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
           {doctors.loading ? (
@@ -291,8 +275,8 @@ export function PatientDashboardPage() {
               <Siren className="h-5 w-5" />
             </span>
             <span className="min-w-0 flex-1 text-left">
-              <span className="block text-sm font-bold">Emergency SOS</span>
-              <span className="block text-[11px] opacity-90">One-tap call: next-of-kin, ambulance, police…</span>
+              <span className="block text-sm font-bold">{t('home.sos')}</span>
+              <span className="block text-[11px] opacity-90">{t('home.sosHint')}</span>
             </span>
             <ChevronRight className="h-4 w-4 opacity-80" />
           </button>
@@ -302,9 +286,9 @@ export function PatientDashboardPage() {
         {tips.data && tips.data.length > 0 && (
           <section>
             <div className="mb-2.5 flex items-center justify-between">
-              <h2 className="text-[15px] font-bold tracking-tight">Health tips</h2>
+              <h2 className="text-[15px] font-bold tracking-tight">{t('home.healthTips')}</h2>
               <Link to="/tips" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
-                View all <ChevronRight className="h-3.5 w-3.5" />
+                {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </div>
             <Link

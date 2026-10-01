@@ -1,21 +1,61 @@
 import { Link } from 'react-router-dom';
-import { Bell, ChevronRight, Info, Key, LogOut, Moon, Sun } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Bell, ChevronRight, Globe, Info, Key, LogOut, Moon, Sun } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { LOCALES, type LocaleCode } from '@/i18n';
 import { cn } from '@/lib/cn';
 
 export function SettingsPage() {
   const { signOut, user } = useAuth();
   const { mode, setMode } = useTheme();
+  const { t, i18n } = useTranslation();
+
+  const changeLang = (code: LocaleCode) => {
+    i18n.changeLanguage(code);
+  };
 
   return (
     <>
-      <Header title="Settings" showBack />
+      <Header title={t('settings.title')} showBack />
       <div className="mx-auto max-w-3xl px-4 py-4 space-y-4">
-        <Section title="Preferences">
+        <Section title={t('settings.language')}>
+          <div className="px-4 py-3">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-surface-soft dark:bg-slate-800 text-ink-soft dark:text-slate-300">
+                <Globe className="h-4 w-4" />
+              </span>
+              <div className="flex-1">
+                <div className="text-sm font-medium">{t('settings.language')}</div>
+                <div className="text-xs text-ink-muted">{t('settings.languageHint')}</div>
+              </div>
+            </div>
+            <div className="mt-2 grid grid-cols-3 gap-2">
+              {LOCALES.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  onClick={() => changeLang(l.code)}
+                  aria-pressed={i18n.language.startsWith(l.code)}
+                  className={cn(
+                    'flex items-center justify-center gap-1.5 rounded-xl px-2 py-2.5 text-xs font-bold transition border',
+                    i18n.language.startsWith(l.code)
+                      ? 'border-brand-500 bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
+                      : 'border-slate-200 dark:border-slate-700 text-ink-soft dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
+                  )}
+                >
+                  <span aria-hidden>{l.flag}</span>
+                  <span className="truncate">{l.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        <Section title={t('settings.appearance')}>
           <SegmentedRow
-            label="Appearance"
+            label={t('settings.appearance')}
             icon={<Moon className="h-4 w-4" />}
             options={[
               { value: 'light', label: 'Light', icon: <Sun className="h-4 w-4" /> },
@@ -25,14 +65,14 @@ export function SettingsPage() {
             value={mode}
             onChange={(v) => setMode(v as 'light' | 'dark' | 'system')}
           />
-          <MenuRow href="/notifications" icon={<Bell className="h-4 w-4" />} label="Notifications" />
+          <MenuRow href="/notifications" icon={<Bell className="h-4 w-4" />} label={t('settings.notifications')} />
         </Section>
 
         <Section title="Account">
           <MenuRow href="/forgot-password" icon={<Key className="h-4 w-4" />} label="Change password" hint={user?.email ?? undefined} />
         </Section>
 
-        <Section title="About">
+        <Section title={t('settings.about')}>
           <MenuRow href="#" icon={<Info className="h-4 w-4" />} label="Terms & privacy" />
           <div className="flex items-center gap-3 px-4 py-3">
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-surface-soft dark:bg-slate-800 text-ink-soft dark:text-slate-300">
@@ -48,7 +88,7 @@ export function SettingsPage() {
           onClick={signOut}
           className="w-full flex items-center justify-center gap-2 rounded-2xl border border-danger/30 bg-white dark:bg-slate-900 px-4 py-3 text-sm font-semibold text-danger hover:bg-danger-soft"
         >
-          <LogOut className="h-4 w-4" /> Log out
+          <LogOut className="h-4 w-4" /> {t('settings.signOut')}
         </button>
       </div>
     </>

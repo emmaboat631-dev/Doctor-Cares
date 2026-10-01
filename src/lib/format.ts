@@ -49,10 +49,18 @@ export const initialsOf = (name?: string | null) => {
 };
 
 /**
- * Greeting appropriate for the local hour.
+ * Greeting key for the local hour — resolved via i18n at the call site.
+ * Returns one of 'morning' | 'afternoon' | 'evening' so callers can do
+ * `t('greeting.' + greetingKeyFor())`.
  */
+export const greetingKeyFor = (hour = new Date().getHours()) => {
+  if (hour < 12) return 'morning' as const;
+  if (hour < 18) return 'afternoon' as const;
+  return 'evening' as const;
+};
+
+/** Back-compat helper for callers that still want a hardcoded English string. */
 export const greetingFor = (hour = new Date().getHours()) => {
-  if (hour < 12) return 'Good morning';
-  if (hour < 18) return 'Good afternoon';
-  return 'Good evening';
+  const k = greetingKeyFor(hour);
+  return k === 'morning' ? 'Good morning' : k === 'afternoon' ? 'Good afternoon' : 'Good evening';
 };

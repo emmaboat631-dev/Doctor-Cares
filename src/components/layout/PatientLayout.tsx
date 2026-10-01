@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Calendar, Home, MessageSquare, Pill, User } from 'lucide-react';
 import { BottomNavigation, type NavItem } from './BottomNavigation';
 import { Sidebar, type SidebarItem } from './Sidebar';
@@ -10,26 +11,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { listMyConversations } from '@/lib/api/chat';
 
-const baseItems: (NavItem & SidebarItem)[] = [
-  { to: '/', label: 'Home', icon: Home, end: true },
-  { to: '/appointments', label: 'Appts', icon: Calendar },
-  { to: '/chat', label: 'Chat', icon: MessageSquare },
-  { to: '/drugs', label: 'Drugs', icon: Pill },
-  { to: '/profile', label: 'Profile', icon: User },
-];
-
 export function PatientLayout() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const convs = useAsync(async () => (user ? listMyConversations(user.id) : []), [user?.id]);
   const unreadTotal = useMemo(
     () => (convs.data ?? []).reduce((s, c) => s + (c.unread_count ?? 0), 0),
     [convs.data],
   );
 
-  const items = useMemo(
-    () => baseItems.map((it) => (it.to === '/chat' ? { ...it, badge: unreadTotal } : it)),
-    [unreadTotal],
-  );
+  const items: (NavItem & SidebarItem)[] = useMemo(() => [
+    { to: '/',             label: t('nav.home'),         icon: Home,          end: true },
+    { to: '/appointments', label: t('nav.appointments'), icon: Calendar },
+    { to: '/chat',         label: t('nav.chat'),         icon: MessageSquare, badge: unreadTotal },
+    { to: '/drugs',        label: t('nav.drugs'),        icon: Pill },
+    { to: '/profile',      label: t('nav.profile'),      icon: User },
+  ], [t, unreadTotal]);
 
   // Full-viewport pages skip the bottom padding that reserves room for the
   // floating pill nav (since the nav itself is hidden on these routes — see
