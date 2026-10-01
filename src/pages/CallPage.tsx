@@ -98,7 +98,15 @@ export function CallPage() {
     // Hide video controls when it's a voice call.
     configBits.push('config.toolbarButtons=["microphone","hangup","chat","settings","tileview","participants-pane"]');
   }
-  const jitsiUrl = `https://meet.jit.si/${roomName}#` + configBits.join('&');
+  // meet.jit.si (the main public instance) enforces mandatory moderator
+  // authentication as of 2024, which stalls non-authenticated users on an
+  // "Asking to join…" screen that no URL config can disable. We use
+  // meet.ffmuc.net — a long-running community Jitsi instance in Germany
+  // that runs the same Jitsi stack without the moderator wall. Overridable
+  // at build time via VITE_JITSI_HOST so you can swap in a self-hosted or
+  // 8x8 JaaS deployment later with no code change.
+  const jitsiHost = import.meta.env.VITE_JITSI_HOST || 'meet.ffmuc.net';
+  const jitsiUrl = `https://${jitsiHost}/${roomName}#` + configBits.join('&');
 
   if (inCall) {
     return (

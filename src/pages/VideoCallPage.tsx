@@ -105,11 +105,17 @@ export function VideoCallPage() {
   const displayName = encodeURIComponent(
     (role === 'patient' ? '' : role === 'doctor' ? 'Dr. ' : 'Nurse ') + (profile?.full_name ?? 'User'),
   );
+  // See CallPage for why we use meet.ffmuc.net instead of meet.jit.si.
+  const jitsiHost = import.meta.env.VITE_JITSI_HOST || 'meet.ffmuc.net';
   const jitsiUrl =
-    `https://meet.jit.si/${roomName}` +
+    `https://${jitsiHost}/${roomName}` +
     `#userInfo.displayName="${displayName}"` +
     `&config.prejoinPageEnabled=false` +
+    `&config.prejoinConfig.enabled=false` +
     `&config.disableDeepLinking=true` +
+    `&config.lobby.enabled=false` +
+    `&config.enableLobbyChat=false` +
+    `&config.requireDisplayName=false` +
     `&config.startWithAudioMuted=false` +
     `&config.startWithVideoMuted=false`;
 
