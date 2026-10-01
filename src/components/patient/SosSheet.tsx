@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Ambulance, Phone, Shield, Siren, X, Flame, UserRound } from 'lucide-react';
+import { bump } from '@/lib/native/haptics';
 
 /**
  * Ghana emergency numbers (as of 2026). The unified 112 is routed to the
@@ -25,6 +26,9 @@ interface Props {
 export function SosSheet({ open, onClose, contactName, contactPhone, contactRelation }: Props) {
   useEffect(() => {
     if (!open) return;
+    // Haptic bump on open — the user feels the sheet appear so they know
+    // the SOS was actually invoked (helpful under panic).
+    bump();
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
@@ -33,6 +37,14 @@ export function SosSheet({ open, onClose, contactName, contactPhone, contactRela
       document.body.style.overflow = '';
     };
   }, [open, onClose]);
+
+  // Confirm before dialing a government emergency line — too easy to
+  // trigger a false ambulance call otherwise. Personal contact is NOT
+  // confirmed; the user picked that person themselves.
+  const confirmEmergencyCall = (number: string, label: string) =>
+    (e: MouseEvent<HTMLAnchorElement>) => {
+      if (!confirm(`Call ${label} (${number}) now?`)) e.preventDefault();
+    };
 
   if (!open) return null;
 
@@ -109,6 +121,7 @@ export function SosSheet({ open, onClose, contactName, contactPhone, contactRela
               <a
                 key={s.number}
                 href={`tel:${s.number}`}
+                onClick={confirmEmergencyCall(s.number, s.label)}
                 className="flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 active:scale-[0.98] transition"
               >
                 <div className={`grid h-11 w-11 place-items-center rounded-xl text-white ${s.tone}`}>

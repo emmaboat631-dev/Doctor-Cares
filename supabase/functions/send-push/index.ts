@@ -219,18 +219,52 @@ serve(async (req) => {
       // Only push when status actually changed (or on INSERT).
       if (payload.type === 'UPDATE' && old?.status === appt.status) return new Response('nochange');
 
+      // Pull the doctor's name so the body can address the patient personally.
+      const { data: doc } = await supabase
+        .from('profiles').select('full_name').eq('id', appt.doctor_id).single();
+      const docName = doc?.full_name ?? 'your doctor';
+
       let title = '';
       let body = '';
+      let route = `/appointments/${appt.id}`;
       switch (appt.status) {
         case 'pending':   title = 'New booking request'; body = 'A patient booked a slot.'; break;
-        case 'confirmed': title = 'Appointment confirmed'; body = 'Your doctor accepted the booking.'; break;
-        case 'rejected':  title = 'Appointment declined'; body = 'Your doctor could not take this slot.'; break;
+        case 'confirmed': title = 'Appointment confirmed'; body = `Dr. ${docName} accepted your booking.`; break;
+        case 'rejected':  title = 'Appointment declined'; body = `Dr. ${docName} could not take this slot.`; break;
         case 'cancelled': title = 'Appointment cancelled'; body = 'This appointment was cancelled.'; break;
-        case 'completed': title = 'Visit complete'; body = 'Thanks — please leave a review.'; break;
+        case 'completed':
+          title = 'How was your visit?';
+          body  = `Rate your visit with Dr. ${docName}.`;
+          route = `/appointments/${appt.id}/review`;
+          break;
         default: return new Response('unhandled status');
       }
       const notifyUser = appt.status === 'pending' ? appt.doctor_id : appt.patient_id;
-      await sendPush(notifyUser, title, body, `/appointments/${appt.id}`);
+      await sendPush(notifyUser, title, body, route);
+      return new Response('ok');
+    }
+
+    // Health tip broadcast — one push to EVERY patient when a tip is newly
+    // published (either an INSERT with is_published=true, or an UPDATE that
+    // flips is_published from false → true). Driven by migration 0018's
+    // trigger, which POSTs this envelope to send-push via pg_net.
+    if (payload.table === 'health_tips') {
+      const tip = payload.record as { id: string; title: string; is_published: boolean };
+      const old = payload.old_record as { is_published?: boolean } | undefined;
+      const wasPublished = old?.is_published ?? false;
+      const isNowPublished = tip.is_published === true;
+      if (!isNowPublished) return new Response('not published');
+      if (payload.type === 'UPDATE' && wasPublished === true) return new Response('already published');
+
+      // Fetch every active patient's user id. We fan out from here because
+      // webhooks only fire once per changed row.
+      const { data: patients } = await supabase
+        .from('profiles').select('id').eq('role', 'patient').eq('status', 'active');
+      if (!patients?.length) return new Response('no patients');
+
+      await Promise.allSettled(patients.map((p) =>
+        sendPush(p.id, 'New health tip', tip.title, `/tips/${tip.id}`),
+      ));
       return new Response('ok');
     }
 

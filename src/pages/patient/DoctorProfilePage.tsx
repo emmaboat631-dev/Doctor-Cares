@@ -258,8 +258,44 @@ function ReviewsList({ doctorId }: { doctorId: string }) {
       </Card>
     );
   }
+
+  // Distribution: count of 5★, 4★, …, 1★
+  const counts = [5, 4, 3, 2, 1].map((n) => ({
+    n,
+    count: list.filter((r) => r.rating === n).length,
+  }));
+  const total = list.length;
+  const avg = list.reduce((s, r) => s + r.rating, 0) / total;
+
   return (
     <div className="space-y-3">
+      <Card>
+        <div className="flex items-start gap-4">
+          <div className="text-center shrink-0">
+            <div className="text-3xl font-bold tracking-tight">{avg.toFixed(1)}</div>
+            <div className="mt-0.5 flex justify-center text-amber-500">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className={cn('h-3.5 w-3.5', i < Math.round(avg) ? 'fill-current' : 'opacity-30')} />
+              ))}
+            </div>
+            <div className="mt-0.5 text-[10px] text-ink-muted">{total} review{total === 1 ? '' : 's'}</div>
+          </div>
+          <div className="flex-1 space-y-1">
+            {counts.map((c) => {
+              const pct = total ? (c.count / total) * 100 : 0;
+              return (
+                <div key={c.n} className="flex items-center gap-2">
+                  <span className="w-5 text-[10px] font-bold text-ink-muted text-right">{c.n}★</span>
+                  <div className="flex-1 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                    <div className="h-full rounded-full bg-amber-500 transition-[width] duration-500" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="w-6 text-[10px] text-ink-muted text-right">{c.count}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Card>
       {list.map((r) => <ReviewCard key={r.id} r={r} />)}
     </div>
   );
