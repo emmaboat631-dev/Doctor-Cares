@@ -16,16 +16,12 @@ import { supabase } from '@/lib/supabase';
 type Mode = 'video' | 'audio';
 
 /**
- * Voice / video call between the two parties of a conversation. The Jitsi
- * room is keyed to the conversation id so both sides land in the same
- * meeting. Mode (audio vs video) is passed via ?mode= and controls which
- * Jitsi URL hash params are set.
- *
- * Jitsi notes:
- *  - meet.jit.si's default lobby/moderator check is DISABLED here so solo
- *    testers aren't stuck in "Asking to join" forever
- *  - prejoin + deep-linking disabled so the iframe lands straight in the
- *    call UI and never tries to open a native app
+ * Voice / video call between the two parties of a conversation. Opens a
+ * Jitsi Meet room (meet.jit.si) in a new browser tab — a plain <a target=
+ * "_blank"> which browsers never block, bypassing the iframe/popup issues
+ * that come with Jitsi's new moderator policy and X-Frame-Options on
+ * community instances. The room is keyed to the conversation id so both
+ * parties land in the same meeting.
  */
 export function CallPage() {
   const { conversationId } = useParams<{ conversationId: string }>();
@@ -33,11 +29,7 @@ export function CallPage() {
   const mode: Mode = params.get('mode') === 'audio' ? 'audio' : 'video';
   const { user, profile, role } = useAuth();
   const navigate = useNavigate();
-  const [inCall, setInCall] = useState(false);
   const [peersPresent, setPeersPresent] = useState<string[]>([]);
-  const [roomUrl, setRoomUrl] = useState<string | null>(null);
-  const [roomError, setRoomError] = useState<string | undefined>();
-  const [provisioning, setProvisioning] = useState(false);
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>['channel']> | null>(null);
 
   const conv = useAsync(
@@ -45,8 +37,9 @@ export function CallPage() {
     [conversationId, user?.id],
   );
 
-  // Supabase Realtime presence — tells each side when the other party is in
-  // the waiting room so they can hit "Join" without a blind entry.
+  // Supabase Realtime presence — tells each side when the other party has
+  // this call page open, so the UI can say "Dr. X is in the waiting room"
+  // instead of a blind "join".
   useEffect(() => {
     if (!supabase || !conversationId || !user) return;
     const channel = supabase.channel(`call:${conversationId}`, {
@@ -80,72 +73,12 @@ export function CallPage() {
   const otherLabel = (other?.role === 'doctor' ? 'Dr. ' : '') + (other?.full_name ?? 'User');
   const myLabel = (role === 'doctor' ? 'Dr. ' : role === 'nurse' ? 'Nurse ' : '') + (profile?.full_name ?? 'User');
 
-  // Daily.co room URL is created on-demand by the create-call-room Edge
-  // Function (which calls Daily's API with our secret key). We cache the
-  // result for the lifetime of this component so hitting "Leave" and
-  // rejoining doesn't re-create a room needlessly.
-  // Jitsi fallback URL — rendered as a real anchor tag below so the browser
-  // treats the click as a user-initiated navigation. window.open() is blocked
-  // by popup policies on mobile and in PWAs; a plain <a target="_blank"> is
-  // the only approach that reliably opens a new tab everywhere.
+  // Jitsi room URL. Deterministic room name from conversation id so both
+  // parties land in the same meeting. prejoinPageEnabled disables Jitsi's
+  // own "set your name" step; we pass the display name via userInfo.
   const jitsiRoom = `doctor-cares-${conversationId}`;
-  const jitsiFallbackUrl = `https://meet.jit.si/${jitsiRoom}#config.startWithVideoMuted=${mode === 'audio'}`
+  const jitsiUrl = `https://meet.jit.si/${jitsiRoom}#config.startWithVideoMuted=${mode === 'audio'}`
     + `&config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(myLabel)}"`;
-
-  const startCall = async () => {
-    if (roomUrl || provisioning) { setInCall(true); return; }
-    setProvisioning(true);
-    setRoomError(undefined);
-    try {
-      const { data, error } = await supabase!.functions.invoke('create-call-room', {
-        body: { conversationId, mode },
-      });
-      if (error) throw error;
-      const d = data as { url?: string; error?: string };
-      if (!d.url) throw new Error(d.error ?? 'No room URL returned.');
-      // Append the viewer's display name and audio/video mute preference.
-      const u = new URL(d.url);
-      u.searchParams.set('userName', myLabel);
-      if (mode === 'audio') u.searchParams.set('startVideoOff', 'true');
-      setRoomUrl(u.toString());
-      setInCall(true);
-    } catch (e: unknown) {
-      // Daily failed — probably no payment method on file, or no API key.
-      // We surface the error and let the user click the Jitsi fallback link
-      // below (a real anchor, which browsers never block).
-      setRoomError((e as { message?: string })?.message
-        ?? 'The embedded video service is not configured. Use the Jitsi link below instead.');
-    } finally {
-      setProvisioning(false);
-    }
-  };
-
-  if (inCall && roomUrl) {
-    return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col">
-        <div className="flex items-center justify-between gap-3 px-4 h-12 bg-black/90 text-white">
-          <div className="text-sm font-bold truncate">
-            {mode === 'audio' ? '🎙️ ' : '📹 '}{otherLabel}
-          </div>
-          <button
-            type="button"
-            onClick={() => { setInCall(false); navigate(-1); }}
-            aria-label="Leave call"
-            className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 hover:bg-rose-700 px-3 h-9 text-xs font-bold"
-          >
-            <PhoneOff className="h-4 w-4" /> Leave
-          </button>
-        </div>
-        <iframe
-          src={roomUrl}
-          title={mode === 'audio' ? 'Voice call' : 'Video call'}
-          allow="camera; microphone; fullscreen; display-capture; autoplay; speaker-selection"
-          allowFullScreen
-          className="flex-1 w-full border-0"
-        />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -173,30 +106,17 @@ export function CallPage() {
           allow it so the call can start.
         </Alert>
 
-        {roomError && (
-          <Alert tone="info">
-            {roomError}
-          </Alert>
-        )}
-
-        <Button
-          fullWidth size="lg"
-          loading={provisioning}
-          leftIcon={mode === 'audio' ? <Phone className="h-4 w-4" /> : <Video className="h-4 w-4" />}
-          onClick={startCall}
-        >
-          {otherOnline ? 'Join call' : 'Start call anyway'}
-        </Button>
         <a
-          href={jitsiFallbackUrl}
+          href={jitsiUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl h-11 border border-slate-300 dark:border-slate-700 text-ink dark:text-ink-onDark text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] transition"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl h-12 bg-brand-500 text-white text-base font-semibold hover:bg-brand-600 shadow-sm active:scale-[0.98] transition"
         >
-          Open call in new tab (Jitsi)
+          {mode === 'audio' ? <Phone className="h-4 w-4" /> : <Video className="h-4 w-4" />}
+          {otherOnline ? 'Join call' : 'Start call'}
         </a>
         <Button
-          fullWidth variant="ghost"
+          fullWidth variant="outline"
           leftIcon={mode === 'audio' ? <PhoneOff className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
           onClick={() => navigate(-1)}
         >
@@ -204,7 +124,7 @@ export function CallPage() {
         </Button>
 
         <div className="text-center text-[11px] text-ink-muted">
-          Primary: Daily.co · Fallback: Jitsi Meet
+          Powered by Jitsi Meet · end-to-end encrypted
         </div>
       </div>
     </>
