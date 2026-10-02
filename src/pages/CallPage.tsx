@@ -84,6 +84,18 @@ export function CallPage() {
   // Function (which calls Daily's API with our secret key). We cache the
   // result for the lifetime of this component so hitting "Leave" and
   // rejoining doesn't re-create a room needlessly.
+  // Opens the Jitsi fallback room in a new browser tab. Works without any
+  // account or payment method — the moderator wait screen can be bypassed
+  // by just having both parties present. Used when Daily is not configured.
+  const openJitsiFallback = () => {
+    const room = `doctor-cares-${conversationId}`;
+    const url = `https://meet.jit.si/${room}#config.startWithVideoMuted=${mode === 'audio'}`
+      + `&config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(myLabel)}"`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    // We navigate back since the call is happening in a new tab now.
+    navigate(-1);
+  };
+
   const startCall = async () => {
     if (roomUrl || provisioning) { setInCall(true); return; }
     setProvisioning(true);
@@ -102,8 +114,12 @@ export function CallPage() {
       setRoomUrl(u.toString());
       setInCall(true);
     } catch (e: unknown) {
+      // Daily failed — probably no payment method on file, or no API key.
+      // Rather than dead-end, fall back to opening the free Jitsi room in
+      // a new tab so the user can still complete the call.
       setRoomError((e as { message?: string })?.message
-        ?? 'Could not start the call. The video service may not be configured yet.');
+        ?? 'The embedded video service is not configured. Opening Jitsi in a new tab instead.');
+      setTimeout(openJitsiFallback, 1500);
     } finally {
       setProvisioning(false);
     }
@@ -162,7 +178,11 @@ export function CallPage() {
           allow it so the call can start.
         </Alert>
 
-        {roomError && <Alert tone="error">{roomError}</Alert>}
+        {roomError && (
+          <Alert tone="info">
+            {roomError}
+          </Alert>
+        )}
 
         <Button
           fullWidth size="lg"
@@ -174,6 +194,12 @@ export function CallPage() {
         </Button>
         <Button
           fullWidth variant="outline"
+          onClick={openJitsiFallback}
+        >
+          Open call in new tab (Jitsi)
+        </Button>
+        <Button
+          fullWidth variant="ghost"
           leftIcon={mode === 'audio' ? <PhoneOff className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
           onClick={() => navigate(-1)}
         >
@@ -181,7 +207,7 @@ export function CallPage() {
         </Button>
 
         <div className="text-center text-[11px] text-ink-muted">
-          Powered by Daily.co · end-to-end encrypted
+          Primary: Daily.co · Fallback: Jitsi Meet
         </div>
       </div>
     </>
