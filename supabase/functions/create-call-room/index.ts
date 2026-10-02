@@ -21,7 +21,10 @@ const DAILY_API_KEY = Deno.env.get('DAILY_API_KEY')!;
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, content-type',
+  // Must include apikey + x-client-info because supabase-js adds them on
+  // every invoke() call; without them the browser preflight fails and the
+  // client sees "Failed to send a request to the Edge Function".
+  'Access-Control-Allow-Headers': 'authorization, content-type, apikey, x-client-info',
 };
 
 serve(async (req) => {
