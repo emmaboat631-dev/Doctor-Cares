@@ -35,6 +35,9 @@ export function CallPage() {
   const navigate = useNavigate();
   const [inCall, setInCall] = useState(false);
   const [peersPresent, setPeersPresent] = useState<string[]>([]);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  const [roomError, setRoomError] = useState<string | undefined>();
+  const [provisioning, setProvisioning] = useState(false);
   const channelRef = useRef<ReturnType<NonNullable<typeof supabase>['channel']> | null>(null);
 
   const conv = useAsync(
@@ -81,11 +84,6 @@ export function CallPage() {
   // Function (which calls Daily's API with our secret key). We cache the
   // result for the lifetime of this component so hitting "Leave" and
   // rejoining doesn't re-create a room needlessly.
-  const [roomUrl, setRoomUrl] = useState<string | null>(null);
-  const [roomError, setRoomError] = useState<string | undefined>();
-  const [provisioning, setProvisioning] = useState(false);
-  const [myLabelMemo] = useState(myLabel);
-
   const startCall = async () => {
     if (roomUrl || provisioning) { setInCall(true); return; }
     setProvisioning(true);
@@ -99,7 +97,7 @@ export function CallPage() {
       if (!d.url) throw new Error(d.error ?? 'No room URL returned.');
       // Append the viewer's display name and audio/video mute preference.
       const u = new URL(d.url);
-      u.searchParams.set('userName', myLabelMemo);
+      u.searchParams.set('userName', myLabel);
       if (mode === 'audio') u.searchParams.set('startVideoOff', 'true');
       setRoomUrl(u.toString());
       setInCall(true);
