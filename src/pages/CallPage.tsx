@@ -77,38 +77,41 @@ export function CallPage() {
   const otherLabel = (other?.role === 'doctor' ? 'Dr. ' : '') + (other?.full_name ?? 'User');
   const myLabel = (role === 'doctor' ? 'Dr. ' : role === 'nurse' ? 'Nurse ' : '') + (profile?.full_name ?? 'User');
 
-  // Deterministic Jitsi room name from conversation id. Prefix keeps our
-  // rooms namespaced so they don't collide with other apps.
-  const roomName = `doctor-cares-chat-${conversationId}`;
-  const displayName = encodeURIComponent(myLabel);
-  // Hash config — Jitsi reads these to override defaults.
-  const configBits = [
-    `userInfo.displayName="${displayName}"`,
-    'config.prejoinPageEnabled=false',
-    'config.prejoinConfig.enabled=false',
-    'config.disableDeepLinking=true',
-    'config.lobby.enabled=false',
-    'config.enableLobbyChat=false',
-    'config.requireDisplayName=false',
-    `config.startWithVideoMuted=${mode === 'audio' ? 'true' : 'false'}`,
-    'config.startWithAudioMuted=false',
-    `config.subject="${encodeURIComponent('Doctor Cares — ' + (mode === 'audio' ? 'Voice call' : 'Video call'))}"`,
-  ];
-  if (mode === 'audio') {
-    // Hide video controls when it's a voice call.
-    configBits.push('config.toolbarButtons=["microphone","hangup","chat","settings","tileview","participants-pane"]');
-  }
-  // meet.jit.si (the main public instance) enforces mandatory moderator
-  // authentication as of 2024, which stalls non-authenticated users on an
-  // "Asking to join…" screen that no URL config can disable. We use
-  // meet.ffmuc.net — a long-running community Jitsi instance in Germany
-  // that runs the same Jitsi stack without the moderator wall. Overridable
-  // at build time via VITE_JITSI_HOST so you can swap in a self-hosted or
-  // 8x8 JaaS deployment later with no code change.
-  const jitsiHost = import.meta.env.VITE_JITSI_HOST || 'meet.ffmuc.net';
-  const jitsiUrl = `https://${jitsiHost}/${roomName}#` + configBits.join('&');
+  // Daily.co room URL is created on-demand by the create-call-room Edge
+  // Function (which calls Daily's API with our secret key). We cache the
+  // result for the lifetime of this component so hitting "Leave" and
+  // rejoining doesn't re-create a room needlessly.
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
+  const [roomError, setRoomError] = useState<string | undefined>();
+  const [provisioning, setProvisioning] = useState(false);
+  const [myLabelMemo] = useState(myLabel);
 
-  if (inCall) {
+  const startCall = async () => {
+    if (roomUrl || provisioning) { setInCall(true); return; }
+    setProvisioning(true);
+    setRoomError(undefined);
+    try {
+      const { data, error } = await supabase!.functions.invoke('create-call-room', {
+        body: { conversationId, mode },
+      });
+      if (error) throw error;
+      const d = data as { url?: string; error?: string };
+      if (!d.url) throw new Error(d.error ?? 'No room URL returned.');
+      // Append the viewer's display name and audio/video mute preference.
+      const u = new URL(d.url);
+      u.searchParams.set('userName', myLabelMemo);
+      if (mode === 'audio') u.searchParams.set('startVideoOff', 'true');
+      setRoomUrl(u.toString());
+      setInCall(true);
+    } catch (e: unknown) {
+      setRoomError((e as { message?: string })?.message
+        ?? 'Could not start the call. The video service may not be configured yet.');
+    } finally {
+      setProvisioning(false);
+    }
+  };
+
+  if (inCall && roomUrl) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex flex-col">
         <div className="flex items-center justify-between gap-3 px-4 h-12 bg-black/90 text-white">
@@ -125,7 +128,7 @@ export function CallPage() {
           </button>
         </div>
         <iframe
-          src={jitsiUrl}
+          src={roomUrl}
           title={mode === 'audio' ? 'Voice call' : 'Video call'}
           allow="camera; microphone; fullscreen; display-capture; autoplay; speaker-selection"
           allowFullScreen
@@ -161,10 +164,13 @@ export function CallPage() {
           allow it so the call can start.
         </Alert>
 
+        {roomError && <Alert tone="error">{roomError}</Alert>}
+
         <Button
           fullWidth size="lg"
+          loading={provisioning}
           leftIcon={mode === 'audio' ? <Phone className="h-4 w-4" /> : <Video className="h-4 w-4" />}
-          onClick={() => setInCall(true)}
+          onClick={startCall}
         >
           {otherOnline ? 'Join call' : 'Start call anyway'}
         </Button>
@@ -177,7 +183,7 @@ export function CallPage() {
         </Button>
 
         <div className="text-center text-[11px] text-ink-muted">
-          Powered by Jitsi Meet · end-to-end encrypted
+          Powered by Daily.co · end-to-end encrypted
         </div>
       </div>
     </>
