@@ -84,17 +84,13 @@ export function CallPage() {
   // Function (which calls Daily's API with our secret key). We cache the
   // result for the lifetime of this component so hitting "Leave" and
   // rejoining doesn't re-create a room needlessly.
-  // Opens the Jitsi fallback room in a new browser tab. Works without any
-  // account or payment method — the moderator wait screen can be bypassed
-  // by just having both parties present. Used when Daily is not configured.
-  const openJitsiFallback = () => {
-    const room = `doctor-cares-${conversationId}`;
-    const url = `https://meet.jit.si/${room}#config.startWithVideoMuted=${mode === 'audio'}`
-      + `&config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(myLabel)}"`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-    // We navigate back since the call is happening in a new tab now.
-    navigate(-1);
-  };
+  // Jitsi fallback URL — rendered as a real anchor tag below so the browser
+  // treats the click as a user-initiated navigation. window.open() is blocked
+  // by popup policies on mobile and in PWAs; a plain <a target="_blank"> is
+  // the only approach that reliably opens a new tab everywhere.
+  const jitsiRoom = `doctor-cares-${conversationId}`;
+  const jitsiFallbackUrl = `https://meet.jit.si/${jitsiRoom}#config.startWithVideoMuted=${mode === 'audio'}`
+    + `&config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(myLabel)}"`;
 
   const startCall = async () => {
     if (roomUrl || provisioning) { setInCall(true); return; }
@@ -115,11 +111,10 @@ export function CallPage() {
       setInCall(true);
     } catch (e: unknown) {
       // Daily failed — probably no payment method on file, or no API key.
-      // Rather than dead-end, fall back to opening the free Jitsi room in
-      // a new tab so the user can still complete the call.
+      // We surface the error and let the user click the Jitsi fallback link
+      // below (a real anchor, which browsers never block).
       setRoomError((e as { message?: string })?.message
-        ?? 'The embedded video service is not configured. Opening Jitsi in a new tab instead.');
-      setTimeout(openJitsiFallback, 1500);
+        ?? 'The embedded video service is not configured. Use the Jitsi link below instead.');
     } finally {
       setProvisioning(false);
     }
@@ -192,12 +187,14 @@ export function CallPage() {
         >
           {otherOnline ? 'Join call' : 'Start call anyway'}
         </Button>
-        <Button
-          fullWidth variant="outline"
-          onClick={openJitsiFallback}
+        <a
+          href={jitsiFallbackUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl h-11 border border-slate-300 dark:border-slate-700 text-ink dark:text-ink-onDark text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-[0.98] transition"
         >
           Open call in new tab (Jitsi)
-        </Button>
+        </a>
         <Button
           fullWidth variant="ghost"
           leftIcon={mode === 'audio' ? <PhoneOff className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
