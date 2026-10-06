@@ -22,11 +22,11 @@ interface AuthContextValue {
   /** True when the current session came from a "reset password" email link. */
   passwordRecovery: boolean;
   refreshProfile: () => Promise<void>;
-  signUp: (params: { email: string; password: string; fullName: string; role: 'patient' | 'doctor' | 'nurse' }) => Promise<AsyncResult>;
-  signIn: (params: { email: string; password: string }) => Promise<AsyncResult>;
+  signUp: (params: { email: string; password: string; fullName: string; role: 'patient' | 'doctor' | 'nurse'; captchaToken?: string }) => Promise<AsyncResult>;
+  signIn: (params: { email: string; password: string; captchaToken?: string }) => Promise<AsyncResult>;
   signInWithOAuth: (provider: 'google' | 'apple') => Promise<AsyncResult>;
   signOut: () => Promise<void>;
-  resetPasswordForEmail: (email: string) => Promise<AsyncResult>;
+  resetPasswordForEmail: (email: string, captchaToken?: string) => Promise<AsyncResult>;
   updatePassword: (newPassword: string) => Promise<AsyncResult>;
 }
 
@@ -160,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (session?.user) await loadProfile(session.user.id);
     },
 
-    signUp: async ({ email, password, fullName, role }) => {
+    signUp: async ({ email, password, fullName, role, captchaToken }) => {
       if (!supabase) return { error: 'Supabase is not configured.' };
       const env = readEnvSafe();
       const { error } = await supabase.auth.signUp({
@@ -169,14 +169,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         options: {
           data: { role, full_name: fullName },
           emailRedirectTo: env ? `${env.appUrl}/login` : undefined,
+          captchaToken,
         },
       });
       return { error: humanError(error) };
     },
 
-    signIn: async ({ email, password }) => {
+    signIn: async ({ email, password, captchaToken }) => {
       if (!supabase) return { error: 'Supabase is not configured.' };
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({
+        email, password, options: { captchaToken },
+      });
       return { error: humanError(error) };
     },
 
@@ -204,11 +207,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await supabase.auth.signOut();
     },
 
-    resetPasswordForEmail: async (email) => {
+    resetPasswordForEmail: async (email, captchaToken) => {
       if (!supabase) return { error: 'Supabase is not configured.' };
       const env = readEnvSafe();
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: env ? `${env.appUrl}/reset-password` : undefined,
+        captchaToken,
       });
       return { error: humanError(error) };
     },

@@ -1,4 +1,5 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { Captcha, type CaptchaHandle } from '@/components/auth/Captcha';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { LogIn, UserPlus, KeyRound, Mail, User as UserIcon, Stethoscope, HeartPulse, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
@@ -110,6 +111,7 @@ export function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [redirected, setRedirected] = useState(false);
+  const captchaRef = useRef<CaptchaHandle>(null);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -117,9 +119,10 @@ export function LoginPage() {
     if (password.length < 6)             return setError('Password is too short.');
     setError(undefined);
     setSubmitting(true);
-    const { error: err } = await signIn({ email, password });
+    const captchaToken = await captchaRef.current?.execute();
+    const { error: err } = await signIn({ email, password, captchaToken });
     setSubmitting(false);
-    if (err) return setError(err);
+    if (err) { captchaRef.current?.reset(); return setError(err); }
     try {
       if (remember) localStorage.setItem(REMEMBER_EMAIL_KEY, email);
       else          localStorage.removeItem(REMEMBER_EMAIL_KEY);
@@ -175,6 +178,7 @@ export function LoginPage() {
           </Link>
         </div>
 
+        <Captcha ref={captchaRef} />
         <Button type="submit" fullWidth size="lg" loading={submitting} leftIcon={<LogIn className="h-4 w-4" />}>
           Log in
         </Button>
@@ -209,6 +213,7 @@ export function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState(false);
+  const captchaRef = useRef<CaptchaHandle>(null);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -220,10 +225,11 @@ export function RegisterPage() {
 
     setError(undefined);
     setSubmitting(true);
-    const { error: err } = await signUp({ email, password, fullName: fullName.trim(), role });
+    const captchaToken = await captchaRef.current?.execute();
+    const { error: err } = await signUp({ email, password, fullName: fullName.trim(), role, captchaToken });
     setSubmitting(false);
 
-    if (err) { setError(err); return; }
+    if (err) { captchaRef.current?.reset(); setError(err); return; }
     setSuccess(true);
     // If email confirmation is off (dev), Supabase returns an active session
     // and the AuthProvider redirects via PublicRoute. If confirmation is on
@@ -333,6 +339,7 @@ export function RegisterPage() {
           </span>
         </label>
 
+        <Captcha ref={captchaRef} />
         <Button type="submit" fullWidth size="lg" loading={submitting} leftIcon={<UserPlus className="h-4 w-4" />}>
           Create account
         </Button>
@@ -393,15 +400,17 @@ export function ForgotPasswordPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [sent, setSent] = useState(false);
+  const captchaRef = useRef<CaptchaHandle>(null);
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!emailPattern.test(email)) return setError('Please enter a valid email address.');
     setError(undefined);
     setSubmitting(true);
-    const { error: err } = await resetPasswordForEmail(email);
+    const captchaToken = await captchaRef.current?.execute();
+    const { error: err } = await resetPasswordForEmail(email, captchaToken);
     setSubmitting(false);
-    if (err) setError(err);
+    if (err) { captchaRef.current?.reset(); setError(err); }
     else setSent(true);
   };
 
@@ -438,6 +447,7 @@ export function ForgotPasswordPage() {
             placeholder="you@example.com"
             required
           />
+          <Captcha ref={captchaRef} />
           <Button type="submit" fullWidth size="lg" loading={submitting}>
             Send reset link
           </Button>
