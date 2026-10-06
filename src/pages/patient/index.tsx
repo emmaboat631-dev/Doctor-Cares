@@ -10,6 +10,7 @@ export { RateVisitPage }            from './RateVisitPage';
 export { HealthMetricsPage }        from './HealthMetricsPage';
 export { MedicalHistoryPage }       from './MedicalHistoryPage';
 export { PatientReferralsPage }     from './ReferralsPage';
+export { PrescriptionsPage }        from './PrescriptionsPage';
 export { HealthTipsPage }           from './HealthTipsPage';
 export { HealthTipDetailPage }      from './HealthTipDetailPage';
 export { NotificationsPage }        from './NotificationsPage';

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CheckCircle2, FileText, MessageSquare, Video, XCircle } from 'lucide-react';
+import { CheckCircle2, FileText, MessageSquare, Pill, Video, XCircle } from 'lucide-react';
 import { FileClaimModal } from '@/components/doctor/FileClaimModal';
+import { PrescriptionModal } from '@/components/doctor/PrescriptionModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { getClaimForAppointment, STATUS_LABEL, STATUS_TONE } from '@/lib/api/nhisClaims';
+import { listPrescriptionsForAppointment } from '@/lib/api/prescriptions';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -35,7 +37,9 @@ export function DoctorAppointmentDetailsPage() {
   const patientId = appt.data?.patient_id ?? null;
   const patient = useAsync(async () => (patientId ? getPatientForDoctor(patientId) : null), [patientId]);
   const claim = useAsync(async () => (id ? getClaimForAppointment(id) : null), [id]);
+  const rxs = useAsync(async () => (id ? listPrescriptionsForAppointment(id) : []), [id]);
   const [claimOpen, setClaimOpen] = useState(false);
+  const [rxOpen, setRxOpen] = useState(false);
 
   const [notes, setNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
@@ -187,6 +191,12 @@ export function DoctorAppointmentDetailsPage() {
               Mark as completed
             </Button>
           )}
+          {(d.status === 'completed' || d.status === 'confirmed') && (
+            <Button variant="outline" onClick={() => setRxOpen(true)}
+              leftIcon={<Pill className="h-4 w-4" />}>
+              {(rxs.data ?? []).length > 0 ? `Write another prescription (${rxs.data!.length})` : 'Write prescription'}
+            </Button>
+          )}
           {(d.status === 'completed' || d.status === 'confirmed') && !claim.data && (
             <Button variant="outline" onClick={() => setClaimOpen(true)}
               leftIcon={<FileText className="h-4 w-4" />}>
@@ -213,14 +223,24 @@ export function DoctorAppointmentDetailsPage() {
       </div>
 
       {user && d && (
-        <FileClaimModal
-          open={claimOpen}
-          onClose={() => setClaimOpen(false)}
-          appointmentId={d.id}
-          patientId={d.patient_id}
-          doctorId={user.id}
-          onCreated={() => claim.refetch()}
-        />
+        <>
+          <FileClaimModal
+            open={claimOpen}
+            onClose={() => setClaimOpen(false)}
+            appointmentId={d.id}
+            patientId={d.patient_id}
+            doctorId={user.id}
+            onCreated={() => claim.refetch()}
+          />
+          <PrescriptionModal
+            open={rxOpen}
+            onClose={() => setRxOpen(false)}
+            patientId={d.patient_id}
+            doctorId={user.id}
+            appointmentId={d.id}
+            onCreated={() => rxs.refetch()}
+          />
+        </>
       )}
     </>
   );

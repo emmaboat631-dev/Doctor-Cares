@@ -21,7 +21,7 @@ import {
 import {
   PatientDashboardPage, FindDoctorsPage, DoctorProfilePage as PatientDoctorProfilePage,
   BookAppointmentPage, BookingConfirmationPage, MyAppointmentsPage, AppointmentDetailsPage,
-  RateVisitPage, HealthMetricsPage, HealthTipsPage, HealthTipDetailPage, MedicalHistoryPage, PatientReferralsPage,
+  RateVisitPage, HealthMetricsPage, HealthTipsPage, HealthTipDetailPage, MedicalHistoryPage, PatientReferralsPage, PrescriptionsPage,
   ChatListPage, ChatDetailPage, DrugSearchPage, DrugDetailPage, NotificationsPage,
   PatientProfilePage, EditProfilePage, SettingsPage,
 } from '@/pages/patient';
@@ -73,6 +73,7 @@ function RoleRouter() {
           <Route path="profile/edit" element={<EditProfilePage />} />
           <Route path="profile/medical-history" element={<MedicalHistoryPage />} />
           <Route path="referrals" element={<PatientReferralsPage />} />
+          <Route path="prescriptions" element={<PrescriptionsPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
