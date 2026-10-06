@@ -153,7 +153,16 @@ async function sendFcm(token: string, title: string, body: string, route?: strin
     }),
   });
   const bodyText = await res.text();
-  console.log(`[sendFcm] status=${res.status} body=${bodyText.slice(0, 300)}`);
+  // Log status only — the FCM response body can echo the recipient token
+  // on certain errors, which would leak into Supabase function logs.
+  // On HTTP errors we log a redacted preview with any FCM-token-shaped
+  // substrings replaced.
+  if (res.status >= 400) {
+    const redacted = bodyText.replace(/[A-Za-z0-9_-]{140,}/g, '[REDACTED-TOKEN]').slice(0, 300);
+    console.error(`[sendFcm] status=${res.status} body=${redacted}`);
+  } else {
+    console.log(`[sendFcm] status=${res.status}`);
+  }
   // 404 / UNREGISTERED → token dead, prune it
   if (res.status === 404) {
     await supabase.from('push_tokens').delete().eq('token', token);
