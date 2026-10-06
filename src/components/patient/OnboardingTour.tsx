@@ -46,20 +46,20 @@ export function OnboardingTour() {
   const s = STEPS[step];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70" role="dialog" aria-modal="true">
-      <div className="relative w-full max-w-md rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/70 overflow-y-auto" role="dialog" aria-modal="true">
+      <div className="relative w-full max-w-md rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col my-auto">
         <button type="button" onClick={dismiss} aria-label="Skip"
           className="absolute top-3 right-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-100 dark:bg-slate-800 text-ink-muted hover:bg-slate-200 dark:hover:bg-slate-700">
           <X className="h-4 w-4" />
         </button>
 
-        <div className={`h-40 ${s.tint} flex items-center justify-center`}>
-          <span className="grid h-20 w-20 place-items-center rounded-3xl bg-white/25 backdrop-blur ring-1 ring-white/30 text-white">
-            <s.icon className="h-10 w-10" />
+        <div className={`shrink-0 h-32 sm:h-40 ${s.tint} flex items-center justify-center`}>
+          <span className="grid h-16 w-16 sm:h-20 sm:w-20 place-items-center rounded-3xl bg-white/25 backdrop-blur ring-1 ring-white/30 text-white">
+            <s.icon className="h-8 w-8 sm:h-10 sm:w-10" />
           </span>
         </div>
 
-        <div className="p-6 pb-5">
+        <div className="p-6 pb-6 overflow-y-auto">
           <div className="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300">
             Step {step + 1} of {STEPS.length}
           </div>

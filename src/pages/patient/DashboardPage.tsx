@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Bell, Calendar, CalendarCheck, ChevronRight, Heart, HeartPulse,
-  MessageSquare, Pill, Search, Siren, Sparkles, Stethoscope, Thermometer,
+  MessageSquare, Moon, Pill, Search, Siren, Sparkles, Stethoscope, Sun, Thermometer,
   TrendingUp, Video, Wind,
 } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 import { SosSheet } from '@/components/patient/SosSheet';
 import { OnboardingTour } from '@/components/patient/OnboardingTour';
 import { getPatientProfile } from '@/lib/api/profile';
@@ -26,6 +27,7 @@ import { cn } from '@/lib/cn';
 export function PatientDashboardPage() {
   const { user, profile } = useAuth();
   const { t } = useTranslation();
+  const { effective, setMode } = useTheme();
   const userId = user?.id;
 
   const doctors = useAsync(() => listDoctors({ limit: 5 }), []);
@@ -65,6 +67,14 @@ export function PatientDashboardPage() {
               <span className="text-lg" aria-hidden>👋</span>
             </div>
           </div>
+          <button
+            type="button"
+            onClick={() => setMode(effective === 'dark' ? 'light' : 'dark')}
+            aria-label={effective === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="grid h-11 w-11 place-items-center rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-ink-soft shadow-sm hover:shadow-md transition"
+          >
+            {effective === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Link
             to="/notifications"
             aria-label="Notifications"

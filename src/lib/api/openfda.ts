@@ -92,14 +92,8 @@ const SYNONYMS: Record<string, string> = {
   glyceryl_trinitrate: 'nitroglycerin',
 };
 
-const runSearch = async (term: string, limit: number, signal?: AbortSignal): Promise<DrugSummary[]> => {
-  const t = esc(term);
-  const search = [
-    `openfda.brand_name:"${t}"`,
-    `openfda.generic_name:"${t}"`,
-    `openfda.substance_name:"${t}"`,
-  ].join('+');
-  const url = `${BASE}?search=(${encodeURIComponent(search)})&limit=${limit}`;
+const runSearch = async (query: string, limit: number, signal?: AbortSignal): Promise<DrugSummary[]> => {
+  const url = `${BASE}?search=${encodeURIComponent(query)}&limit=${limit}`;
   try {
     const body = await fetchJson<{ results?: DrugLabel[] }>(url, signal);
     return (body.results ?? []).map(summarize);
@@ -110,31 +104,61 @@ const runSearch = async (term: string, limit: number, signal?: AbortSignal): Pro
 };
 
 /**
- * Free-text search. Looks in brand_name, generic_name, and substance_name,
- * then falls back to a known synonym (e.g. paracetamol → acetaminophen) if
- * the direct search returned nothing. Deduped by generic name.
+ * Free-text search. Runs a tiered query so a wider net is cast:
+ *   1. Exact phrase in brand/generic/substance (strongest signal, cleanest)
+ *   2. Wildcard prefix in brand/generic/substance (catches partial typing)
+ *   3. Free-text across indications_and_usage + purpose (catches "pain",
+ *      "fever", "headache" and other symptom-based queries)
+ * Results are merged and deduped so the user sees more hits than they used
+ * to for most queries, especially for common/short search terms.
  */
 export async function searchDrugs(query: string, opts: { signal?: AbortSignal; limit?: number } = {}): Promise<DrugSummary[]> {
   const q = query.trim();
   if (q.length < 2) return [];
-  const limit = opts.limit ?? 20;
+  const limit = opts.limit ?? 50;
+  const t = esc(q);
 
-  let results = await runSearch(q, limit, opts.signal);
-  if (results.length === 0) {
-    const synonym = SYNONYMS[q.toLowerCase()];
-    if (synonym) {
-      results = await runSearch(synonym, limit, opts.signal);
-    }
-  }
+  // Apply any synonym mapping (paracetamol → acetaminophen) up front.
+  const synonym = SYNONYMS[q.toLowerCase()];
+  const term = synonym ?? t;
+
+  const bucketSize = Math.max(10, Math.ceil(limit / 3));
+
+  const tier1 = [
+    `openfda.brand_name:"${term}"`,
+    `openfda.generic_name:"${term}"`,
+    `openfda.substance_name:"${term}"`,
+  ].join('+');
+
+  // Wildcard — OpenFDA accepts `field:term*` for prefix matching.
+  const tier2 = [
+    `openfda.brand_name:${term}*`,
+    `openfda.generic_name:${term}*`,
+    `openfda.substance_name:${term}*`,
+  ].join('+');
+
+  // Symptom text search — unquoted so OpenFDA tokenizes.
+  const tier3 = [
+    `indications_and_usage:${term}`,
+    `purpose:${term}`,
+  ].join('+');
+
+  // Run all three in parallel. Any failure returns [] — we take whatever
+  // the others gave us rather than nothing.
+  const [a, b, c] = await Promise.all([
+    runSearch(`(${tier1})`, bucketSize, opts.signal).catch(() => []),
+    runSearch(`(${tier2})`, bucketSize, opts.signal).catch(() => []),
+    runSearch(`(${tier3})`, bucketSize, opts.signal).catch(() => []),
+  ]);
 
   // Dedupe by generic name (case-insensitive), prefer rows with a purpose.
   const seen = new Map<string, DrugSummary>();
-  for (const r of results) {
+  for (const r of [...a, ...b, ...c]) {
     const key = (r.generic_name ?? r.brand_name ?? r.id).toLowerCase();
     const existing = seen.get(key);
     if (!existing || (!existing.purpose && r.purpose)) seen.set(key, r);
   }
-  return Array.from(seen.values());
+  return Array.from(seen.values()).slice(0, limit);
 }
 
 export async function getDrug(id: string, signal?: AbortSignal): Promise<DrugLabel | null> {

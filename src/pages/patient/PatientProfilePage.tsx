@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, ChevronRight, ClipboardList, Download, LogOut, Moon, Pill, Settings, Share2, Shield, User } from 'lucide-react';
+import { Bell, ChevronRight, ClipboardList, Download, LogOut, Pill, Settings, Share2, Shield, User } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
@@ -65,7 +65,7 @@ export function PatientProfilePage() {
           </button>
           <MenuRow href="/settings"     icon={<Shield className="h-4 w-4" />} label="Privacy & security" />
           <MenuRow href="/notifications" icon={<Bell className="h-4 w-4" />} label="Notifications" />
-          <MenuRow href="/settings"     icon={<Moon className="h-4 w-4" />} label="Appearance" />
+          <MenuRow href="/settings"     icon={<Settings className="h-4 w-4" />} label="Settings" />
         </div>
 
         <button

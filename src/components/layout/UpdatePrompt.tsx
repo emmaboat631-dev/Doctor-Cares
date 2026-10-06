@@ -48,6 +48,15 @@ if (typeof window !== 'undefined' && !updateSWFn) {
   } else {
     updateSWFn = registerSW({
       immediate: true,
+      // Throttle SW update checks: previously the SW re-registered aggressively
+      // on every tab open, which under rapid-deploy conditions made the app
+      // feel like it was "refreshing all the time". We now poll for a new SW
+      // at most every 5 minutes once registered.
+      onRegistered(registration) {
+        if (!registration) return;
+        const FIVE_MIN = 5 * 60 * 1000;
+        setInterval(() => { registration.update().catch(() => { /* fine */ }); }, FIVE_MIN);
+      },
       onNeedRefresh() {
         state = { ...state, need: true };
         emit();
