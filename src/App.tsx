@@ -4,6 +4,7 @@ import { AppRoutes } from '@/routes';
 import { isSupabaseConfigured } from '@/lib/supabase';
 import { ConfigMissingPage } from '@/pages/system/ConfigMissingPage';
 import { UpdatePrompt } from '@/components/layout/UpdatePrompt';
+import { CookieBanner } from '@/components/layout/CookieBanner';
 
 export default function App() {
   if (!isSupabaseConfigured) {
@@ -22,6 +23,7 @@ export default function App() {
         <AppRoutes />
         {/* Global toasts — outside the route tree so they persist across nav. */}
         <UpdatePrompt />
+        <CookieBanner />
       </AuthProvider>
     </ThemeProvider>
   );

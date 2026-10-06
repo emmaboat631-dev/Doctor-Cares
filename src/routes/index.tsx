@@ -12,6 +12,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { VideoCallPage } from '@/pages/VideoCallPage';
 import { CallPage } from '@/pages/CallPage';
+import { TermsPage } from '@/pages/legal/TermsPage';
+import { PrivacyPage } from '@/pages/legal/PrivacyPage';
 
 import {
   SplashPage, OnboardingPage, LoginPage, RegisterPage, ForgotPasswordPage,
@@ -142,6 +144,10 @@ export function AppRoutes() {
       {/* Marketing / onboarding — accessible whether signed in or not. */}
       <Route path="/welcome" element={<SplashPage />} />
       <Route path="/onboarding" element={<OnboardingPage />} />
+
+      {/* Legal — publicly accessible, no auth required. */}
+      <Route path="/terms"   element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
 
       {/* Auth pages — redirect signed-in users to app. */}
       <Route element={<PublicRoute />}>
