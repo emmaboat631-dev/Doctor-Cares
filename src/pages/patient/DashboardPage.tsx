@@ -7,6 +7,7 @@ import {
   TrendingUp, Video, Wind,
 } from 'lucide-react';
 import { SosSheet } from '@/components/patient/SosSheet';
+import { OnboardingTour } from '@/components/patient/OnboardingTour';
 import { getPatientProfile } from '@/lib/api/profile';
 import { Avatar } from '@/components/ui/Avatar';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -319,6 +320,7 @@ export function PatientDashboardPage() {
         contactPhone={patientProfile.data?.emergency_contact_phone}
         contactRelation={patientProfile.data?.emergency_contact_relation}
       />
+      <OnboardingTour />
     </div>
   );
 }

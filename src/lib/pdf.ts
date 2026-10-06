@@ -1,9 +1,18 @@
-import { jsPDF } from 'jspdf';
+import type { jsPDF as JsPdfType } from 'jspdf';
 import type { Prescription } from '@/lib/api/prescriptions';
 import type { PatientProfile, Profile } from '@/types';
 import type { HealthMetric, MetricType } from '@/lib/api/healthMetrics';
 import { METRIC_SPEC, formatMetric } from '@/lib/api/healthMetrics';
 import type { AppointmentWithDoctor } from '@/lib/api/appointments';
+
+// Lazy-load jsPDF — it's ~150 KB + html2canvas peer; loading it only when
+// the user actually taps "Download PDF" or "Export medical record" keeps
+// first-paint small.
+async function loadJsPdf() {
+  const mod = await import('jspdf');
+  return mod.jsPDF;
+}
+type jsPDF = JsPdfType;
 
 // ----- Shared layout helpers --------------------------------------------------
 
@@ -65,8 +74,9 @@ function ensureSpace(doc: jsPDF, y: number, needed = 20): number {
 
 // ----- Single prescription PDF -----------------------------------------------
 
-export function prescriptionPdf(rx: Prescription): jsPDF {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+export async function prescriptionPdf(rx: Prescription): Promise<jsPDF> {
+  const JsPDF = await loadJsPdf();
+  const doc = new JsPDF({ unit: 'mm', format: 'a4' });
   header(doc, 'Prescription', `Issued ${new Date(rx.issued_at).toLocaleString()}`);
 
   let y = 48;
@@ -146,8 +156,8 @@ export function prescriptionPdf(rx: Prescription): jsPDF {
   return doc;
 }
 
-export function downloadPrescriptionPdf(rx: Prescription): void {
-  const doc = prescriptionPdf(rx);
+export async function downloadPrescriptionPdf(rx: Prescription): Promise<void> {
+  const doc = await prescriptionPdf(rx);
   const date = new Date(rx.issued_at).toISOString().slice(0, 10);
   const name = (rx.patient?.full_name ?? 'patient').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
   doc.save(`prescription-${date}-${name}.pdf`);
@@ -163,8 +173,9 @@ export interface MedicalRecordData {
   prescriptions: Prescription[];
 }
 
-export function medicalRecordPdf(data: MedicalRecordData): jsPDF {
-  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+export async function medicalRecordPdf(data: MedicalRecordData): Promise<jsPDF> {
+  const JsPDF = await loadJsPdf();
+  const doc = new JsPDF({ unit: 'mm', format: 'a4' });
   header(doc, 'Medical Record', `Generated ${new Date().toLocaleString()}`);
   let y = 48;
   doc.setFontSize(10);
@@ -284,8 +295,8 @@ export function medicalRecordPdf(data: MedicalRecordData): jsPDF {
   return doc;
 }
 
-export function downloadMedicalRecordPdf(data: MedicalRecordData): void {
-  const doc = medicalRecordPdf(data);
+export async function downloadMedicalRecordPdf(data: MedicalRecordData): Promise<void> {
+  const doc = await medicalRecordPdf(data);
   const name = (data.profile?.full_name ?? 'patient').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
   const date = new Date().toISOString().slice(0, 10);
   doc.save(`medical-record-${date}-${name}.pdf`);
