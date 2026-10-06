@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /appointments
+Disallow: /chat
+Disallow: /patients
+Disallow: /admin
+Disallow: /profile
+Disallow: /settings
+Disallow: /metrics
+Disallow: /prescriptions
+Disallow: /referrals
+Disallow: /notifications
+Disallow: /call
+Disallow: /reset-password
+Disallow: /select-role
+
+Sitemap: https://doctor-cares-ten.vercel.app/sitemap.xml

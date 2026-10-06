@@ -38,6 +38,7 @@ const CallPage               = lazy(() => import('@/pages/CallPage').then((m) =>
 const VideoCallPage          = lazy(() => import('@/pages/VideoCallPage').then((m) => ({ default: m.VideoCallPage })));
 const TermsPage              = lazy(() => import('@/pages/legal/TermsPage').then((m) => ({ default: m.TermsPage })));
 const PrivacyPage            = lazy(() => import('@/pages/legal/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
+const LandingPage            = lazy(() => import('@/pages/LandingPage').then((m) => ({ default: m.LandingPage })));
 
 const RateVisitPage          = lazy(() => import('@/pages/patient/RateVisitPage').then((m) => ({ default: m.RateVisitPage })));
 const HealthMetricsPage      = lazy(() => import('@/pages/patient/HealthMetricsPage').then((m) => ({ default: m.HealthMetricsPage })));
@@ -160,6 +161,21 @@ function RoleRouter() {
   return <Navigate to="/select-role" replace />;
 }
 
+/**
+ * Decides what to render at `/` based on auth state. Logged-out visitors see
+ * the marketing landing page; signed-in users fall through to the role tree.
+ */
+function RootRoute() {
+  const { loading, session } = useAuth();
+  if (loading) return <Loading />;
+  if (!session) return <LandingPage />;
+  return (
+    <ProtectedRoute allow={['patient', 'doctor', 'nurse', 'admin']}>
+      <RoleRouter />
+    </ProtectedRoute>
+  );
+}
+
 export function AppRoutes() {
   return (
     <Suspense fallback={<Loading />}>
@@ -187,14 +203,7 @@ export function AppRoutes() {
           </Route>
         </Route>
 
-        <Route
-          path="/*"
-          element={
-            <ProtectedRoute allow={['patient', 'doctor', 'nurse', 'admin']}>
-              <RoleRouter />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/*" element={<RootRoute />} />
       </Routes>
     </Suspense>
   );

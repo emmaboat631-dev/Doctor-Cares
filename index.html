@@ -5,14 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
     <meta name="theme-color" content="#F5F7FB" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#020617" media="(prefers-color-scheme: dark)" />
-    <meta name="description" content="Doctor Cares — Healthcare. Anytime. Anywhere. Book doctors, chat privately, and find drug information." />
+
+    <!-- Primary SEO -->
+    <title>Doctor Cares — Book Ghana doctors, chat & video consultations</title>
+    <meta name="description" content="Doctor Cares connects you with verified Ghanaian doctors and nurses. Book video or clinic visits, chat securely, track your vitals, file NHIS claims — all in one app." />
+    <meta name="keywords" content="telemedicine Ghana, book doctor Ghana, NHIS claims, video consultation, online doctor Ghana, Accra doctor, nurse consultation, health app Ghana" />
+    <meta name="author" content="Doctor Cares" />
+    <link rel="canonical" href="https://doctor-cares-ten.vercel.app/" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp link previews) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Doctor Cares" />
+    <meta property="og:title" content="Doctor Cares — Healthcare, anytime, anywhere" />
+    <meta property="og:description" content="Book verified doctors + nurses, chat securely, do video visits, track your vitals, file NHIS claims. Built for Ghana." />
+    <meta property="og:url" content="https://doctor-cares-ten.vercel.app/" />
+    <meta property="og:image" content="https://doctor-cares-ten.vercel.app/brand-illustration.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:locale" content="en_GB" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Doctor Cares — Healthcare, anytime, anywhere" />
+    <meta name="twitter:description" content="Book verified doctors + nurses, chat securely, do video visits, track your vitals, file NHIS claims." />
+    <meta name="twitter:image" content="https://doctor-cares-ten.vercel.app/brand-illustration.png" />
+
+    <!-- PWA / mobile -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Doctor Cares" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="icon" type="image/png" href="/brand-illustration.png" />
     <link rel="apple-touch-icon" href="/brand-illustration.png" />
-    <!-- iOS home-screen icon sizes so it doesn't get downscaled from anywhere -->
     <link rel="apple-touch-icon" sizes="180x180" href="/brand-illustration.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="/brand-illustration.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="/brand-illustration.png" />
@@ -21,7 +46,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <title>Doctor Cares — Healthcare. Anytime. Anywhere.</title>
+
+    <!-- Structured data: MedicalBusiness so Google renders rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalBusiness",
+      "name": "Doctor Cares",
+      "description": "Telemedicine platform connecting patients with verified Ghanaian doctors and nurses.",
+      "url": "https://doctor-cares-ten.vercel.app/",
+      "image": "https://doctor-cares-ten.vercel.app/brand-illustration.png",
+      "logo": "https://doctor-cares-ten.vercel.app/brand-illustration.png",
+      "priceRange": "GH₵",
+      "areaServed": { "@type": "Country", "name": "Ghana" },
+      "medicalSpecialty": ["GeneralPractice", "Nursing", "Pediatric", "Obstetric"],
+      "availableLanguage": ["English", "Twi", "French"]
+    }
+    </script>
     <script>
       // Apply theme synchronously before first paint to avoid FOUC.
       // Priority: user's saved choice → device preference (system).
