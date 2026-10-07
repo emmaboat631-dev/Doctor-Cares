@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
 
 const KEY = 'doctor-cares.cookie-consent.v1';
+
+// Routes where the banner must stay out of the way so the first-impression
+// animation / content can breathe: splash, onboarding, landing.
+const HIDDEN_ROUTES = ['/welcome', '/onboarding', '/about', '/launch-video.html'];
 
 /**
  * Lightweight consent banner. Doctor Cares only uses functional cookies +
@@ -12,6 +16,8 @@ const KEY = 'doctor-cares.cookie-consent.v1';
  */
 export function CookieBanner() {
   const [visible, setVisible] = useState(false);
+  const location = useLocation();
+  const onHiddenRoute = HIDDEN_ROUTES.some((p) => location.pathname === p || location.pathname.startsWith(p + '/'));
 
   useEffect(() => {
     try {
@@ -25,7 +31,7 @@ export function CookieBanner() {
     setVisible(false);
   };
 
-  if (!visible) return null;
+  if (!visible || onHiddenRoute) return null;
   return (
     <div
       role="dialog"
