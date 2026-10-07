@@ -18,9 +18,20 @@ export interface HealthTip {
   updated_at: string;
 }
 
-/** Published tips for the patient home feed. */
+/** Published tips for the patient home feed.
+ *
+ * Uses the `get_rotating_health_tips` RPC: each day the "featured" tip rotates
+ * through the 60-slot cycle, so patients see different content every day for
+ * ~2 months before it repeats. Falls back to a plain table select if the RPC
+ * isn't available yet (e.g. migration 0028 hasn't been applied to this DB).
+ */
 export async function listPublishedTips(limit = 20): Promise<HealthTip[]> {
   const sb = requireClient();
+  const rpc = await sb.rpc('get_rotating_health_tips', { p_limit: limit });
+  if (!rpc.error) {
+    return Array.isArray(rpc.data) ? (rpc.data as HealthTip[]) : [];
+  }
+  // Fallback for an older DB where the RPC doesn't exist.
   const { data, error } = await sb
     .from('health_tips')
     .select('*')
@@ -28,9 +39,6 @@ export async function listPublishedTips(limit = 20): Promise<HealthTip[]> {
     .order('published_at', { ascending: false })
     .limit(limit);
   if (error) throw error;
-  // Defensive: Supabase has returned non-array shapes in edge cases
-  // (schema cache miss, PostgREST issue). Always hand callers an array
-  // so the UI can safely .map() over the result.
   return Array.isArray(data) ? (data as HealthTip[]) : [];
 }
 
