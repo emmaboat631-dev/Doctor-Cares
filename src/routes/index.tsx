@@ -161,27 +161,13 @@ function RoleRouter() {
   return <Navigate to="/select-role" replace />;
 }
 
-/**
- * Decides what to render at `/` based on auth state. Logged-out visitors see
- * the marketing landing page; signed-in users fall through to the role tree.
- */
-function RootRoute() {
-  const { loading, session } = useAuth();
-  if (loading) return <Loading />;
-  if (!session) return <LandingPage />;
-  return (
-    <ProtectedRoute allow={['patient', 'doctor', 'nurse', 'admin']}>
-      <RoleRouter />
-    </ProtectedRoute>
-  );
-}
-
 export function AppRoutes() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/welcome" element={<SplashPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/about"      element={<LandingPage />} />
         <Route path="/terms"   element={<TermsPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
 
@@ -203,7 +189,14 @@ export function AppRoutes() {
           </Route>
         </Route>
 
-        <Route path="/*" element={<RootRoute />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute allow={['patient', 'doctor', 'nurse', 'admin']}>
+              <RoleRouter />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Suspense>
   );

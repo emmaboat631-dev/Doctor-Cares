@@ -191,6 +191,14 @@ export function LoginPage() {
             Create one
           </Link>
         </p>
+
+        <div className="pt-1 flex items-center justify-center gap-4 text-xs">
+          <Link to="/about"   className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">About us</Link>
+          <span className="text-ink-faint">·</span>
+          <Link to="/terms"   className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">Terms</Link>
+          <span className="text-ink-faint">·</span>
+          <Link to="/privacy" className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">Privacy</Link>
+        </div>
       </form>
     </Card>
   );
@@ -352,6 +360,14 @@ export function RegisterPage() {
             Log in
           </Link>
         </p>
+
+        <div className="pt-1 flex items-center justify-center gap-4 text-xs">
+          <Link to="/about"   className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">About us</Link>
+          <span className="text-ink-faint">·</span>
+          <Link to="/terms"   className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">Terms</Link>
+          <span className="text-ink-faint">·</span>
+          <Link to="/privacy" className="text-ink-muted hover:text-ink dark:hover:text-ink-onDark">Privacy</Link>
+        </div>
       </form>
     </Card>
   );

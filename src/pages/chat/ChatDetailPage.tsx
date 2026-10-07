@@ -73,6 +73,7 @@ export function ChatDetailPage() {
 
   // Voice recording state
   const [recording, setRecording] = useState(false);
+  const recMimeRef = useRef<{ mime: string; ext: string }>({ mime: 'audio/webm', ext: 'webm' });
   const [recSecs, setRecSecs] = useState(0);
   const recRef = useRef<{ mr: MediaRecorder; chunks: Blob[]; stream: MediaStream; startedAt: number } | null>(null);
   const recTimer = useRef<number | null>(null);
@@ -180,11 +181,36 @@ export function ChatDetailPage() {
   };
 
   // --- Voice recording ----------------------------------------------------
+  // Pick a mime type the browser can actually record. Chrome/Firefox/Android
+  // record webm/opus; iOS Safari records mp4/aac. We ask the browser which
+  // one it supports and use that for both record AND upload so playback
+  // works on every device.
+  const pickRecordingMime = (): { mime: string; ext: string } => {
+    const candidates: { mime: string; ext: string }[] = [
+      { mime: 'audio/webm;codecs=opus', ext: 'webm' },
+      { mime: 'audio/webm',             ext: 'webm' },
+      { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' }, // iOS Safari
+      { mime: 'audio/mp4',              ext: 'm4a' },     // iOS Safari fallback
+      { mime: 'audio/aac',              ext: 'aac' },
+      { mime: 'audio/ogg;codecs=opus',  ext: 'ogg' },
+    ];
+    for (const c of candidates) {
+      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(c.mime)) {
+        return c;
+      }
+    }
+    return { mime: '', ext: 'webm' }; // empty mime → MediaRecorder picks default
+  };
+
   const startRecording = async () => {
     if (recording) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mr = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+      const picked = pickRecordingMime();
+      recMimeRef.current = picked;
+      const mr = picked.mime
+        ? new MediaRecorder(stream, { mimeType: picked.mime })
+        : new MediaRecorder(stream);
       const chunks: Blob[] = [];
       mr.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
       mr.start();
@@ -217,7 +243,12 @@ export function ChatDetailPage() {
     stream.getTracks().forEach((t) => t.stop());
 
     const dur = Math.max(1, Math.round((Date.now() - startedAt) / 1000));
-    const blob = new Blob(chunks, { type: 'audio/webm' });
+    const { mime, ext } = recMimeRef.current;
+    // Fall back to whatever the first chunk reported as its own type — this
+    // handles browsers (iOS Safari especially) that silently coerce the
+    // requested type to something else.
+    const blobType = mime || chunks[0]?.type || 'audio/mp4';
+    const blob = new Blob(chunks, { type: blobType });
     if (blob.size < 500) { setError('Recording too short.'); recRef.current = null; setRecSecs(0); return; }
 
     setSending(true);
@@ -225,8 +256,8 @@ export function ChatDetailPage() {
       const { url } = await uploadChatAttachment({
         conversationId,
         file: blob,
-        extension: 'webm',
-        contentType: 'audio/webm',
+        extension: ext,
+        contentType: blobType,
       });
       await send({ body: `🎤 Voice (${dur}s)`, attachmentUrl: url });
     } catch (e: unknown) {
@@ -260,8 +291,16 @@ export function ChatDetailPage() {
         name={other?.full_name ?? null}
         role={other?.role ?? null}
         avatarUrl={other?.avatar_url ?? undefined}
-        onProfileClick={otherId && other?.role === 'doctor'
-          ? () => navigate(`/doctors/${otherId}`)
+        onProfileClick={otherId
+          ? () => {
+              // Patient-viewer → doctor/nurse profile (public directory).
+              // Doctor/nurse-viewer → patient details page they manage.
+              if (other?.role === 'doctor' || other?.role === 'nurse') {
+                navigate(`/doctors/${otherId}`);
+              } else if (other?.role === 'patient') {
+                navigate(`/patients/${otherId}`);
+              }
+            }
           : undefined}
         onVoiceCall={() => navigate(`/call/${conversationId}?mode=audio`)}
         onVideoCall={() => navigate(`/call/${conversationId}?mode=video`)}
