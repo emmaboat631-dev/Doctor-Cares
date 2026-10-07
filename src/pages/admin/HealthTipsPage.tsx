@@ -38,11 +38,11 @@ export function AdminHealthTipsPage() {
         <div className="space-y-3">{[0,1,2].map((i) => <Skeleton key={i} className="h-24 rounded-2xl" />)}</div>
       ) : tips.error ? (
         <ErrorState onRetry={tips.refetch} />
-      ) : (tips.data ?? []).length === 0 ? (
+      ) : !Array.isArray(tips.data) || tips.data.length === 0 ? (
         <Card><EmptyState title="No tips yet" description="Create your first health tip to broadcast." /></Card>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
-          {tips.data!.map((t) => (
+          {tips.data.map((t) => (
             <TipRow key={t.id} tip={t} onEdit={() => setEditing(t)} onChange={tips.refetch} />
           ))}
         </div>

@@ -28,7 +28,10 @@ export async function listPublishedTips(limit = 20): Promise<HealthTip[]> {
     .order('published_at', { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data ?? []) as HealthTip[];
+  // Defensive: Supabase has returned non-array shapes in edge cases
+  // (schema cache miss, PostgREST issue). Always hand callers an array
+  // so the UI can safely .map() over the result.
+  return Array.isArray(data) ? (data as HealthTip[]) : [];
 }
 
 export async function getTip(id: string): Promise<HealthTip | null> {
@@ -47,7 +50,7 @@ export async function listAllTips(limit = 100): Promise<HealthTip[]> {
     .order('updated_at', { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data ?? []) as HealthTip[];
+  return Array.isArray(data) ? (data as HealthTip[]) : [];
 }
 
 export async function createTip(params: {
