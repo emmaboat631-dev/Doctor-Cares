@@ -50,7 +50,15 @@ export function useAsync<T>(
   deps: unknown[] = [],
   options: UseAsyncOptions = {},
 ): State<T> & { refetch: () => void } {
-  const key = options.cacheKey ?? JSON.stringify(deps);
+  // CRITICAL: the cache key must include something that identifies the
+  // CALLSITE, not just the deps. Previously key = JSON.stringify(deps) meant
+  // every hook with `[user?.id]` deps shared one slot — notifications,
+  // referrals, prescriptions etc. all overwrote each other.
+  //
+  // We derive a stable callsite signature from the fetcher's source string
+  // (same across remounts because the arrow literal is identical). Pair it
+  // with the deps and we get a unique slot per hook per dep combination.
+  const key = options.cacheKey ?? (fetcher.toString() + '::' + JSON.stringify(deps));
   const staleMs = options.staleMs ?? DEFAULT_STALE_MS;
 
   const seq = useRef(0);
