@@ -186,24 +186,33 @@ export function ChatDetailPage() {
   // one it supports and use that for both record AND upload so playback
   // works on every device.
   const pickRecordingMime = (): { mime: string; ext: string } => {
-    // mp4/aac is the only format that plays everywhere — iOS Safari CANNOT
-    // play webm. Prefer it so a note recorded on Android plays on iPhone.
-    // Chrome/Edge/Firefox all record mp4 since late 2024.
-    const candidates: { mime: string; ext: string }[] = [
+    // iOS Safari can RECORD webm on newer versions but can NEVER play it
+    // back. Force mp4 on any Apple device so an iPhone recording plays on
+    // both iPhones and Androids. Other browsers try mp4 first, fall back
+    // to webm (which Android/Chrome plays fine).
+    const ua = navigator.userAgent;
+    const isApple = /iPhone|iPad|iPod|Macintosh/.test(ua) && !/CriOS|FxiOS/.test(ua);
+    const prefersMp4 = isApple;
+
+    const mp4 = [
       { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' },
       { mime: 'audio/mp4',                  ext: 'm4a' },
       { mime: 'audio/aac',                  ext: 'aac' },
-      // webm fallback — plays on Android/Chrome but NOT iOS. Last resort.
+    ];
+    const webm = [
       { mime: 'audio/webm;codecs=opus',     ext: 'webm' },
       { mime: 'audio/webm',                 ext: 'webm' },
       { mime: 'audio/ogg;codecs=opus',      ext: 'ogg' },
     ];
+    const candidates = prefersMp4 ? [...mp4, ...webm] : [...mp4, ...webm];
+
     for (const c of candidates) {
       if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(c.mime)) {
         return c;
       }
     }
-    return { mime: '', ext: 'm4a' };
+    // Last resort — Apple falls back to default (which is mp4 on iOS Safari)
+    return { mime: '', ext: isApple ? 'm4a' : 'webm' };
   };
 
   const startRecording = async () => {
@@ -511,6 +520,7 @@ function VoiceBubble({
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playError, setPlayError] = useState<string | null>(null);
 
   useEffect(() => {
     const a = new Audio(url);
@@ -518,14 +528,36 @@ function VoiceBubble({
     a.addEventListener('loadedmetadata', () => setDuration(Number.isFinite(a.duration) ? a.duration : 0));
     a.addEventListener('timeupdate', () => setProgress(a.currentTime));
     a.addEventListener('ended', () => { setPlaying(false); setProgress(0); });
+    a.addEventListener('error', () => {
+      // Most common cause: an older webm note arriving on an iOS device.
+      // Show a human message instead of 'mime type audio/webm is not supported'.
+      const isWebm = url.includes('.webm') || url.includes('webm');
+      setPlayError(isWebm
+        ? "This voice note can't play on this device. Ask the sender to re-record from the latest app version."
+        : 'This voice note cannot be played.');
+      setPlaying(false);
+    });
     return () => { a.pause(); audioRef.current = null; };
   }, [url]);
 
   const toggle = () => {
     if (failed) { onRetry?.(); return; }
+    if (playError) return;
     const a = audioRef.current; if (!a) return;
     if (playing) { a.pause(); setPlaying(false); }
-    else { a.play(); setPlaying(true); }
+    else {
+      const p = a.play();
+      if (p && typeof p.catch === 'function') {
+        p.then(() => setPlaying(true)).catch(() => {
+          const isWebm = url.includes('.webm') || url.includes('webm');
+          setPlayError(isWebm
+            ? "This voice note can't play on this device."
+            : 'Playback failed.');
+        });
+      } else {
+        setPlaying(true);
+      }
+    }
   };
 
   const bars = Array.from({ length: 22 }, (_, i) => ((i * 37) % 18) + 6);
@@ -569,6 +601,13 @@ function VoiceBubble({
         </div>
         {meta}
       </div>
+      {playError && (
+        <div className={cn(
+          'absolute left-0 right-0 -bottom-5 text-[10px] font-semibold text-rose-500 text-center',
+        )}>
+          {playError}
+        </div>
+      )}
     </div>
   );
 }

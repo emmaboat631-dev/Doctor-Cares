@@ -27,9 +27,27 @@
 <body>
   <div class="wrap">
     <img class="logo" src="/brand-illustration.png" alt="Doctor Cares" />
-    <h1>You're offline</h1>
-    <p>Doctor Cares needs a connection to load new appointments, messages, and drug information. Reconnect and try again.</p>
-    <button onclick="location.reload()">Try again</button>
+    <h1 id="h">You're offline</h1>
+    <p id="p">Doctor Cares needs a connection to load new appointments, messages, and drug information. Reconnect and try again.</p>
+    <button onclick="location.href='/'">Try again</button>
   </div>
+  <script>
+    // False-positive guard: Workbox's navigateFallback can serve this page
+    // even when the device is actually online (e.g. a service-worker request
+    // timed out during a pull-to-refresh). If we're actually online, bounce
+    // back to the real app immediately so the user never sees this screen.
+    (function () {
+      function bounceIfOnline() {
+        if (navigator.onLine) {
+          // Replace so Back doesn't bring the user to the offline screen.
+          location.replace('/');
+        }
+      }
+      // Initial check — likely true on a pull-to-refresh from a connected device.
+      bounceIfOnline();
+      // If the device comes back online later, auto-bounce too.
+      window.addEventListener('online', bounceIfOnline);
+    })();
+  </script>
 </body>
 </html>

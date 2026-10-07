@@ -204,6 +204,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     signOut: async () => {
       if (!supabase) return;
+      // Wipe the cross-mount data cache so a new user doesn't see the old one's data.
+      const { clearAsyncCache } = await import('@/hooks/useAsync');
+      clearAsyncCache();
       await supabase.auth.signOut();
     },
 
