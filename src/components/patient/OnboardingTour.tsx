@@ -46,33 +46,33 @@ export function OnboardingTour() {
   const s = STEPS[step];
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/70 overflow-y-auto" role="dialog" aria-modal="true">
-      <div className="relative w-full max-w-md rounded-t-3xl sm:rounded-3xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden max-h-[92dvh] flex flex-col my-auto">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 overflow-y-auto p-4 safe-top safe-bottom" role="dialog" aria-modal="true">
+      <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden max-h-[90dvh] flex flex-col">
         <button type="button" onClick={dismiss} aria-label="Skip"
           className="absolute top-3 right-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-100 dark:bg-slate-800 text-ink-muted hover:bg-slate-200 dark:hover:bg-slate-700">
           <X className="h-4 w-4" />
         </button>
 
-        <div className={`shrink-0 h-32 sm:h-40 ${s.tint} flex items-center justify-center`}>
-          <span className="grid h-16 w-16 sm:h-20 sm:w-20 place-items-center rounded-3xl bg-white/25 backdrop-blur ring-1 ring-white/30 text-white">
-            <s.icon className="h-8 w-8 sm:h-10 sm:w-10" />
+        <div className={`shrink-0 h-24 sm:h-32 ${s.tint} flex items-center justify-center`}>
+          <span className="grid h-14 w-14 sm:h-16 sm:w-16 place-items-center rounded-2xl bg-white/25 backdrop-blur ring-1 ring-white/30 text-white">
+            <s.icon className="h-7 w-7 sm:h-8 sm:w-8" />
           </span>
         </div>
 
-        <div className="p-6 pb-6 overflow-y-auto">
+        <div className="p-5 pb-5 overflow-y-auto">
           <div className="text-[10px] font-bold uppercase tracking-widest text-brand-600 dark:text-brand-300">
             Step {step + 1} of {STEPS.length}
           </div>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight">{s.title}</h2>
-          <p className="mt-2 text-sm text-ink-soft dark:text-slate-300">{s.body}</p>
+          <h2 className="mt-1.5 text-xl font-bold tracking-tight">{s.title}</h2>
+          <p className="mt-1.5 text-sm text-ink-soft dark:text-slate-300">{s.body}</p>
 
-          <div className="mt-5 flex items-center gap-1.5" aria-hidden>
+          <div className="mt-4 flex items-center gap-1.5" aria-hidden>
             {STEPS.map((_, i) => (
               <span key={i} className={`h-1.5 rounded-full transition-all ${i === step ? 'w-6 bg-brand-500' : 'w-1.5 bg-slate-300 dark:bg-slate-700'}`} />
             ))}
           </div>
 
-          <div className="mt-5 flex gap-2">
+          <div className="mt-4 flex gap-2">
             <button type="button" onClick={dismiss}
               className="flex-1 h-11 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800">
               Skip

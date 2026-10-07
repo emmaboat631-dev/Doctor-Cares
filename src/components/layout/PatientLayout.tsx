@@ -28,15 +28,17 @@ export function PatientLayout() {
     { to: '/profile',      label: t('nav.profile'),      icon: User },
   ], [t, unreadTotal]);
 
-  // Full-viewport pages skip the bottom padding that reserves room for the
-  // floating pill nav (since the nav itself is hidden on these routes — see
-  // BottomNavigation.useHidePillNav). Their own sticky action bars take care
-  // of the safe area.
-  const inChat = useMatch('/chat/:conversationId');
-  const inDoctorProfile = useMatch('/doctors/:id');
-  const inBooking = useMatch('/doctors/:id/book');
-  const navHidden = !!inChat || !!inDoctorProfile || !!inBooking;
-  const mainPadding = navHidden ? 'pb-0 sm:pb-6' : 'pb-28 sm:pb-6';
+  // Show the pill nav ONLY on primary tabs. Every detail / edit / sub-page
+  // hides it so the content gets full-screen real estate and the back
+  // button in the header is the primary way out. Nav visibility is kept in
+  // sync with BottomNavigation.useHidePillNav via the same route list there.
+  const inHome        = useMatch('/');
+  const inAppts       = useMatch('/appointments');
+  const inChat        = useMatch('/chat');
+  const inDrugs       = useMatch('/drugs');
+  const inProfile     = useMatch('/profile');
+  const showNav = !!(inHome || inAppts || inChat || inDrugs || inProfile);
+  const mainPadding = showNav ? 'pb-28 sm:pb-6' : 'pb-0 sm:pb-6';
 
   return (
     <div className="min-h-dvh flex bg-surface-muted dark:bg-slate-950">

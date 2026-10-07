@@ -65,7 +65,6 @@ export function PatientProfilePage() {
           </button>
           <MenuRow href="/settings"     icon={<Shield className="h-4 w-4" />} label="Privacy & security" />
           <MenuRow href="/notifications" icon={<Bell className="h-4 w-4" />} label="Notifications" />
-          <MenuRow href="/settings"     icon={<Settings className="h-4 w-4" />} label="Settings" />
         </div>
 
         <button

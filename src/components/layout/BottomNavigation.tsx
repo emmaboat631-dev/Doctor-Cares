@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useMatch } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import type { LucideIcon } from 'lucide-react';
 import { tap } from '@/lib/native/haptics';
 import { cn } from '@/lib/cn';
@@ -27,23 +27,24 @@ interface Props {
  * bar would just steal thumb space and cover the message composer's send
  * button. Same idea for booking confirmation (a full-screen success moment).
  */
+/**
+ * The pill nav is only shown on the 5 primary tab routes. Every detail /
+ * edit / sub-page auto-hides it so the user gets the full viewport and
+ * uses the header's back arrow to return.
+ *
+ * Primary tabs:
+ *   Patient:  / /appointments /chat /drugs /profile
+ *   Doctor:   / /appointments /chat /patients /profile
+ */
 function useHidePillNav(): boolean {
-  const chatDetail = useMatch('/chat/:conversationId');
-  const bookConfirmed = useMatch('/appointments/:id/confirmed');
-  const doctorProfile = useMatch('/doctors/:id');
-  const bookAppointment = useMatch('/doctors/:id/book');
   const loc = useLocation();
-  // Also hide on the login/register/onboarding auth pages just in case a
-  // layout ever renders them under the app shell (defensive).
-  const isAuth = ['/login', '/register', '/onboarding', '/welcome', '/forgot-password', '/reset-password']
-    .includes(loc.pathname);
-  return (
-    !!chatDetail ||
-    !!bookConfirmed ||
-    !!doctorProfile ||
-    !!bookAppointment ||
-    isAuth
-  );
+  const p = loc.pathname;
+  // Exact-match the primary tab roots. Anything with an extra segment
+  // (/chat/:id, /profile/edit, /appointments/:id, etc.) is a sub-page.
+  const primary = new Set(['/', '/appointments', '/chat', '/drugs', '/profile', '/patients']);
+  if (primary.has(p)) return false;
+  // Defensive: hide on any auth / public page a layout might render under.
+  return true;
 }
 
 export function BottomNavigation({ items }: Props) {

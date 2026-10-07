@@ -28,9 +28,15 @@ export function DoctorLayout() {
     { to: '/profile',      label: t('nav.profile'),      icon: User },
   ], [t, unreadTotal]);
 
-  // Chat thread pages skip the pill-nav bottom padding — see PatientLayout.
-  const inChat = useMatch('/chat/:conversationId');
-  const mainPadding = inChat ? 'pb-0 sm:pb-6' : 'pb-28 sm:pb-6';
+  // Show the pill nav ONLY on primary tabs — detail/edit screens get full
+  // height. Mirrors the patient-side nav visibility logic.
+  const inHome     = useMatch('/');
+  const inAppts    = useMatch('/appointments');
+  const inChat     = useMatch('/chat');
+  const inPatients = useMatch('/patients');
+  const inProfile  = useMatch('/profile');
+  const showNav = !!(inHome || inAppts || inChat || inPatients || inProfile);
+  const mainPadding = showNav ? 'pb-28 sm:pb-6' : 'pb-0 sm:pb-6';
 
   return (
     <div className="min-h-dvh flex bg-surface-muted dark:bg-slate-950">

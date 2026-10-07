@@ -186,20 +186,24 @@ export function ChatDetailPage() {
   // one it supports and use that for both record AND upload so playback
   // works on every device.
   const pickRecordingMime = (): { mime: string; ext: string } => {
+    // mp4/aac is the only format that plays everywhere — iOS Safari CANNOT
+    // play webm. Prefer it so a note recorded on Android plays on iPhone.
+    // Chrome/Edge/Firefox all record mp4 since late 2024.
     const candidates: { mime: string; ext: string }[] = [
-      { mime: 'audio/webm;codecs=opus', ext: 'webm' },
-      { mime: 'audio/webm',             ext: 'webm' },
-      { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' }, // iOS Safari
-      { mime: 'audio/mp4',              ext: 'm4a' },     // iOS Safari fallback
-      { mime: 'audio/aac',              ext: 'aac' },
-      { mime: 'audio/ogg;codecs=opus',  ext: 'ogg' },
+      { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' },
+      { mime: 'audio/mp4',                  ext: 'm4a' },
+      { mime: 'audio/aac',                  ext: 'aac' },
+      // webm fallback — plays on Android/Chrome but NOT iOS. Last resort.
+      { mime: 'audio/webm;codecs=opus',     ext: 'webm' },
+      { mime: 'audio/webm',                 ext: 'webm' },
+      { mime: 'audio/ogg;codecs=opus',      ext: 'ogg' },
     ];
     for (const c of candidates) {
       if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(c.mime)) {
         return c;
       }
     }
-    return { mime: '', ext: 'webm' }; // empty mime → MediaRecorder picks default
+    return { mime: '', ext: 'm4a' };
   };
 
   const startRecording = async () => {
