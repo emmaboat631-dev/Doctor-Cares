@@ -301,6 +301,7 @@ function Footer() {
           <ul className="space-y-2 text-xs text-ink-muted">
             <li><a href="mailto:support@doctor-cares.app" className="hover:text-brand-600 dark:hover:text-brand-300">support@doctor-cares.app</a></li>
             <li><a href="mailto:privacy@doctor-cares.app" className="hover:text-brand-600 dark:hover:text-brand-300">privacy@doctor-cares.app</a></li>
+            <li><a href="mailto:emmaboat631@gmail.com"   className="hover:text-brand-600 dark:hover:text-brand-300">emmaboat631@gmail.com</a></li>
           </ul>
         </div>
       </div>
