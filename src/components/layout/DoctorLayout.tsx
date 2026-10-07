@@ -34,8 +34,8 @@ export function DoctorLayout() {
   const inAppts    = useMatch('/appointments');
   const inChat     = useMatch('/chat');
   const inPatients = useMatch('/patients');
-  const inProfile  = useMatch('/profile');
-  const showNav = !!(inHome || inAppts || inChat || inPatients || inProfile);
+  // /profile deliberately excluded — matches BottomNavigation.useHidePillNav.
+  const showNav = !!(inHome || inAppts || inChat || inPatients);
   const mainPadding = showNav ? 'pb-28 sm:pb-6' : 'pb-0 sm:pb-6';
 
   return (

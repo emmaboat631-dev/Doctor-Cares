@@ -185,53 +185,77 @@ export function ChatDetailPage() {
   // record webm/opus; iOS Safari records mp4/aac. We ask the browser which
   // one it supports and use that for both record AND upload so playback
   // works on every device.
-  const pickRecordingMime = (): { mime: string; ext: string } => {
-    // iOS Safari can RECORD webm on newer versions but can NEVER play it
-    // back. Force mp4 on any Apple device so an iPhone recording plays on
-    // both iPhones and Androids. Other browsers try mp4 first, fall back
-    // to webm (which Android/Chrome plays fine).
-    const ua = navigator.userAgent;
-    const isApple = /iPhone|iPad|iPod|Macintosh/.test(ua) && !/CriOS|FxiOS/.test(ua);
-    const prefersMp4 = isApple;
-
-    const mp4 = [
+  // Try each candidate until MediaRecorder actually accepts it. isTypeSupported
+  // lies on some iOS versions (returns true but the constructor throws), so
+  // we only trust what the constructor succeeds with. mp4/aac is tried first
+  // because it's the only container that plays on EVERY platform (iOS cannot
+  // play webm).
+  const tryStartRecorder = (stream: MediaStream): { mr: MediaRecorder; mime: string; ext: string } | null => {
+    const candidates: { mime: string; ext: string }[] = [
       { mime: 'audio/mp4;codecs=mp4a.40.2', ext: 'm4a' },
       { mime: 'audio/mp4',                  ext: 'm4a' },
       { mime: 'audio/aac',                  ext: 'aac' },
-    ];
-    const webm = [
       { mime: 'audio/webm;codecs=opus',     ext: 'webm' },
       { mime: 'audio/webm',                 ext: 'webm' },
       { mime: 'audio/ogg;codecs=opus',      ext: 'ogg' },
     ];
-    const candidates = prefersMp4 ? [...mp4, ...webm] : [...mp4, ...webm];
-
     for (const c of candidates) {
-      if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported?.(c.mime)) {
-        return c;
-      }
+      try {
+        if (typeof MediaRecorder === 'undefined') return null;
+        if (!MediaRecorder.isTypeSupported?.(c.mime)) continue;
+        const mr = new MediaRecorder(stream, { mimeType: c.mime });
+        return { mr, mime: c.mime, ext: c.ext };
+      } catch { /* try next */ }
     }
-    // Last resort — Apple falls back to default (which is mp4 on iOS Safari)
-    return { mime: '', ext: isApple ? 'm4a' : 'webm' };
+    // Final fallback — let the browser pick its own default
+    try {
+      if (typeof MediaRecorder === 'undefined') return null;
+      const mr = new MediaRecorder(stream);
+      // Read the mime the browser actually chose
+      const actualMime = mr.mimeType || 'audio/webm';
+      const ext = actualMime.includes('mp4') ? 'm4a'
+        : actualMime.includes('webm') ? 'webm'
+        : actualMime.includes('ogg') ? 'ogg'
+        : 'bin';
+      return { mr, mime: actualMime, ext };
+    } catch { return null; }
   };
 
   const startRecording = async () => {
     if (recording) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const picked = pickRecordingMime();
-      recMimeRef.current = picked;
-      const mr = picked.mime
-        ? new MediaRecorder(stream, { mimeType: picked.mime })
-        : new MediaRecorder(stream);
+      const started = tryStartRecorder(stream);
+      if (!started) {
+        stream.getTracks().forEach((t) => t.stop());
+        setError('Your browser does not support voice recording.');
+        return;
+      }
+      const { mr, mime, ext } = started;
+      // The recorder may negotiate a slightly different mimeType than what
+      // we asked for. Use whatever it reports as .mimeType after start().
+      recMimeRef.current = { mime: mr.mimeType || mime, ext };
       const chunks: Blob[] = [];
       mr.ondataavailable = (e) => { if (e.data.size > 0) chunks.push(e.data); };
       mr.start();
+      // Refresh ref AGAIN after start — some browsers populate .mimeType only
+      // once recording is active.
+      if (mr.mimeType) {
+        const actual = mr.mimeType;
+        const actualExt = actual.includes('mp4') ? 'm4a'
+          : actual.includes('webm') ? 'webm'
+          : actual.includes('ogg') ? 'ogg'
+          : ext;
+        recMimeRef.current = { mime: actual, ext: actualExt };
+      }
       recRef.current = { mr, chunks, stream, startedAt: Date.now() };
       setRecording(true); setRecSecs(0);
       recTimer.current = window.setInterval(() => setRecSecs((s) => s + 1), 1000);
     } catch (e: unknown) {
-      setError('Microphone permission denied.');
+      const msg = (e as { message?: string })?.message ?? '';
+      setError(msg.toLowerCase().includes('permission')
+        ? 'Microphone permission denied.'
+        : msg || 'Could not start recording.');
     }
   };
   const cancelRecording = () => {
@@ -256,11 +280,16 @@ export function ChatDetailPage() {
     stream.getTracks().forEach((t) => t.stop());
 
     const dur = Math.max(1, Math.round((Date.now() - startedAt) / 1000));
-    const { mime, ext } = recMimeRef.current;
-    // Fall back to whatever the first chunk reported as its own type — this
-    // handles browsers (iOS Safari especially) that silently coerce the
-    // requested type to something else.
-    const blobType = mime || chunks[0]?.type || 'audio/mp4';
+    // Trust the FIRST CHUNK over our planned mime — if the recorder silently
+    // negotiated something else (iOS does this), the chunk .type is truth.
+    const chunkType = chunks[0]?.type;
+    const plannedMime = recMimeRef.current.mime;
+    const blobType = chunkType || plannedMime || 'audio/mp4';
+    // Pick extension to match the actual stored container
+    const ext = blobType.includes('mp4') ? 'm4a'
+      : blobType.includes('webm') ? 'webm'
+      : blobType.includes('ogg') ? 'ogg'
+      : recMimeRef.current.ext;
     const blob = new Blob(chunks, { type: blobType });
     if (blob.size < 500) { setError('Recording too short.'); recRef.current = null; setRecSecs(0); return; }
 

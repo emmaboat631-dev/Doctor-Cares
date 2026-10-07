@@ -41,7 +41,10 @@ function useHidePillNav(): boolean {
   const p = loc.pathname;
   // Exact-match the primary tab roots. Anything with an extra segment
   // (/chat/:id, /profile/edit, /appointments/:id, etc.) is a sub-page.
-  const primary = new Set(['/', '/appointments', '/chat', '/drugs', '/profile', '/patients']);
+  // /profile deliberately excluded — tapping into the profile tab should
+  // hide the pill nav so the content gets the full viewport (matches the
+  // feedback that detail/settings pages inside Profile shouldn't show nav).
+  const primary = new Set(['/', '/appointments', '/chat', '/drugs', '/patients']);
   if (primary.has(p)) return false;
   // Defensive: hide on any auth / public page a layout might render under.
   return true;
