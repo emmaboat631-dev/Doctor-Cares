@@ -1,0 +1,21 @@
+# Build output
+dist
+dev-dist
+build
+
+# Native shell
+android
+
+# Vendored
+node_modules
+
+# Non-source
+scripts
+brag-output
+brag-output-2026-10-07-112655
+walkthrough-output
+full-walkthrough-output
+design-review
+
+# Generated
+*.tsbuildinfo

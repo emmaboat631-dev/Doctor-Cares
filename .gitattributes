@@ -1,0 +1,49 @@
+# Doctor Cares — line-ending policy
+#
+# Default: let Git auto-detect text files and normalize them to LF in the
+# repository. The working copy keeps whatever the OS/editor uses, so no
+# mass CRLF↔LF churn appears in diffs when you edit on Windows.
+* text=auto
+
+# Source: always LF in the repo
+*.ts     text eol=lf
+*.tsx    text eol=lf
+*.js     text eol=lf
+*.cjs    text eol=lf
+*.mjs    text eol=lf
+*.json   text eol=lf
+*.jsonc  text eol=lf
+*.css    text eol=lf
+*.html   text eol=lf
+*.md     text eol=lf
+*.yml    text eol=lf
+*.yaml   text eol=lf
+*.svg    text eol=lf
+*.sql    text eol=lf
+
+# Scripts: enforce LF even on Windows (shells and gradle wrappers need it)
+*.sh     text eol=lf
+gradlew  text eol=lf
+
+# Windows scripts stay CRLF
+*.bat    text eol=crlf
+*.cmd    text eol=crlf
+
+# Binary: never try to merge or diff
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.webp   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary
+*.otf    binary
+*.mp3    binary
+*.mp4    binary
+*.apk    binary
+*.aab    binary
+*.jar    binary
+*.keystore binary
