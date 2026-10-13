@@ -7,14 +7,7 @@ interface Env {
   supabaseUrl: string;
   supabaseAnonKey: string;
   appUrl: string;
-  adminEmails: string[];
 }
-
-const readAdminEmails = () =>
-  (import.meta.env.VITE_ADMIN_EMAILS ?? '')
-    .split(',')
-    .map((s: string) => s.trim().toLowerCase())
-    .filter(Boolean);
 
 const readEnv = (): Env => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -25,7 +18,6 @@ const readEnv = (): Env => {
     supabaseUrl,
     supabaseAnonKey,
     appUrl: import.meta.env.VITE_APP_URL ?? window.location.origin,
-    adminEmails: readAdminEmails(),
   };
 };
 
