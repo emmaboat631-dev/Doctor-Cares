@@ -56,3 +56,8 @@ brag-output-*/
 walkthrough-output/
 full-walkthrough-output/
 skills-lock.json
+
+# Android release signing — NEVER commit the keystore or credentials
+android/key.properties
+*.jks
+*.keystore

@@ -1,5 +1,24 @@
 apply plugin: 'com.android.application'
 
+// Release signing: credentials live in android/key.properties (gitignored).
+// Copy android/key.properties.example and fill in the four values, or set
+// RELEASE_STORE_FILE / _PASSWORD / _KEY_ALIAS / _KEY_PASSWORD as env vars.
+// Without those, the release build is left unsigned and will fail to upload
+// to the Play Store — but debug builds still work for local testing.
+def keystorePropertiesFile = rootProject.file('key.properties')
+def keystoreProperties = new Properties()
+def hasReleaseSigning = false
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    hasReleaseSigning = true
+} else if (System.getenv('RELEASE_STORE_FILE')) {
+    keystoreProperties['storeFile']     = System.getenv('RELEASE_STORE_FILE')
+    keystoreProperties['storePassword'] = System.getenv('RELEASE_STORE_PASSWORD')
+    keystoreProperties['keyAlias']      = System.getenv('RELEASE_KEY_ALIAS')
+    keystoreProperties['keyPassword']   = System.getenv('RELEASE_KEY_PASSWORD')
+    hasReleaseSigning = true
+}
+
 android {
     namespace = "app.doctorcares.mobile"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,8 +35,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    if (hasReleaseSigning) {
+        signingConfigs {
+            release {
+                storeFile     file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias      keystoreProperties['keyAlias']
+                keyPassword   keystoreProperties['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

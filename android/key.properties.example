@@ -1,0 +1,22 @@
+# Doctor Cares — Android release signing credentials
+#
+# Copy this file to `android/key.properties` and fill in the four values.
+# `android/key.properties` is gitignored and MUST NEVER be committed.
+# The .jks keystore itself should live OUTSIDE the repo (e.g. a password
+# manager or a secure drive). Losing it means you cannot update the app on
+# the Play Store — only start over as a new app.
+#
+# Alternative: set RELEASE_STORE_FILE, RELEASE_STORE_PASSWORD,
+# RELEASE_KEY_ALIAS, RELEASE_KEY_PASSWORD as environment variables.
+
+# Absolute (or project-root-relative) path to the .jks keystore
+storeFile=/absolute/path/to/doctorcares-release.jks
+
+# Keystore password
+storePassword=CHANGE_ME
+
+# Key alias inside the keystore
+keyAlias=doctorcares
+
+# Key password (often equal to storePassword)
+keyPassword=CHANGE_ME
