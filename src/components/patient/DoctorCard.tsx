@@ -22,7 +22,8 @@ export function DoctorCard({ doctor, variant = 'default', className }: Props) {
       to={`/doctors/${doctor.id}`}
       className={cn(
         'flex items-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800',
-        'bg-white dark:bg-slate-900 shadow-card transition hover:shadow-pop active:scale-[0.995]',
+        'bg-white dark:bg-slate-900 shadow-card touch-manipulation',
+        'transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]',
         variant === 'compact' ? 'p-3' : 'p-4',
         className,
       )}
@@ -39,24 +40,24 @@ export function DoctorCard({ doctor, variant = 'default', className }: Props) {
         {variant === 'default' && (
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             {doctor.rating != null && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-caption font-semibold text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">
                 <Star className="h-3 w-3 fill-current" aria-hidden />
                 {doctor.rating.toFixed(1)}
                 {doctor.rating_count > 0 && <span className="font-normal opacity-70">({doctor.rating_count})</span>}
               </span>
             )}
             {doctor.consultation_fee != null && (
-              <span className="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:bg-brand-500/15 dark:text-brand-200">
+              <span className="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-caption font-semibold text-brand-700 dark:bg-brand-500/15 dark:text-brand-200">
                 {fmtMoney(doctor.consultation_fee)}
               </span>
             )}
             {hasVideo && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-ink-soft dark:bg-slate-800 dark:text-slate-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-caption text-ink-soft dark:bg-slate-800 dark:text-slate-300">
                 <Video className="h-3 w-3" aria-hidden /> Video
               </span>
             )}
             {hasClinic && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-ink-soft dark:bg-slate-800 dark:text-slate-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-caption text-ink-soft dark:bg-slate-800 dark:text-slate-300">
                 <MapPin className="h-3 w-3" aria-hidden /> Clinic
               </span>
             )}

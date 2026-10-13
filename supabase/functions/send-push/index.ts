@@ -30,9 +30,12 @@ interface Payload {
   old_record?: Record<string, unknown>;
 }
 
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
-const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const SA_JSON = Deno.env.get('FIREBASE_SERVICE_ACCOUNT')!;
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+const SA_JSON = Deno.env.get('FIREBASE_SERVICE_ACCOUNT');
+if (!SUPABASE_URL)  throw new Error('Missing env SUPABASE_URL');
+if (!SERVICE_ROLE)  throw new Error('Missing env SUPABASE_SERVICE_ROLE_KEY');
+if (!SA_JSON)       throw new Error('Missing env FIREBASE_SERVICE_ACCOUNT');
 
 // Web Push (VAPID) — used for iOS Safari PWA + desktop browsers.
 const VAPID_PUBLIC_KEY = Deno.env.get('VAPID_PUBLIC_KEY') ?? '';

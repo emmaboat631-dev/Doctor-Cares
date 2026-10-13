@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { CalendarRange, Search } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -17,10 +17,6 @@ import { cn } from '@/lib/cn';
 type Filter = 'all' | AppointmentStatus;
 
 const STATUSES: Filter[] = ['all', 'pending', 'confirmed', 'completed', 'cancelled', 'rejected'];
-
-const statusTone: Record<AppointmentStatus, 'brand' | 'success' | 'warning' | 'danger' | 'info'> = {
-  pending: 'warning', confirmed: 'success', cancelled: 'danger', completed: 'info', rejected: 'danger',
-};
 
 export function AdminAppointmentsPage() {
   const [filter, setFilter] = useState<Filter>('all');
@@ -96,7 +92,7 @@ export function AdminAppointmentsPage() {
                     <div>{fmtDate(a.scheduled_at)}</div>
                     <div className="text-ink-muted">{fmtTime(a.scheduled_at)}</div>
                   </div>
-                  <div><Badge tone={statusTone[a.status]}>{a.status}</Badge></div>
+                  <div><StatusBadge status={a.status} /></div>
                   <div className="text-xs text-ink-soft dark:text-slate-300 capitalize">{a.mode}</div>
                   <div className="text-xs font-semibold text-right text-brand-700 dark:text-brand-300">
                     {fmtMoney(a.fee)}

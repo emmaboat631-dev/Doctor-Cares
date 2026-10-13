@@ -41,10 +41,7 @@ function useHidePillNav(): boolean {
   const p = loc.pathname;
   // Exact-match the primary tab roots. Anything with an extra segment
   // (/chat/:id, /profile/edit, /appointments/:id, etc.) is a sub-page.
-  // /profile deliberately excluded — tapping into the profile tab should
-  // hide the pill nav so the content gets the full viewport (matches the
-  // feedback that detail/settings pages inside Profile shouldn't show nav).
-  const primary = new Set(['/', '/appointments', '/chat', '/drugs', '/patients']);
+  const primary = new Set(['/', '/appointments', '/chat', '/drugs', '/patients', '/profile']);
   if (primary.has(p)) return false;
   // Defensive: hide on any auth / public page a layout might render under.
   return true;
@@ -71,8 +68,10 @@ export function BottomNavigation({ items }: Props) {
           'pointer-events-auto mx-auto max-w-md',
           'flex items-stretch justify-between gap-1',
           'rounded-[28px] px-2 py-2',
-          'bg-slate-900/90 dark:bg-slate-950/90 backdrop-blur-2xl',
-          'shadow-[0_20px_50px_-15px_rgba(15,23,42,0.5)]',
+          // Higher opacity (95%) keeps the glass aesthetic while ensuring
+          // content underneath stays readable — see master §32.1-2.
+          'bg-slate-900/95 dark:bg-slate-950/95 backdrop-blur-2xl',
+          'shadow-[0_20px_50px_-15px_rgba(15,23,42,0.55)]',
           'border border-white/10',
         )}
       >
@@ -94,16 +93,16 @@ function NavItemBtn({ item }: { item: NavItem }) {
         className={({ isActive }) =>
           cn(
             'group relative flex flex-col items-center justify-center gap-1',
-            'rounded-2xl px-2 py-2 transition-all duration-300',
-            'text-[10.5px] font-bold tracking-tight leading-none',
-            'active:scale-[0.94]',
+            'rounded-2xl px-2 py-2 touch-manipulation select-none',
+            'transition-[background-color,color,box-shadow,transform] duration-200 ease-spring',
+            'text-caption font-semibold leading-none',
+            'active:scale-[0.98]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900',
             isActive
               ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/40'
-              : 'text-white/70 hover:text-white',
+              : 'text-white/80 hover:text-white',
           )
         }
-        style={{ transitionTimingFunction: 'cubic-bezier(0.32, 0.72, 0, 1)' }}
       >
         {({ isActive }) => (
           <>
@@ -112,8 +111,8 @@ function NavItemBtn({ item }: { item: NavItem }) {
                 aria-hidden
                 strokeWidth={isActive ? 2.4 : 2}
                 className={cn(
-                  'h-6 w-6 transition-transform duration-300',
-                  isActive ? 'scale-110' : 'scale-100',
+                  'h-6 w-6 transition-transform duration-200 ease-spring',
+                  isActive ? 'scale-[1.06]' : 'scale-100',
                 )}
               />
 
@@ -123,7 +122,7 @@ function NavItemBtn({ item }: { item: NavItem }) {
                   className={cn(
                     'absolute -top-2 -right-2.5 min-h-[18px] min-w-[18px] px-1',
                     'grid place-items-center rounded-full bg-danger text-white',
-                    'text-[9px] font-bold ring-2',
+                    'text-[10px] font-semibold ring-2',
                     isActive ? 'ring-brand-500' : 'ring-slate-900 dark:ring-slate-950',
                   )}
                 >

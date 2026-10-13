@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
-import { CalendarRange, CheckCircle2, ChevronRight, Edit, MapPin, Settings, Star, Video } from 'lucide-react';
+import { CalendarRange, CheckCircle2, Edit, MapPin, Settings, Star, Video } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { MenuRow } from '@/components/ui/MenuRow';
+import { SectionGroup } from '@/components/ui/SectionGroup';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { getMyDoctorProfile } from '@/lib/api/doctors';
@@ -83,10 +85,10 @@ export function DoctorProfilePage() {
               </div>
             </Card>
 
-            <div className="rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden">
+            <SectionGroup>
               <MenuRow href="/availability" icon={<CalendarRange className="h-4 w-4" />} label="Availability" />
               <MenuRow href="/settings"     icon={<Settings className="h-4 w-4" />}     label="Settings" />
-            </div>
+            </SectionGroup>
           </>
         )}
       </div>
@@ -103,12 +105,3 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-function MenuRow({ href, icon, label }: { href: string; icon: React.ReactNode; label: string }) {
-  return (
-    <Link to={href} className="flex items-center gap-3 border-b border-slate-200/70 dark:border-slate-800 px-4 py-3 last:border-none hover:bg-slate-50 dark:hover:bg-slate-800/60">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-surface-soft dark:bg-slate-800 text-ink-soft dark:text-slate-300">{icon}</span>
-      <span className="flex-1 text-sm font-medium">{label}</span>
-      <ChevronRight className="h-4 w-4 text-ink-muted" />
-    </Link>
-  );
-}

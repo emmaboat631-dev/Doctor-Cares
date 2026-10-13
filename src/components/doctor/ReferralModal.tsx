@@ -110,16 +110,16 @@ export function ReferralModal({
 
           <Input label="Reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Suspected cardiac arrhythmia — needs ECG" />
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">
               Notes <span className="font-normal opacity-70">(optional)</span>
-            </label>
+            </span>
             <textarea
               value={notes} onChange={(e) => setNotes(e.target.value)} rows={4}
               placeholder="Relevant history, test results, meds tried so far…"
               className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
             />
-          </div>
+          </label>
           {error && <Alert tone="error">{error}</Alert>}
         </div>
 

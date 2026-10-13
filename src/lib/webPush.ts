@@ -29,7 +29,9 @@ const supported = (): boolean =>
   !!VAPID_PUBLIC_KEY;
 
 export async function subscribeWebPush(userId: string): Promise<void> {
-  if (!supported() || !supabase) return;
+  if (!supported() || !supabase || !VAPID_PUBLIC_KEY) return;
+  // Narrow for TypeScript — `supported()` already checked truthiness.
+  const vapidKey: string = VAPID_PUBLIC_KEY;
 
   // Permission — if denied earlier the user has to re-grant from site
   // settings; we don't re-prompt.
@@ -52,12 +54,12 @@ export async function subscribeWebPush(userId: string): Promise<void> {
     try {
       sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY!) as BufferSource,
+        applicationServerKey: urlBase64ToUint8Array(vapidKey) as BufferSource,
       });
     } catch {
       sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: VAPID_PUBLIC_KEY!,
+        applicationServerKey: vapidKey,
       });
     }
   }

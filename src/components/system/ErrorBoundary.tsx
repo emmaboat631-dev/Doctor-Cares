@@ -18,7 +18,6 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     // Surface in the console so devs can see the stack trace.
-    // eslint-disable-next-line no-console
     console.error('[ErrorBoundary]', error, info);
   }
 

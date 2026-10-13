@@ -20,7 +20,6 @@ export function PageTransition() {
     }
     historyRef.current = [...stack, location.pathname].slice(-40);
     return 'forward';
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   return (

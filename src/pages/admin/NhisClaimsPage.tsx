@@ -65,7 +65,7 @@ export function AdminNhisClaimsPage() {
         <Card><EmptyState icon={<FileText className="h-5 w-5" />} title="No claims" description="None at this status." /></Card>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
-          {claims.data!.map((c) => <ClaimRow key={c.id} c={c} onChange={claims.refetch} />)}
+          {(claims.data ?? []).map((c) => <ClaimRow key={c.id} c={c} onChange={claims.refetch} />)}
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Bell, Calendar, CalendarCheck, ChevronRight, Heart, HeartPulse,
-  MessageSquare, Moon, Pill, Search, Siren, Sparkles, Stethoscope, Sun, Thermometer,
+  MessageSquare, Moon, Pill, Search, Siren, Sparkles, Star, Stethoscope, Sun, Thermometer,
   TrendingUp, Video, Wind,
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -57,32 +57,29 @@ export function PatientDashboardPage() {
   return (
     <div className="min-h-full">
       {/* Header */}
-      <header className="mx-auto max-w-3xl px-5 pt-4 safe-top">
-        <div className="flex items-start gap-3">
+      <header className="mx-auto max-w-3xl px-4 pt-4 safe-top">
+        <div className="flex items-center gap-3">
           <Avatar name={profile?.full_name} src={profile?.avatar_url ?? undefined} size="md" />
           <div className="min-w-0 flex-1">
             <div className="text-xs text-ink-muted">{t(`greeting.${greetingKeyFor()}`)},</div>
-            <div className="flex items-center gap-1.5">
-              <span className="truncate text-lg font-bold tracking-tight">{firstName}</span>
-              <span className="text-lg" aria-hidden>👋</span>
-            </div>
+            <div className="truncate text-lg font-semibold tracking-tight">{firstName}</div>
           </div>
           <button
             type="button"
             onClick={() => setMode(effective === 'dark' ? 'light' : 'dark')}
             aria-label={effective === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="grid h-11 w-11 place-items-center rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-ink-soft shadow-sm hover:shadow-md transition"
+            className="grid h-11 w-11 place-items-center rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-ink-soft shadow-sm touch-manipulation transition-shadow duration-150 hover:shadow-md"
           >
             {effective === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
           <Link
             to="/notifications"
             aria-label="Notifications"
-            className="relative grid h-11 w-11 place-items-center rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-ink-soft shadow-sm hover:shadow-md transition"
+            className="relative grid h-11 w-11 place-items-center rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 text-ink-soft shadow-sm transition-shadow duration-150 hover:shadow-md"
           >
             <Bell className="h-4 w-4" />
             {(unread.data ?? 0) > 0 && (
-              <span className="absolute top-1 right-1 grid min-h-[16px] min-w-[16px] place-items-center rounded-full bg-danger px-1 text-[9px] font-bold text-white ring-2 ring-white dark:ring-slate-900">
+              <span className="absolute top-1 right-1 grid min-h-[16px] min-w-[16px] place-items-center rounded-full bg-danger px-1 text-[10px] font-semibold text-white ring-2 ring-white dark:ring-slate-900">
                 {(unread.data ?? 0) > 9 ? '9+' : unread.data}
               </span>
             )}
@@ -90,15 +87,15 @@ export function PatientDashboardPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-5 pt-4 pb-6 space-y-5">
+      <div className="mx-auto max-w-3xl px-4 pt-4 pb-2 space-y-6">
         {/* Search with prominent Go button */}
         <Link
           to="/doctors"
-          className="flex items-center gap-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 pl-4 pr-1.5 h-12 text-sm text-ink-muted shadow-sm hover:shadow-md transition"
+          className="flex items-center gap-3 rounded-full bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 pl-4 pr-1.5 h-12 text-sm text-ink-muted shadow-sm touch-manipulation transition-shadow duration-150 hover:shadow-md"
         >
           <Search className="h-4 w-4" aria-hidden />
           <span className="flex-1">{t('home.searchPlaceholder')}</span>
-          <span className="inline-flex h-9 items-center rounded-full bg-brand-500 px-4 text-xs font-bold text-white">
+          <span className="inline-flex h-9 items-center rounded-full bg-brand-500 px-4 text-xs font-semibold text-white">
             {t('home.goButton')}
           </span>
         </Link>
@@ -109,14 +106,14 @@ export function PatientDashboardPage() {
           <div aria-hidden className="pointer-events-none absolute right-16 top-24 h-16 w-16 rounded-full bg-white/10" />
           <div className="relative flex items-start gap-4">
             <div className="min-w-0 flex-1">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-white/18 backdrop-blur px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-white/25 backdrop-blur px-2.5 py-1 text-label font-semibold uppercase">
                 <Sparkles className="h-3 w-3" /> {t('home.heroTag')}
               </div>
-              <h2 className="mt-3 text-2xl font-bold leading-tight tracking-tight whitespace-pre-line">{t('home.heroTitle')}</h2>
+              <h2 className="mt-3 text-2xl font-semibold leading-tight tracking-tight whitespace-pre-line">{t('home.heroTitle')}</h2>
               <p className="mt-1 text-sm opacity-90 max-w-[16rem]">{t('home.heroSubtitle')}</p>
               <Link
                 to="/doctors"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-white text-brand-700 h-10 px-4 text-sm font-bold shadow-sm hover:bg-brand-50 transition"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-white text-brand-700 h-10 px-4 text-sm font-semibold shadow-sm touch-manipulation transition-colors duration-150 hover:bg-brand-50"
               >
                 {t('home.heroButton')} <ChevronRight className="h-4 w-4" />
               </Link>
@@ -134,8 +131,8 @@ export function PatientDashboardPage() {
         {/* Health snapshot — real readings; tap tile to log a new one */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">{t('home.healthSnapshot')}</h2>
-            <Link to="/metrics" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
+            <h2 className="text-sm font-semibold tracking-tight">{t('home.healthSnapshot')}</h2>
+            <Link to="/metrics" className="inline-flex items-center gap-0.5 text-xs font-semibold text-brand-600 dark:text-brand-300">
               {t('home.logLink')} <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -149,7 +146,7 @@ export function PatientDashboardPage() {
         {/* Services */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">{t('home.services')}</h2>
+            <h2 className="text-sm font-semibold tracking-tight">{t('home.services')}</h2>
           </div>
           <div className="grid grid-cols-4 gap-2.5">
             <ServiceTile to="/doctors"            icon={<Stethoscope className="h-5 w-5" />}   label={t('home.findDoctor')} tone="brand" />
@@ -165,9 +162,9 @@ export function PatientDashboardPage() {
         {/* Next appointment */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">{t('home.upcomingAppointment')}</h2>
+            <h2 className="text-sm font-semibold tracking-tight">{t('home.upcomingAppointment')}</h2>
             {appts.data && appts.data.length > 0 && (
-              <Link to="/appointments" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
+              <Link to="/appointments" className="inline-flex items-center gap-0.5 text-xs font-semibold text-brand-600 dark:text-brand-300">
                 {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             )}
@@ -177,7 +174,7 @@ export function PatientDashboardPage() {
           ) : nextAppt ? (
             <Link
               to={`/appointments/${nextAppt.id}`}
-              className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-4 hover:shadow-pop transition"
+              className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-4 touch-manipulation transition-shadow duration-150 hover:shadow-pop"
             >
               <div className="flex items-center gap-3">
                 <div className="relative">
@@ -189,17 +186,17 @@ export function PatientDashboardPage() {
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-sm font-bold">{nextAppt.doctor?.full_name ?? 'Doctor'}</div>
+                  <div className="truncate text-sm font-semibold">{nextAppt.doctor?.full_name ?? 'Doctor'}</div>
                   <div className="mt-0.5 truncate text-xs text-ink-muted">{nextAppt.doctor?.doctor_profile?.specialty ?? '—'}</div>
                   <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:text-brand-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-0.5 text-caption font-semibold text-brand-700 dark:text-brand-300">
                       <Calendar className="h-3 w-3" /> {fmtDate(nextAppt.scheduled_at)}
                     </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:text-brand-300">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-0.5 text-caption font-semibold text-brand-700 dark:text-brand-300">
                       {fmtTime(nextAppt.scheduled_at)}
                     </span>
                     {nextAppt.mode === 'video' && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-accent-100 dark:bg-accent-500/15 px-2 py-0.5 text-[11px] font-semibold text-accent-700 dark:text-accent-500">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-accent-100 dark:bg-accent-500/15 px-2 py-0.5 text-caption font-semibold text-accent-700 dark:text-accent-500">
                         <Video className="h-3 w-3" />
                       </span>
                     )}
@@ -214,7 +211,7 @@ export function PatientDashboardPage() {
               </div>
               <div className="mt-3 text-sm font-semibold">{t('home.noUpcoming')}</div>
               <p className="mt-1 text-xs text-ink-muted">{t('home.noUpcomingHint')}</p>
-              <Link to="/doctors" className="mt-3 inline-flex h-9 items-center rounded-xl bg-brand-500 px-4 text-xs font-bold text-white hover:bg-brand-600">
+              <Link to="/doctors" className="mt-3 inline-flex h-9 items-center rounded-xl bg-brand-500 px-4 text-xs font-semibold text-white touch-manipulation transition-colors duration-150 hover:bg-brand-600">
                 {t('home.findADoctor')}
               </Link>
             </div>
@@ -224,8 +221,8 @@ export function PatientDashboardPage() {
         {/* Top doctors */}
         <section>
           <div className="mb-2.5 flex items-center justify-between">
-            <h2 className="text-[15px] font-bold tracking-tight">{t('home.topRated')}</h2>
-            <Link to="/doctors" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
+            <h2 className="text-sm font-semibold tracking-tight">{t('home.topRated')}</h2>
+            <Link to="/doctors" className="inline-flex items-center gap-0.5 text-xs font-semibold text-brand-600 dark:text-brand-300">
               {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -241,11 +238,11 @@ export function PatientDashboardPage() {
                 <Link
                   key={d.id}
                   to={`/doctors/${d.id}`}
-                  className="flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card px-3 py-2.5 hover:shadow-pop transition"
+                  className="flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card px-3 py-2.5 touch-manipulation transition-shadow duration-150 hover:shadow-pop"
                 >
                   <Avatar name={d.profile?.full_name} src={d.profile?.avatar_url ?? undefined} size="md" />
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-bold">{d.profile?.full_name ?? 'Doctor'}</div>
+                    <div className="truncate text-sm font-semibold">{d.profile?.full_name ?? 'Doctor'}</div>
                     <div className="mt-0.5 truncate text-xs text-ink-muted">
                       {d.specialty ?? 'General practitioner'}
                       {d.years_experience ? ` · ${d.years_experience} yr${d.years_experience > 1 ? 's' : ''}` : ''}
@@ -253,12 +250,12 @@ export function PatientDashboardPage() {
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     {d.rating != null && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:text-amber-300">
-                        ⭐ {d.rating.toFixed(1)}
+                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 text-caption font-semibold text-amber-700 dark:text-amber-300">
+                        <Star className="h-3 w-3 fill-current" aria-hidden /> {d.rating.toFixed(1)}
                       </span>
                     )}
                     {d.consultation_fee != null && (
-                      <span className="text-[11px] font-bold text-brand-600 dark:text-brand-300">
+                      <span className="text-caption font-semibold text-brand-600 dark:text-brand-300">
                         {fmtMoney(d.consultation_fee)}
                       </span>
                     )}
@@ -280,14 +277,14 @@ export function PatientDashboardPage() {
           <button
             type="button"
             onClick={() => setSosOpen(true)}
-            className="w-full rounded-2xl bg-gradient-to-r from-rose-600 to-red-700 p-4 text-white shadow-[0_12px_32px_-8px_rgba(220,38,38,0.5)] active:scale-[0.98] transition flex items-center gap-3"
+            className="w-full rounded-2xl bg-gradient-to-r from-rose-600 to-red-700 p-4 text-white shadow-[0_12px_32px_-8px_rgba(220,38,38,0.5)] touch-manipulation transition-transform duration-150 ease-spring active:scale-[0.98] flex items-center gap-3"
           >
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25">
               <Siren className="h-5 w-5" />
             </span>
             <span className="min-w-0 flex-1 text-left">
-              <span className="block text-sm font-bold">{t('home.sos')}</span>
-              <span className="block text-[11px] opacity-90">{t('home.sosHint')}</span>
+              <span className="block text-sm font-semibold">{t('home.sos')}</span>
+              <span className="block text-caption opacity-90">{t('home.sosHint')}</span>
             </span>
             <ChevronRight className="h-4 w-4 opacity-80" />
           </button>
@@ -297,21 +294,21 @@ export function PatientDashboardPage() {
         {tips.data && tips.data.length > 0 && (
           <section>
             <div className="mb-2.5 flex items-center justify-between">
-              <h2 className="text-[15px] font-bold tracking-tight">{t('home.healthTips')}</h2>
-              <Link to="/tips" className="inline-flex items-center gap-0.5 text-xs font-bold text-brand-600 dark:text-brand-300">
+              <h2 className="text-sm font-semibold tracking-tight">{t('home.healthTips')}</h2>
+              <Link to="/tips" className="inline-flex items-center gap-0.5 text-xs font-semibold text-brand-600 dark:text-brand-300">
                 {t('home.viewAll')} <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </div>
             <Link
               to={`/tips/${tips.data[0].id}`}
-              className="block rounded-2xl bg-gradient-to-r from-accent-50 to-brand-50 dark:from-accent-500/10 dark:to-brand-500/10 border border-accent-100 dark:border-accent-500/20 p-4 hover:shadow-pop transition"
+              className="block rounded-2xl bg-gradient-to-r from-accent-50 to-brand-50 dark:from-accent-500/10 dark:to-brand-500/10 border border-accent-100 dark:border-accent-500/20 p-4 touch-manipulation transition-shadow duration-150 hover:shadow-pop"
             >
               <div className="flex items-center gap-3">
                 <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white dark:bg-slate-900 text-danger shadow-sm">
                   <Heart className="h-6 w-6 fill-current" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-bold line-clamp-1">{tips.data[0].title}</div>
+                  <div className="text-sm font-semibold line-clamp-1">{tips.data[0].title}</div>
                   <p className="mt-0.5 text-xs text-ink-muted line-clamp-2">{tips.data[0].body}</p>
                 </div>
                 <div className="grid h-8 w-8 place-items-center rounded-full bg-white dark:bg-slate-900 text-brand-600 shadow-sm shrink-0">
@@ -352,14 +349,14 @@ function ServiceTile({
   return (
     <Link
       to={to}
-      className="group rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-3 flex flex-col items-center gap-2 hover:shadow-pop active:scale-[0.97] transition"
+      className="group rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-3 flex flex-col items-center gap-2 touch-manipulation select-none transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]"
     >
       <span className={cn('grid h-11 w-11 place-items-center rounded-2xl', t.ring)}>
         <span className={cn('grid h-8 w-8 place-items-center rounded-xl text-white', t.bg)}>
           {icon}
         </span>
       </span>
-      <span className="text-[11px] font-bold text-ink dark:text-ink-onDark text-center leading-tight">{label}</span>
+      <span className="text-caption font-semibold text-ink dark:text-ink-onDark text-center leading-tight">{label}</span>
     </Link>
   );
 }
@@ -389,16 +386,16 @@ function VitalTile({
   return (
     <Link
       to={`/metrics?type=${type}`}
-      className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-card hover:shadow-pop active:scale-[0.98] transition"
+      className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3 shadow-card touch-manipulation select-none transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]"
     >
       <span className={cn('grid h-7 w-7 place-items-center rounded-lg', t.ring, t.iconTint)}>
         {icon}
       </span>
-      <div className="mt-2 text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="mt-2 text-label font-semibold uppercase text-ink-muted">{label}</div>
       <div className="mt-0.5 flex items-baseline gap-1">
         {hasReading ? (
           <>
-            <span className="text-lg font-bold">{formatMetric(reading)}</span>
+            <span className="text-lg font-semibold">{formatMetric(reading)}</span>
             <span className="text-[10px] text-ink-muted">{reading.unit}</span>
           </>
         ) : (
@@ -406,7 +403,7 @@ function VitalTile({
         )}
       </div>
       <div className={cn(
-        'mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold',
+        'mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-label font-semibold',
         hasReading ? statusPalette : 'bg-slate-100 dark:bg-slate-800 text-ink-muted',
       )}>
         {hasReading ? (<><TrendingUp className="h-2.5 w-2.5" /> {statusLabel}</>) : 'Tap to log'}

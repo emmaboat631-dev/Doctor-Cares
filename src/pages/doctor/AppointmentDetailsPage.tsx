@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CheckCircle2, FileText, MessageSquare, Pill, Video, XCircle } from 'lucide-react';
+import { DeclineReasonModal } from '@/components/doctor/DeclineReasonModal';
 import { FileClaimModal } from '@/components/doctor/FileClaimModal';
 import { PrescriptionModal } from '@/components/doctor/PrescriptionModal';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +9,7 @@ import { getClaimForAppointment, STATUS_LABEL, STATUS_TONE } from '@/lib/api/nhi
 import { listPrescriptionsForAppointment } from '@/lib/api/prescriptions';
 import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
@@ -19,15 +20,6 @@ import { getAppointmentForDoctor, setAppointmentStatus, updateDoctorNotes } from
 import { openConversationWith } from '@/lib/api/chat';
 import { getPatientForDoctor } from '@/lib/api/patients';
 import { fmtDate, fmtMoney, fmtTime } from '@/lib/format';
-import type { AppointmentStatus } from '@/types';
-
-const statusTone: Record<AppointmentStatus, { tone: 'brand' | 'success' | 'warning' | 'danger' | 'neutral' | 'info'; label: string }> = {
-  pending:   { tone: 'warning', label: 'Pending confirmation' },
-  confirmed: { tone: 'success', label: 'Confirmed' },
-  cancelled: { tone: 'danger',  label: 'Cancelled' },
-  completed: { tone: 'info',    label: 'Completed' },
-  rejected:  { tone: 'danger',  label: 'Declined' },
-};
 
 export function DoctorAppointmentDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -40,6 +32,7 @@ export function DoctorAppointmentDetailsPage() {
   const rxs = useAsync(async () => (id ? listPrescriptionsForAppointment(id) : []), [id]);
   const [claimOpen, setClaimOpen] = useState(false);
   const [rxOpen, setRxOpen] = useState(false);
+  const [declineOpen, setDeclineOpen] = useState(false);
 
   const [notes, setNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
@@ -93,11 +86,28 @@ export function DoctorAppointmentDetailsPage() {
     }
   };
 
+  // Decline flow: open the reason modal first, then persist via
+  // setAppointmentStatus with cancel_reason. Master §12.
+  const handleDecline = async (reason: string | null) => {
+    if (!id) return;
+    setBusy(true);
+    setError(undefined);
+    try {
+      await setAppointmentStatus(id, 'rejected', { cancel_reason: reason });
+      setDeclineOpen(false);
+      navigate('/appointments');
+    } catch (e: unknown) {
+      setError((e as { message?: string })?.message ?? 'Could not decline the appointment.');
+      throw e;
+    } finally {
+      setBusy(false);
+    }
+  };
+
   if (appt.loading) return (<><Header title="Appointment" showBack /><LoadingSpinner fullScreen /></>);
   if (!appt.data) return (<><Header title="Appointment" showBack /><EmptyState title="Appointment not found" /></>);
 
   const d = appt.data;
-  const tone = statusTone[d.status];
   const canAccept = d.status === 'pending';
   const canComplete = d.status === 'confirmed';
 
@@ -109,11 +119,11 @@ export function DoctorAppointmentDetailsPage() {
           <div className="flex items-center gap-3">
             <Avatar name={d.patient?.full_name} src={d.patient?.avatar_url ?? undefined} size="lg" />
             <div className="flex-1 min-w-0">
-              <div className="text-base font-bold">{d.patient?.full_name ?? 'Patient'}</div>
+              <div className="text-base font-semibold">{d.patient?.full_name ?? 'Patient'}</div>
               <div className="text-xs text-ink-muted mt-0.5">
                 {fmtDate(d.scheduled_at, { weekday: 'long', month: 'short', day: 'numeric' })} · {fmtTime(d.scheduled_at)}
               </div>
-              <div className="mt-2"><Badge tone={tone.tone}>{tone.label}</Badge></div>
+              <div className="mt-2"><StatusBadge status={d.status} /></div>
             </div>
           </div>
         </Card>
@@ -128,7 +138,11 @@ export function DoctorAppointmentDetailsPage() {
         <Card>
           <div className="flex items-center justify-between mb-2">
             <div className="text-sm font-semibold">Clinical notes</div>
-            {notesSaved && <span className="text-[11px] text-success font-semibold">Saved ✓</span>}
+            {notesSaved && (
+              <span className="inline-flex items-center gap-1 text-caption text-success font-semibold">
+                <CheckCircle2 className="h-3 w-3" aria-hidden /> Saved
+              </span>
+            )}
           </div>
           <textarea
             value={notes}
@@ -136,10 +150,10 @@ export function DoctorAppointmentDetailsPage() {
             rows={4}
             maxLength={4000}
             placeholder="Findings, plan, follow-up… (only visible to you and the patient after completion)"
-            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-base sm:text-sm outline-none transition-[border-color,box-shadow] duration-150 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
           />
           <div className="mt-2 flex items-center justify-between">
-            <span className="text-[11px] text-ink-muted">{notes.length}/4000</span>
+            <span className="text-caption text-ink-muted">{notes.length}/4000</span>
             <Button size="sm" variant="outline" loading={savingNotes} onClick={saveNotes}>Save notes</Button>
           </div>
         </Card>
@@ -161,7 +175,7 @@ export function DoctorAppointmentDetailsPage() {
           <div className="grid gap-1.5 text-sm">
             <Row label="Consultation" value={d.mode === 'video' ? 'Video call' : d.mode === 'clinic' ? 'Clinic visit' : 'Home visit'} />
             <Row label="Duration" value={`${d.duration_minutes} min`} />
-            <Row label="Fee" value={<span className="font-bold text-brand-700 dark:text-brand-300">{fmtMoney(d.fee)}</span>} />
+            <Row label="Fee" value={<span className="font-semibold text-brand-700 dark:text-brand-300">{fmtMoney(d.fee)}</span>} />
           </div>
         </Card>
 
@@ -173,7 +187,7 @@ export function DoctorAppointmentDetailsPage() {
               <Button loading={busy} onClick={() => act('confirmed')} leftIcon={<CheckCircle2 className="h-4 w-4" />}>
                 Accept &amp; confirm
               </Button>
-              <Button variant="outline" loading={busy} onClick={() => act('rejected')}
+              <Button variant="outline" loading={busy} onClick={() => setDeclineOpen(true)}
                 className="!text-danger !border-danger/40 hover:!bg-danger-soft"
                 leftIcon={<XCircle className="h-4 w-4" />}>
                 Decline
@@ -207,7 +221,7 @@ export function DoctorAppointmentDetailsPage() {
             <div className="flex items-center gap-2 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 px-3 py-2 text-xs">
               <FileText className="h-3.5 w-3.5 text-ink-muted" />
               <span className="flex-1">NHIS claim</span>
-              <span className={`rounded-full px-2 py-0.5 font-bold ${
+              <span className={`rounded-full px-2 py-0.5 font-semibold ${
                 STATUS_TONE[claim.data.status] === 'success' ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
                 : STATUS_TONE[claim.data.status] === 'danger' ? 'bg-rose-50 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300'
                 : STATUS_TONE[claim.data.status] === 'warning' ? 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300'
@@ -239,6 +253,12 @@ export function DoctorAppointmentDetailsPage() {
             doctorId={user.id}
             appointmentId={d.id}
             onCreated={() => rxs.refetch()}
+          />
+          <DeclineReasonModal
+            open={declineOpen}
+            onClose={() => setDeclineOpen(false)}
+            onSubmit={handleDecline}
+            busy={busy}
           />
         </>
       )}

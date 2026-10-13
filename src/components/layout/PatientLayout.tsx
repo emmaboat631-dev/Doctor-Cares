@@ -36,9 +36,13 @@ export function PatientLayout() {
   const inAppts       = useMatch('/appointments');
   const inChat        = useMatch('/chat');
   const inDrugs       = useMatch('/drugs');
-  // /profile deliberately excluded — matches BottomNavigation.useHidePillNav.
-  const showNav = !!(inHome || inAppts || inChat || inDrugs);
-  const mainPadding = showNav ? 'pb-28 sm:pb-6' : 'pb-0 sm:pb-6';
+  const inProfile     = useMatch('/profile');
+  const showNav = !!(inHome || inAppts || inChat || inDrugs || inProfile);
+  // `pb-nav` is the canonical pill-nav clearance (defined in styles/index.css).
+  // It respects env(safe-area-inset-bottom) so content doesn't tuck under
+  // the pill on notched devices, and collapses to `1.5rem` on sm+ where the
+  // pill nav itself is hidden.
+  const mainPadding = showNav ? 'pb-nav' : 'pb-0 sm:pb-6';
 
   return (
     <div className="min-h-dvh flex bg-surface-muted dark:bg-slate-950">

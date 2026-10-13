@@ -77,18 +77,14 @@ export default defineConfig({
               expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 * 24 * 30 },
             },
           },
-          // Supabase REST + Realtime health-check + Storage. Network-first
-          // so live data always wins, but a cached copy is served offline
-          // for GETs like /profiles, /doctor_profiles.
+          // Supabase REST + Realtime + Storage: NEVER cache. Supabase hosts
+          // PHI (appointments, messages, profiles, medical history), and
+          // master §26 forbids caching private medical information in the
+          // service worker. NetworkOnly also prevents stale PHI leaking
+          // across user sessions after sign-out.
           {
             urlPattern: ({ url }) => url.hostname.endsWith('.supabase.co'),
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'supabase-api',
-              networkTimeoutSeconds: 8,
-              expiration: { maxEntries: 80, maxAgeSeconds: 60 * 60 },
-              cacheableResponse: { statuses: [0, 200] },
-            },
+            handler: 'NetworkOnly',
           },
         ],
       },

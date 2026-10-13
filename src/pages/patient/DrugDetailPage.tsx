@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
+import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { getDrug, type DrugLabel } from '@/lib/api/openfda';
@@ -95,21 +96,21 @@ export function DrugDetailPage() {
         <Card padding="lg" className="bg-brand-50 dark:bg-brand-500/10 border-brand-100 dark:border-brand-500/20">
           <div className="flex items-start gap-3">
             <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-brand-500 text-white shadow-sm">
-              <PillIcon className="h-7 w-7" />
+              <PillIcon className="h-7 w-7" aria-hidden />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-brand-300">Brand name</div>
-              <h1 className="mt-0.5 text-lg font-bold capitalize break-words">{displayName}</h1>
+              <div className="text-label font-semibold uppercase text-brand-700 dark:text-brand-300">Brand name</div>
+              <h1 className="mt-0.5 text-lg font-semibold capitalize break-words leading-snug">{displayName}</h1>
               {generic && (
                 <>
-                  <div className="mt-2 text-[10px] font-bold uppercase tracking-wider text-brand-700 dark:text-brand-300">Generic name</div>
-                  <div className="text-sm font-semibold capitalize">{generic.toLowerCase()}</div>
+                  <div className="mt-2 text-label font-semibold uppercase text-brand-700 dark:text-brand-300">Generic name</div>
+                  <div className="text-sm font-semibold capitalize break-words">{generic.toLowerCase()}</div>
                 </>
               )}
               {brands.length > 1 && (
                 <div className="mt-2 flex flex-wrap gap-1">
                   {brands.slice(0, 6).map((b) => (
-                    <span key={b} className="inline-flex items-center rounded-full bg-white/70 dark:bg-slate-900/60 border border-brand-100 dark:border-brand-500/20 px-2 py-0.5 text-[11px] font-semibold text-brand-700 dark:text-brand-300 capitalize">
+                    <span key={b} className="inline-flex items-center rounded-full bg-white/70 dark:bg-slate-900/60 border border-brand-100 dark:border-brand-500/20 px-2 py-0.5 text-caption font-semibold text-brand-700 dark:text-brand-300 capitalize">
                       {b.toLowerCase()}
                     </span>
                   ))}
@@ -132,7 +133,8 @@ export function DrugDetailPage() {
               onClick={() => setTab(t.key)}
               aria-pressed={tab === t.key}
               className={cn(
-                'shrink-0 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition',
+                'shrink-0 inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold touch-manipulation',
+                'transition-colors duration-150',
                 tab === t.key
                   ? 'border-ink bg-ink text-white dark:bg-ink-onDark dark:text-ink dark:border-ink-onDark'
                   : 'border-slate-300 dark:border-slate-700 text-ink-soft dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
@@ -192,15 +194,10 @@ export function DrugDetailPage() {
           </Card>
         )}
 
-        {/* Persistent disclaimer */}
-        <div className="rounded-xl bg-warning-soft border-l-4 border-warning px-3 py-3 text-xs text-amber-900 dark:bg-amber-500/10 dark:text-amber-300 leading-relaxed">
-          <div className="flex items-start gap-2">
-            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
-            <div>
-              <b>⚠ Not medical advice.</b> Doctor Cares surfaces public OpenFDA labeling only. Always consult a licensed clinician or pharmacist before starting, stopping, or changing any medication.
-            </div>
-          </div>
-        </div>
+        {/* Persistent disclaimer — always visible at the bottom of the page */}
+        <MedicalDisclaimer variant="card">
+          <b>Information only — not a substitute for medical advice.</b> Doctor Cares surfaces public OpenFDA labeling only. Always consult a licensed clinician or pharmacist before starting, stopping, or changing any medication.
+        </MedicalDisclaimer>
       </div>
     </>
   );
@@ -218,7 +215,7 @@ function Section({
     <Card>
       <div className="flex items-center gap-2 mb-2">
         <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 dark:bg-brand-500/15 text-brand-500">{icon}</span>
-        <div className="text-sm font-bold">{title}</div>
+        <div className="text-sm font-semibold">{title}</div>
       </div>
       {paragraphs.length === 0 ? (
         <p className="text-sm text-ink-muted italic">{empty}</p>
@@ -246,7 +243,7 @@ function WarningSection({
     <Card className={cn(styles.wrap, 'border')}>
       <div className="flex items-center gap-2 mb-2">
         <span className={cn('grid h-8 w-8 place-items-center rounded-lg', styles.chip)}>{icon}</span>
-        <div className={cn('text-sm font-bold', styles.text)}>{title}</div>
+        <div className={cn('text-sm font-semibold', styles.text)}>{title}</div>
       </div>
       <div className={cn('space-y-2 text-sm leading-relaxed', styles.text)}>
         {paragraphs.map((p, i) => <p key={i}>{p}</p>)}

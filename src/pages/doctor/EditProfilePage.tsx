@@ -112,20 +112,20 @@ export function DoctorEditProfilePage() {
         <Input label="Specialty" value={specialty} onChange={(e) => setSpecialty(e.target.value)} placeholder="e.g. Cardiology" />
         <Input label="Qualifications" value={qualifications} onChange={(e) => setQualifications(e.target.value)} placeholder="e.g. MBBS, MD" />
 
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">Bio</label>
+        <label className="block">
+          <span className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">Bio</span>
           <textarea value={bio} onChange={(e) => setBio(e.target.value)} rows={4}
             placeholder="Tell patients about your experience and approach."
             className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20" />
-        </div>
+        </label>
 
         <div className="grid grid-cols-2 gap-3">
           <Input label="Years of experience" type="number" min={0} max={80} value={years} onChange={(e) => setYears(e.target.value)} />
           <Input label="Consultation fee (GH₵)" type="number" step="0.01" min={0} value={fee} onChange={(e) => setFee(e.target.value)} />
         </div>
 
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">Consultation modes</label>
+        <fieldset>
+          <legend className="mb-1.5 block text-sm font-medium text-ink-soft dark:text-slate-300">Consultation modes</legend>
           <div className="flex gap-2">
             {ALL_MODES.map((m) => (
               <button
@@ -143,7 +143,7 @@ export function DoctorEditProfilePage() {
             ))}
           </div>
           <p className="mt-1 text-xs text-ink-muted">At least one mode is required.</p>
-        </div>
+        </fieldset>
 
         <Input label="Clinic address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Only shown for clinic mode" />
         <Input label="Languages" value={languages} onChange={(e) => setLanguages(e.target.value)} placeholder="Comma-separated · e.g. English, Spanish" />

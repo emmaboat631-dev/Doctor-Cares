@@ -13,7 +13,7 @@ export function Card({ padding = 'md', interactive, className, ...rest }: CardPr
       className={cn(
         'card-surface rounded-2xl shadow-card',
         pad,
-        interactive && 'transition hover:shadow-pop active:scale-[0.995] cursor-pointer',
+        interactive && 'touch-manipulation cursor-pointer transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]',
         className,
       )}
       {...rest}

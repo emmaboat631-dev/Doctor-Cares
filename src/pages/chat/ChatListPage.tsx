@@ -19,10 +19,13 @@ export function ChatListPage() {
     <>
       <Header title="Messages" />
       <div className="mx-auto max-w-3xl px-4 py-4 space-y-3">
-        <div className="rounded-xl border border-info/30 bg-info-soft/60 px-3 py-2 text-xs text-sky-800 dark:text-sky-300 dark:bg-sky-500/10">
-          {role === 'patient'
-            ? 'Message a doctor from their profile after you\'ve booked at least one appointment.'
-            : 'Your patients appear here after you\'ve had at least one appointment with them.'}
+        <div className="flex items-start gap-2 rounded-xl border border-info/30 bg-info-soft/60 px-3 py-2.5 text-xs text-sky-800 dark:text-sky-300 dark:bg-sky-500/10 leading-relaxed">
+          <MessageSquare className="h-4 w-4 shrink-0 mt-0.5" aria-hidden />
+          <span>
+            {role === 'patient'
+              ? 'Message a doctor from their profile after you\'ve booked at least one appointment.'
+              : 'Your patients appear here after you\'ve had at least one appointment with them.'}
+          </span>
         </div>
 
         {convs.loading ? (
@@ -48,14 +51,15 @@ export function ChatListPage() {
           />
         ) : (
           <div className="space-y-2">
-            {convs.data!.map((c) => {
+            {(convs.data ?? []).map((c) => {
               const isUnread = c.unread_count > 0;
               return (
                 <Link
                   key={c.id}
                   to={`/chat/${c.id}`}
                   className={cn(
-                    'flex items-start gap-3 rounded-2xl border shadow-card px-3 py-3 transition hover:shadow-pop',
+                    'flex items-start gap-3 rounded-2xl border shadow-card px-3 py-3 touch-manipulation',
+                    'transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]',
                     isUnread
                       ? 'border-brand-200 dark:border-brand-500/30 bg-brand-50/60 dark:bg-brand-500/10'
                       : 'border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900',
@@ -77,17 +81,17 @@ export function ChatListPage() {
                           </div>
                         )}
                       </div>
-                      <div className="flex flex-col items-end gap-1">
+                      <div className="flex flex-col items-end gap-1 shrink-0">
                         {c.last_message_at && (
                           <span className={cn(
-                            'text-[11px] font-semibold whitespace-nowrap',
+                            'text-caption font-semibold whitespace-nowrap',
                             isUnread ? 'text-brand-600 dark:text-brand-300' : 'text-ink-muted',
                           )}>
                             {fmtRelative(c.last_message_at)}
                           </span>
                         )}
                         {isUnread && (
-                          <span className="inline-grid min-h-[18px] min-w-[18px] place-items-center rounded-full bg-brand-500 px-1 text-[10px] font-bold text-white">
+                          <span className="inline-grid min-h-[18px] min-w-[18px] place-items-center rounded-full bg-brand-500 px-1 text-[10px] font-semibold text-white">
                             {c.unread_count > 9 ? '9+' : c.unread_count}
                           </span>
                         )}

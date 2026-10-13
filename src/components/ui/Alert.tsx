@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
-import { AlertCircle, CheckCircle2, Info } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle2, Info } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
-type Tone = 'error' | 'success' | 'info';
+type Tone = 'error' | 'warning' | 'success' | 'info';
 
 interface AlertProps {
   tone?: Tone;
@@ -15,6 +15,10 @@ const tones: Record<Tone, { wrap: string; icon: ReactNode }> = {
   error: {
     wrap: 'bg-danger-soft/70 text-red-800 border-danger/40 dark:bg-red-500/10 dark:text-red-300 dark:border-red-500/30',
     icon: <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" aria-hidden />,
+  },
+  warning: {
+    wrap: 'bg-warning-soft/70 text-amber-800 border-warning/40 dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/30',
+    icon: <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" aria-hidden />,
   },
   success: {
     wrap: 'bg-success-soft/70 text-emerald-800 border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/30',

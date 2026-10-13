@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MessageSquare, Video } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Card';
-import { Badge } from '@/components/ui/Badge';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { Alert } from '@/components/ui/Alert';
@@ -13,15 +13,6 @@ import { useAsync } from '@/hooks/useAsync';
 import { cancelAppointment, getAppointmentForPatient } from '@/lib/api/appointments';
 import { openConversationWith } from '@/lib/api/chat';
 import { fmtDate, fmtMoney, fmtTime } from '@/lib/format';
-import type { AppointmentStatus } from '@/types';
-
-const statusTone: Record<AppointmentStatus, { tone: 'brand' | 'success' | 'warning' | 'danger' | 'neutral' | 'info'; label: string }> = {
-  pending:   { tone: 'warning', label: 'Pending confirmation' },
-  confirmed: { tone: 'success', label: 'Confirmed' },
-  cancelled: { tone: 'danger',  label: 'Cancelled' },
-  completed: { tone: 'info',    label: 'Completed' },
-  rejected:  { tone: 'danger',  label: 'Declined' },
-};
 
 export function AppointmentDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -63,9 +54,12 @@ export function AppointmentDetailsPage() {
   if (!appt.data) return (<><Header title="Appointment" showBack /><EmptyState title="Appointment not found" /></>);
 
   const d = appt.data;
-  const tone = statusTone[d.status];
   const canCancel = d.status === 'pending' || d.status === 'confirmed';
   const inFuture = new Date(d.scheduled_at).getTime() > Date.now();
+  // Patient-side wording: for a pending appointment be explicit that it is
+  // waiting on the doctor (master §8/§12). Other statuses use StatusBadge's
+  // default labels.
+  const statusLabelOverride = d.status === 'pending' ? 'Pending doctor confirmation' : undefined;
 
   return (
     <>
@@ -79,7 +73,7 @@ export function AppointmentDetailsPage() {
               <div className="text-xs text-ink-muted mt-0.5">
                 {d.doctor?.doctor_profile?.specialty ?? 'Specialist'}
               </div>
-              <div className="mt-2"><Badge tone={tone.tone}>{tone.label}</Badge></div>
+              <div className="mt-2"><StatusBadge status={d.status} label={statusLabelOverride} /></div>
             </div>
           </div>
         </Card>
@@ -106,6 +100,9 @@ export function AppointmentDetailsPage() {
 
         {d.status === 'cancelled' && d.cancel_reason && (
           <Alert tone="info" title="Reason for cancellation">{d.cancel_reason}</Alert>
+        )}
+        {d.status === 'rejected' && d.cancel_reason && (
+          <Alert tone="warning" title="Reason the doctor declined">{d.cancel_reason}</Alert>
         )}
 
         {error && <Alert tone="error">{error}</Alert>}

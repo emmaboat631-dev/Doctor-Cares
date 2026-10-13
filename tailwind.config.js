@@ -62,13 +62,25 @@ export default {
         ],
       },
       fontSize: {
-        xs: ['0.75rem', { lineHeight: '1rem' }],
-        sm: ['0.875rem', { lineHeight: '1.25rem' }],
-        base: ['1rem', { lineHeight: '1.5rem' }],
-        lg: ['1.125rem', { lineHeight: '1.75rem' }],
-        xl: ['1.25rem', { lineHeight: '1.75rem' }],
-        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        // Stock scale, kept intact to preserve visual identity. The `caption`
+        // and `label` tokens exist so pages can stop reaching for ad-hoc
+        // text-[11px] / text-[10px] (which bypassed the scale).
+        //   caption: 11/14 — chip meta, small timestamps
+        //   label:   10/14 — uppercase section labels / overlines
+        caption: ['0.6875rem', { lineHeight: '0.875rem' }],
+        label:   ['0.625rem',  { lineHeight: '0.875rem', letterSpacing: '0.06em' }],
+        xs:   ['0.75rem',  { lineHeight: '1rem' }],
+        sm:   ['0.875rem', { lineHeight: '1.25rem' }],
+        base: ['1rem',     { lineHeight: '1.5rem' }],
+        lg:   ['1.125rem', { lineHeight: '1.75rem' }],
+        xl:   ['1.25rem',  { lineHeight: '1.75rem' }],
+        '2xl': ['1.5rem',   { lineHeight: '2rem' }],
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+      },
+      transitionTimingFunction: {
+        // Shared easing — reach for these instead of inline bezier strings.
+        'spring': 'cubic-bezier(0.32, 0.72, 0, 1)',
+        'ease-out-soft': 'cubic-bezier(0.2, 0.7, 0.2, 1)',
       },
       borderRadius: {
         xl: '0.875rem',

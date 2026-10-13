@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, Heart, MapPin, MessageSquare, Star, Video } from 'lucide-react';
+import { CheckCircle2, Heart, MapPin, MessageSquare, Star, Video } from 'lucide-react';
+import { Header } from '@/components/layout/Header';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Card } from '@/components/ui/Card';
@@ -48,28 +49,21 @@ export function DoctorProfilePage() {
 
   return (
     <>
-      {/* Custom appbar — floating, no background so hero can bleed under */}
-      <div className="sticky top-0 z-20 bg-white/95 dark:bg-slate-950/95 backdrop-blur border-b border-slate-200/70 dark:border-slate-800 safe-top">
-        <div className="mx-auto flex h-14 max-w-3xl items-center gap-3 px-3">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-ink"
-            aria-label="Back"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <h1 className="text-base font-bold flex-1">Doctor profile</h1>
+      <Header
+        title="Doctor profile"
+        showBack
+        right={
           <button
             type="button"
             onClick={() => setFavorited((v) => !v)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-surface-muted dark:bg-slate-800 text-rose-500"
+            className="grid h-10 w-10 place-items-center rounded-full text-rose-500 touch-manipulation transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
             aria-label={favorited ? 'Remove favorite' : 'Add to favorites'}
+            aria-pressed={favorited}
           >
             <Heart className={cn('h-4 w-4', favorited && 'fill-current')} />
           </button>
-        </div>
-      </div>
+        }
+      />
 
       <div className="mx-auto max-w-3xl pb-32">
         {doctor.loading ? (
@@ -90,7 +84,7 @@ export function DoctorProfilePage() {
                   className="!h-24 !w-24 ring-4 ring-white dark:ring-slate-900 shadow-lg"
                 />
               </div>
-              <h1 className="mt-3 text-xl font-bold">{doctor.data.profile?.full_name ?? 'Doctor'}</h1>
+              <h1 className="mt-3 text-xl font-semibold">{doctor.data.profile?.full_name ?? 'Doctor'}</h1>
               <div className="mt-1 text-xs text-ink-muted">
                 {doctor.data.specialty ?? 'General practitioner'}
                 {doctor.data.qualifications ? ` · ${doctor.data.qualifications}` : ''}
@@ -100,7 +94,7 @@ export function DoctorProfilePage() {
                   <Badge tone="success"><CheckCircle2 className="h-3 w-3 mr-1" />Verified</Badge>
                 )}
                 {doctor.data.rating != null && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-500/15 px-2.5 py-1 text-[11px] font-bold text-amber-700 dark:text-amber-300">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 dark:bg-amber-500/15 px-2.5 py-1 text-caption font-semibold text-amber-700 dark:text-amber-300">
                     <Star className="h-3 w-3 fill-current" />
                     {doctor.data.rating.toFixed(1)}
                     {doctor.data.rating_count > 0 && <span className="font-medium opacity-70"> ({doctor.data.rating_count})</span>}
@@ -130,7 +124,8 @@ export function DoctorProfilePage() {
                     onClick={() => setTab(t)}
                     aria-pressed={tab === t}
                     className={cn(
-                      'rounded-full border px-3 py-2 text-xs font-bold capitalize transition',
+                      'rounded-full border px-3 py-2 text-xs font-semibold capitalize touch-manipulation',
+                      'transition-colors duration-150',
                       tab === t
                         ? 'border-ink bg-ink text-white dark:bg-ink-onDark dark:text-ink dark:border-ink-onDark'
                         : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-ink-soft dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
@@ -145,29 +140,29 @@ export function DoctorProfilePage() {
               {tab === 'about' && (
                 <>
                   <Card>
-                    <div className="text-sm font-bold mb-1">About {doctor.data.profile?.full_name?.split(' ')[1] ?? 'the doctor'}</div>
+                    <div className="text-sm font-semibold mb-1">About {doctor.data.profile?.full_name?.split(' ')[1] ?? 'the doctor'}</div>
                     <p className="text-xs leading-relaxed text-ink-soft dark:text-slate-300">
                       {doctor.data.bio ?? 'This doctor hasn\'t added a bio yet.'}
                     </p>
                   </Card>
 
                   <Card>
-                    <div className="text-sm font-bold mb-2">Consultation</div>
+                    <div className="text-sm font-semibold mb-2">Consultation</div>
                     <div className="grid gap-2 text-sm">
                       <div className="flex items-center justify-between">
                         <span className="text-xs text-ink-muted">Fee</span>
-                        <span className="font-bold text-brand-700 dark:text-brand-300">{fmtMoney(doctor.data.consultation_fee)}</span>
+                        <span className="font-semibold text-brand-700 dark:text-brand-300">{fmtMoney(doctor.data.consultation_fee)}</span>
                       </div>
                       <div className="flex items-center justify-between flex-wrap gap-2">
                         <span className="text-xs text-ink-muted">Modes</span>
                         <div className="flex gap-1.5">
                           {doctor.data.modes?.includes('video') && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-1 text-[11px] font-bold text-brand-700 dark:text-brand-300">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-1 text-caption font-semibold text-brand-700 dark:text-brand-300">
                               <Video className="h-3 w-3" /> Video
                             </span>
                           )}
                           {doctor.data.modes?.includes('clinic') && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-1 text-[11px] font-bold text-brand-700 dark:text-brand-300">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-50 dark:bg-brand-500/15 px-2 py-1 text-caption font-semibold text-brand-700 dark:text-brand-300">
                               <MapPin className="h-3 w-3" /> Clinic
                             </span>
                           )}
@@ -188,7 +183,7 @@ export function DoctorProfilePage() {
 
               {tab === 'location' && (
                 <Card>
-                  <div className="text-sm font-bold mb-1">Clinic address</div>
+                  <div className="text-sm font-semibold mb-1">Clinic address</div>
                   <p className="text-xs text-ink-soft dark:text-slate-300">
                     {doctor.data.clinic_address ?? 'Address not provided.'}
                   </p>
@@ -222,7 +217,7 @@ export function DoctorProfilePage() {
               </Button>
               <Link
                 to={`/doctors/${doctor.data.id}/book`}
-                className="inline-flex flex-1 h-12 items-center justify-center gap-2 rounded-2xl bg-brand-500 text-sm font-bold text-white hover:bg-brand-600 shadow-lg shadow-brand-500/30 active:scale-[0.98] transition"
+                className="inline-flex flex-1 h-12 items-center justify-center gap-2 rounded-2xl bg-brand-500 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 touch-manipulation transition-[background-color,transform] duration-150 ease-spring hover:bg-brand-600 active:scale-[0.98]"
               >
                 Book appointment
               </Link>
@@ -237,8 +232,8 @@ export function DoctorProfilePage() {
 function StatTile({ num, label, suffix, fixed }: { num: number; label: string; suffix?: string; fixed?: number }) {
   return (
     <Card padding="sm" className="text-center">
-      <div className="text-lg font-bold">{fixed != null ? num.toFixed(fixed) : num}{suffix ?? ''}</div>
-      <div className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="text-lg font-semibold">{fixed != null ? num.toFixed(fixed) : num}{suffix ?? ''}</div>
+      <div className="mt-0.5 text-label font-semibold uppercase text-ink-muted">{label}</div>
     </Card>
   );
 }
@@ -272,24 +267,24 @@ function ReviewsList({ doctorId }: { doctorId: string }) {
       <Card>
         <div className="flex items-start gap-4">
           <div className="text-center shrink-0">
-            <div className="text-3xl font-bold tracking-tight">{avg.toFixed(1)}</div>
+            <div className="text-3xl font-semibold tracking-tight">{avg.toFixed(1)}</div>
             <div className="mt-0.5 flex justify-center text-amber-500">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className={cn('h-3.5 w-3.5', i < Math.round(avg) ? 'fill-current' : 'opacity-30')} />
               ))}
             </div>
-            <div className="mt-0.5 text-[10px] text-ink-muted">{total} review{total === 1 ? '' : 's'}</div>
+            <div className="mt-0.5 text-label text-ink-muted">{total} review{total === 1 ? '' : 's'}</div>
           </div>
           <div className="flex-1 space-y-1">
             {counts.map((c) => {
               const pct = total ? (c.count / total) * 100 : 0;
               return (
                 <div key={c.n} className="flex items-center gap-2">
-                  <span className="w-5 text-[10px] font-bold text-ink-muted text-right">{c.n}★</span>
+                  <span className="w-5 text-label font-semibold text-ink-muted text-right">{c.n}★</span>
                   <div className="flex-1 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
                     <div className="h-full rounded-full bg-amber-500 transition-[width] duration-500" style={{ width: `${pct}%` }} />
                   </div>
-                  <span className="w-6 text-[10px] text-ink-muted text-right">{c.count}</span>
+                  <span className="w-6 text-label text-ink-muted text-right">{c.count}</span>
                 </div>
               );
             })}
@@ -307,8 +302,8 @@ function ReviewCard({ r }: { r: Review }) {
       <div className="flex items-center gap-3">
         <Avatar name={r.patient?.full_name} src={r.patient?.avatar_url ?? undefined} size="sm" />
         <div className="flex-1 min-w-0">
-          <div className="text-sm font-bold truncate">{r.patient?.full_name ?? 'Patient'}</div>
-          <div className="text-[10px] text-ink-muted">{fmtDate(r.created_at, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+          <div className="text-sm font-semibold truncate">{r.patient?.full_name ?? 'Patient'}</div>
+          <div className="text-label text-ink-muted">{fmtDate(r.created_at, { month: 'short', day: 'numeric', year: 'numeric' })}</div>
         </div>
         <div className="flex items-center gap-0.5 text-amber-500 text-sm">
           {Array.from({ length: 5 }).map((_, i) => (

@@ -1,20 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Video, MapPin } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
+import { StatusBadge } from '@/components/ui/StatusBadge';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { fmtDate, fmtTime } from '@/lib/format';
-import type { AppointmentStatus } from '@/types';
 import type { AppointmentWithPatient } from '@/lib/api/appointments';
-
-const statusTone: Record<AppointmentStatus, { tone: 'brand' | 'success' | 'warning' | 'danger' | 'neutral' | 'info'; label: string }> = {
-  pending:   { tone: 'warning', label: 'Pending' },
-  confirmed: { tone: 'success', label: 'Confirmed' },
-  cancelled: { tone: 'danger',  label: 'Cancelled' },
-  completed: { tone: 'info',    label: 'Completed' },
-  rejected:  { tone: 'danger',  label: 'Declined' },
-};
 
 interface Props {
   appointment: AppointmentWithPatient;
@@ -27,7 +18,6 @@ interface Props {
 
 export function DoctorAppointmentCard({ appointment, onAccept, onReject, onComplete, busy, linkTo }: Props) {
   const p = appointment.patient;
-  const tone = statusTone[appointment.status];
   const isBusy = busy === appointment.id;
   const href = linkTo === false ? undefined : (linkTo ?? `/appointments/${appointment.id}`);
 
@@ -53,9 +43,9 @@ export function DoctorAppointmentCard({ appointment, onAccept, onReject, onCompl
                 <div className="mt-0.5 truncate text-xs text-ink-muted">{appointment.reason}</div>
               )}
             </div>
-            <Badge tone={tone.tone}>{tone.label}</Badge>
+            <StatusBadge status={appointment.status} />
           </div>
-          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-[11px] font-medium text-ink-soft dark:text-slate-300">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5 text-caption font-medium text-ink-soft dark:text-slate-300">
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 dark:bg-slate-800">
               <Calendar className="h-3 w-3" aria-hidden /> {fmtDate(appointment.scheduled_at)}
             </span>

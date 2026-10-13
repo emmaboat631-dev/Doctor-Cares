@@ -170,8 +170,8 @@ function TipEditor({ tip, authorId, onClose, onSaved }: {
           <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. 5 ways to lower blood pressure" />
           <Input label="Category (optional)" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="e.g. nutrition, mental-health" />
           <Input label="Image URL (optional)" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://…" />
-          <div>
-            <label className="mb-1 block text-sm font-medium text-ink-soft dark:text-slate-300">Body</label>
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-ink-soft dark:text-slate-300">Body</span>
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -179,7 +179,7 @@ function TipEditor({ tip, authorId, onClose, onSaved }: {
               placeholder="Write the full health tip here. Supports plain text — users will see it formatted with paragraph breaks."
               className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20"
             />
-          </div>
+          </label>
           {error && <Alert tone="error">{error}</Alert>}
         </div>
 

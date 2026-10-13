@@ -22,6 +22,15 @@
     @apply bg-slate-950 text-ink-onDark;
   }
 
+  /* iOS zoom fix: Safari zooms the viewport when a focused input renders
+     below 16px. Any input/select/textarea on a touch viewport renders at
+     16px; from the sm breakpoint up it falls back to its component size. */
+  @media (hover: none) and (pointer: coarse) {
+    input, select, textarea {
+      font-size: 16px;
+    }
+  }
+
   /* Better focus ring, keyboard-only */
   :focus-visible {
     outline: 2px solid theme('colors.brand.500');
@@ -45,6 +54,29 @@
   }
   .safe-top {
     padding-top: max(env(safe-area-inset-top), 0.5rem);
+  }
+
+  /* Clearance for the floating pill nav on mobile. Measured against the
+     pill's actual footprint: ~56px tall + 16px minimum lift from the
+     viewport bottom + env(safe-area-inset-bottom) on notched devices. The
+     extra 1.5rem gives the last card room to breathe before the glass.
+     On sm+ the pill nav is hidden entirely, so we only need breathing room. */
+  .pb-nav {
+    padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+  }
+  @screen sm {
+    .pb-nav { padding-bottom: 1.5rem; }
+  }
+
+  /* Prevent pull-to-refresh/scroll chaining in a dedicated scroll area. */
+  .overscroll-contain-y {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Interactive surface: single pressed state used across tiles, cards, and
+     link rows. Pair with `transition-transform duration-150 ease-spring`. */
+  .press-tile {
+    @apply active:scale-[0.98];
   }
 
   /* Card in dark mode */

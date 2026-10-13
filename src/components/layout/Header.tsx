@@ -7,6 +7,8 @@ import { BrandMark } from '@/components/ui/BrandMark';
 
 interface HeaderProps {
   title?: string;
+  /** Optional secondary line under the title — screen name context. */
+  subtitle?: string;
   showBack?: boolean;
   showLogo?: boolean;
   right?: ReactNode;
@@ -14,7 +16,7 @@ interface HeaderProps {
   className?: string;
 }
 
-export function Header({ title, showBack, showLogo, right, onBack, className }: HeaderProps) {
+export function Header({ title, subtitle, showBack, showLogo, right, onBack, className }: HeaderProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { effective, setMode } = useTheme();
@@ -40,7 +42,7 @@ export function Header({ title, showBack, showLogo, right, onBack, className }: 
             type="button"
             onClick={handleBack}
             aria-label="Go back"
-            className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 dark:border-slate-800 text-ink dark:text-ink-onDark"
+            className="grid h-10 w-10 -ml-1 place-items-center rounded-full border border-slate-200 dark:border-slate-800 text-ink dark:text-ink-onDark touch-manipulation transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800"
           >
             <ArrowLeft className="h-4 w-4" />
           </button>
@@ -50,13 +52,20 @@ export function Header({ title, showBack, showLogo, right, onBack, className }: 
             <span className="font-semibold">Doctor Cares</span>
           </Link>
         ) : null}
-        {title && <h1 className="min-w-0 truncate text-base font-semibold">{title}</h1>}
-        <div className="ml-auto flex items-center gap-1">
+        {title && (
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-base font-semibold leading-tight">{title}</h1>
+            {subtitle && (
+              <div className="truncate text-[11px] text-ink-muted leading-tight">{subtitle}</div>
+            )}
+          </div>
+        )}
+        <div className="ml-auto flex items-center gap-0.5">
           <button
             type="button"
             onClick={toggleTheme}
             aria-label={effective === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-muted hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="grid h-10 w-10 place-items-center rounded-full text-ink-muted touch-manipulation transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             {effective === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
@@ -64,7 +73,7 @@ export function Header({ title, showBack, showLogo, right, onBack, className }: 
             to="/notifications"
             aria-label="Notifications"
             aria-current={location.pathname === '/notifications' ? 'page' : undefined}
-            className="grid h-9 w-9 place-items-center rounded-full text-ink-muted hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="grid h-10 w-10 place-items-center rounded-full text-ink-muted transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <Bell className="h-4 w-4" />
           </Link>

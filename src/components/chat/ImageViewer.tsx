@@ -76,8 +76,16 @@ export function ImageViewer({ src, alt, onClose }: Props) {
       aria-modal="true"
       aria-label="Image preview"
       className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md animate-fade-in"
-      onClick={onClose}
     >
+      {/* Full-viewport dismiss button acts as the click-outside backdrop. */}
+      <button
+        type="button"
+        aria-label="Close image preview"
+        onClick={onClose}
+        tabIndex={-1}
+        className="absolute inset-0 cursor-default"
+      />
+
       {/* Top action bar */}
       <div className="absolute top-0 inset-x-0 z-10 flex items-center justify-between px-4 py-3 safe-top">
         <button
@@ -90,7 +98,7 @@ export function ImageViewer({ src, alt, onClose }: Props) {
         </button>
         <button
           type="button"
-          onClick={(e) => { e.stopPropagation(); download(); }}
+          onClick={download}
           disabled={saving}
           aria-label="Save to gallery"
           className="inline-flex items-center gap-2 h-11 px-4 rounded-full bg-white/10 text-white text-sm font-bold backdrop-blur hover:bg-white/20 active:scale-95 transition disabled:opacity-60"
@@ -100,12 +108,11 @@ export function ImageViewer({ src, alt, onClose }: Props) {
         </button>
       </div>
 
-      {/* Image — click doesn't propagate so it stays open */}
+      {/* Image — not interactive, just visual; above the backdrop button */}
       <img
         src={src}
         alt={alt || 'Attachment'}
-        onClick={(e) => e.stopPropagation()}
-        className="max-h-[90vh] max-w-[95vw] object-contain rounded-lg select-none"
+        className="relative z-[1] max-h-[90vh] max-w-[95vw] object-contain rounded-lg select-none pointer-events-none"
         draggable={false}
       />
 

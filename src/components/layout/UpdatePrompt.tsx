@@ -87,7 +87,7 @@ export function UpdatePrompt() {
   return (
     <>
       {local.need && (
-        <Toast tone="brand" role="dialog">
+        <Toast tone="brand" role="status" aria-live="polite">
           <RotateCw className="h-4 w-4 shrink-0 mt-0.5" aria-hidden />
           <div className="flex-1 min-w-0">
             <div className="text-sm font-bold">New version available</div>
@@ -130,14 +130,16 @@ export function UpdatePrompt() {
   );
 }
 
-function Toast({ tone, children, role }: {
+function Toast({ tone, children, role, ...rest }: {
   tone: 'brand' | 'success';
   children: React.ReactNode;
   role?: string;
+  'aria-live'?: 'polite' | 'assertive' | 'off';
 }) {
   return (
     <div
       role={role}
+      aria-live={rest['aria-live']}
       className={cn(
         'fixed left-3 right-3 sm:left-auto sm:right-4 sm:w-96 z-50',
         // Above the mobile bottom nav (which is 78px + safe-area)

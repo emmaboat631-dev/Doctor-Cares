@@ -34,8 +34,8 @@ export function CookieBanner() {
   if (!visible || onHiddenRoute) return null;
   return (
     <div
-      role="dialog"
-      aria-live="polite"
+      role="region"
+      aria-label="Cookie notice"
       className="fixed inset-x-0 bottom-0 z-40 mx-auto mb-4 max-w-md px-4 safe-bottom"
     >
       <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-4">

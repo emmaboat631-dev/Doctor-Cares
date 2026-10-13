@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { DoctorAppointmentCard } from '@/components/doctor/DoctorAppointmentCard';
+import { DeclineReasonModal } from '@/components/doctor/DeclineReasonModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import {
@@ -29,6 +30,7 @@ export function DoctorDashboardPage() {
   const pendingReferrals = (incomingRefs.data ?? []).filter((r) => r.status === 'pending');
 
   const [busy, setBusy] = useState<string | null>(null);
+  const [declineTarget, setDeclineTarget] = useState<string | null>(null);
 
   const todayList = useMemo(() => {
     if (!appts.data) return [];
@@ -55,6 +57,18 @@ export function DoctorDashboardPage() {
     }
   }, [appts, stats]);
 
+  const handleDecline = useCallback(async (reason: string | null) => {
+    if (!declineTarget) return;
+    setBusy(declineTarget);
+    try {
+      await setAppointmentStatus(declineTarget, 'rejected', { cancel_reason: reason });
+      setDeclineTarget(null);
+      await Promise.all([appts.refetch(), stats.refetch()]);
+    } finally {
+      setBusy(null);
+    }
+  }, [appts, stats, declineTarget]);
+
   const firstName = (profile?.full_name ?? '').split(' ')[0] || (profile?.role === 'nurse' ? 'Nurse' : 'Doctor');
   const titlePrefix = profile?.role === 'nurse' ? 'Nurse' : 'Dr.';
 
@@ -68,12 +82,12 @@ export function DoctorDashboardPage() {
         </div>
         <Link
           to="/notifications"
-          className="ml-auto relative grid h-10 w-10 place-items-center rounded-full text-ink-soft hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="ml-auto relative grid h-11 w-11 place-items-center rounded-full text-ink-soft touch-manipulation transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
           aria-label="Notifications"
         >
           <Bell className="h-5 w-5" />
           {(unread.data ?? 0) > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 grid min-h-[18px] min-w-[18px] place-items-center rounded-full bg-danger px-1 text-[10px] font-bold text-white">
+            <span className="absolute -top-0.5 -right-0.5 grid min-h-[18px] min-w-[18px] place-items-center rounded-full bg-danger px-1 text-[10px] font-semibold text-white">
               {(unread.data ?? 0) > 9 ? '9+' : unread.data}
             </span>
           )}
@@ -83,12 +97,12 @@ export function DoctorDashboardPage() {
       <div className="mx-auto max-w-3xl px-4 pb-4 space-y-4">
         <div className="grid grid-cols-3 gap-2">
           <StatTile label="Today" value={stats.data?.today ?? 0} tone="brand" loading={stats.loading} />
-          <StatTile label="Pending" value={stats.data?.pending ?? 0} tone="warning" loading={stats.loading} />
+          <StatTile label="Pending" value={stats.data?.pending ?? 0} tone="warning" loading={stats.loading} to="/appointments" />
           <StatTile label="This week" value={stats.data?.week ?? 0} loading={stats.loading} />
         </div>
 
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Today's schedule</h2>
+        <div className="flex items-center justify-between pt-1">
+          <h2 className="text-base font-semibold tracking-tight">Today's schedule</h2>
           <Link to="/appointments" className="text-xs font-semibold text-brand-600 dark:text-brand-300">See all</Link>
         </div>
 
@@ -112,7 +126,7 @@ export function DoctorDashboardPage() {
                 appointment={a}
                 busy={busy}
                 onAccept={a.status === 'pending' ? (id) => act(id, 'confirmed') : undefined}
-                onReject={a.status === 'pending' ? (id) => act(id, 'rejected') : undefined}
+                onReject={a.status === 'pending' ? (id) => setDeclineTarget(id) : undefined}
                 onComplete={a.status === 'confirmed' && !a._isPast ? undefined : a.status === 'confirmed' ? (id) => act(id, 'completed') : undefined}
               />
             ))}
@@ -131,20 +145,26 @@ export function DoctorDashboardPage() {
                 </div>
                 <div className="text-xs text-ink-muted mt-0.5">Review and accept from the Appointments tab.</div>
               </div>
-              <Link to="/appointments" className="inline-flex h-9 items-center rounded-xl bg-ink px-3 text-xs font-semibold text-white">
+              <Link
+                to="/appointments"
+                className="inline-flex h-9 items-center rounded-xl bg-ink px-3 text-xs font-semibold text-white touch-manipulation transition-colors duration-150 hover:bg-slate-800"
+              >
                 Review
               </Link>
             </div>
           </Card>
         )}
 
-        <Link to="/referrals" className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-4 hover:shadow-pop transition">
+        <Link
+          to="/referrals"
+          className="block rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-card p-4 touch-manipulation transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]"
+        >
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-300">
               <Share2 className="h-5 w-5" />
             </span>
             <div className="flex-1">
-              <div className="text-sm font-bold">Incoming referrals</div>
+              <div className="text-sm font-semibold">Incoming referrals</div>
               <div className="text-xs text-ink-muted mt-0.5">
                 {pendingReferrals.length === 0
                   ? 'No new referrals from colleagues.'
@@ -152,28 +172,52 @@ export function DoctorDashboardPage() {
               </div>
             </div>
             {pendingReferrals.length > 0 && (
-              <span className="grid min-h-[22px] min-w-[22px] place-items-center rounded-full bg-rose-500 px-1.5 text-[11px] font-bold text-white">
+              <span className="grid min-h-[22px] min-w-[22px] place-items-center rounded-full bg-rose-500 px-1.5 text-caption font-semibold text-white">
                 {pendingReferrals.length}
               </span>
             )}
           </div>
         </Link>
       </div>
+
+      <DeclineReasonModal
+        open={!!declineTarget}
+        onClose={() => setDeclineTarget(null)}
+        onSubmit={handleDecline}
+        busy={busy === declineTarget}
+      />
     </>
   );
 }
 
-function StatTile({ label, value, tone, loading }: { label: string; value: number; tone?: 'brand' | 'warning'; loading?: boolean }) {
-  return (
-    <Card padding="sm" className="text-center">
+function StatTile({ label, value, tone, loading, to }: {
+  label: string;
+  value: number;
+  tone?: 'brand' | 'warning';
+  loading?: boolean;
+  /** Optional navigation target. When set the tile becomes a clickable link with press feedback. */
+  to?: string;
+}) {
+  const body = (
+    <>
       <div className={
-        tone === 'brand'   ? 'text-xl font-bold text-brand-600 dark:text-brand-300'
-        : tone === 'warning' ? 'text-xl font-bold text-amber-600 dark:text-amber-300'
-        : 'text-xl font-bold'
+        tone === 'brand'   ? 'text-xl font-semibold text-brand-600 dark:text-brand-300'
+        : tone === 'warning' ? 'text-xl font-semibold text-amber-600 dark:text-amber-300'
+        : 'text-xl font-semibold'
       }>
         {loading ? '—' : value}
       </div>
-      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-muted">{label}</div>
-    </Card>
+      <div className="mt-0.5 text-label font-semibold uppercase text-ink-muted">{label}</div>
+    </>
   );
+  if (to) {
+    return (
+      <Link to={to} aria-label={`${label}: ${loading ? 'loading' : value}`}>
+        <Card padding="sm" interactive className="text-center">
+          {body}
+        </Card>
+      </Link>
+    );
+  }
+  return <Card padding="sm" className="text-center">{body}</Card>;
 }

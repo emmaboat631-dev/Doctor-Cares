@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Info, Pill, Search, Trash2, X } from 'lucide-react';
+import { ChevronRight, Pill, Search, Trash2, X } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Input } from '@/components/ui/Input';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
+import { MedicalDisclaimer } from '@/components/ui/MedicalDisclaimer';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { useDebounced } from '@/hooks/useDebounced';
@@ -59,7 +60,7 @@ export function DrugSearchPage() {
             <button
               type="button"
               onClick={() => setQuery('')}
-              className="grid h-7 w-7 place-items-center rounded-full text-ink-muted hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="grid h-8 w-8 place-items-center rounded-full text-ink-muted touch-manipulation transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
               aria-label="Clear"
             >
               <X className="h-4 w-4" />
@@ -67,13 +68,10 @@ export function DrugSearchPage() {
           ) : undefined}
         />
 
-        <div className="flex items-start gap-2 rounded-xl bg-info-soft/70 dark:bg-sky-500/10 border-l-4 border-info px-3 py-2 text-xs text-sky-800 dark:text-sky-300">
-          <Info className="h-4 w-4 shrink-0 mt-0.5" />
-          <div>
-            <b>Powered by OpenFDA.</b> Information only — not a substitute for medical advice.
-            Always consult a licensed clinician or pharmacist before taking any medication.
-          </div>
-        </div>
+        <MedicalDisclaimer variant="card">
+          <b>Powered by OpenFDA.</b> Information only — not a substitute for medical advice.
+          Always consult a licensed clinician or pharmacist before taking any medication.
+        </MedicalDisclaimer>
 
         {/* Search results */}
         {showSearchState ? (
@@ -83,7 +81,7 @@ export function DrugSearchPage() {
                 Results
                 {results.data && !results.loading ? ` · ${results.data.length}` : ''}
               </h2>
-              {results.loading && <span className="text-[11px] text-ink-muted">Searching…</span>}
+              {results.loading && <span className="text-caption text-ink-muted">Searching…</span>}
             </div>
             {results.loading ? (
               <div className="space-y-2">
@@ -99,18 +97,18 @@ export function DrugSearchPage() {
               />
             ) : (
               <div className="space-y-2">
-                {results.data!.map((d) => (
+                {(results.data ?? []).map((d) => (
                   <button
                     key={d.id}
                     type="button"
                     onClick={() => openDrug(d)}
-                    className="w-full flex items-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-card px-3 py-3 hover:shadow-pop text-left transition"
+                    className="w-full flex items-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-card px-3 py-3 text-left touch-manipulation transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]"
                   >
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-50 dark:bg-brand-500/15 text-brand-500">
                       <Pill className="h-5 w-5" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-bold capitalize">
+                      <div className="line-clamp-2 text-sm font-semibold capitalize leading-snug break-words">
                         {d.brand_name ?? d.generic_name ?? 'Unnamed drug'}
                       </div>
                       <div className="mt-0.5 truncate text-xs text-ink-muted">
@@ -119,7 +117,7 @@ export function DrugSearchPage() {
                           : d.manufacturer ?? d.product_type ?? 'Drug label'}
                       </div>
                     </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-ink-muted" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-ink-muted" aria-hidden />
                   </button>
                 ))}
               </div>
@@ -134,9 +132,9 @@ export function DrugSearchPage() {
                 <button
                   type="button"
                   onClick={handleClearHistory}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-ink-muted hover:text-danger"
+                  className="inline-flex items-center gap-1 text-caption font-semibold text-ink-muted touch-manipulation transition-colors duration-150 hover:text-danger"
                 >
-                  <Trash2 className="h-3 w-3" /> Clear
+                  <Trash2 className="h-3 w-3" aria-hidden /> Clear
                 </button>
               )}
             </div>
@@ -148,25 +146,25 @@ export function DrugSearchPage() {
               <PopularStarters onPick={openByName} />
             ) : (
               <div className="space-y-2">
-                {recent.data!.map((r) => (
+                {(recent.data ?? []).map((r) => (
                   <button
                     key={r.id}
                     type="button"
                     onClick={() => openByName(r.drug_name ?? r.query)}
-                    className="w-full flex items-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-3 hover:shadow-pop text-left transition"
+                    className="w-full flex items-center gap-3 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-3 text-left touch-manipulation transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-pop active:scale-[0.98]"
                   >
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-slate-100 dark:bg-slate-800 text-ink-soft dark:text-slate-300">
-                      <Search className="h-4 w-4" />
+                      <Search className="h-4 w-4" aria-hidden />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-semibold capitalize">
+                      <div className="line-clamp-2 text-sm font-semibold capitalize leading-snug break-words">
                         {r.drug_name ?? r.query}
                       </div>
                       {r.drug_name && r.query.toLowerCase() !== r.drug_name.toLowerCase() && (
                         <div className="truncate text-xs text-ink-muted">Searched "{r.query}"</div>
                       )}
                     </div>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-ink-muted" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-ink-muted" aria-hidden />
                   </button>
                 ))}
               </div>
@@ -201,14 +199,14 @@ function PopularStarters({ onPick, className }: { onPick: (name: string) => void
             key={p.label}
             type="button"
             onClick={() => onPick(p.label)}
-            className="flex items-center gap-2.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2.5 text-left hover:shadow-card transition"
+            className="flex items-center gap-2.5 rounded-2xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2.5 text-left touch-manipulation transition-[box-shadow,transform] duration-150 ease-spring hover:shadow-card active:scale-[0.98]"
           >
             <span className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-50 dark:bg-brand-500/15 text-brand-500">
-              <Pill className="h-4 w-4" />
+              <Pill className="h-4 w-4" aria-hidden />
             </span>
             <div className="min-w-0">
-              <div className="truncate text-xs font-bold">{p.label}</div>
-              <div className="truncate text-[10px] text-ink-muted">{p.hint}</div>
+              <div className="truncate text-xs font-semibold">{p.label}</div>
+              <div className="truncate text-label text-ink-muted">{p.hint}</div>
             </div>
           </button>
         ))}

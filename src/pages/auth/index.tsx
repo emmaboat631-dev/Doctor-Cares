@@ -138,7 +138,7 @@ export function LoginPage() {
         <BrandMark size="xs" />
         <span className="font-semibold">Doctor Cares</span>
       </div>
-      <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
       <p className="text-sm text-ink-muted mt-1">Log in to continue.</p>
 
       <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
@@ -163,8 +163,8 @@ export function LoginPage() {
           required
         />
 
-        <div className="flex items-center justify-between -mt-1">
-          <label className="flex items-center gap-2 text-sm text-ink-soft dark:text-slate-300 cursor-pointer select-none">
+        <div className="flex items-center justify-between gap-3 -mt-1">
+          <label className="flex items-center gap-2 text-sm text-ink-soft dark:text-slate-300 cursor-pointer select-none touch-manipulation">
             <input
               type="checkbox"
               checked={remember}
@@ -173,7 +173,7 @@ export function LoginPage() {
             />
             Remember me
           </label>
-          <Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300">
+          <Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-300 shrink-0">
             Forgot password?
           </Link>
         </div>
@@ -252,7 +252,7 @@ export function RegisterPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-success-soft text-success">
             <CheckCircle2 className="h-7 w-7" />
           </div>
-          <h1 className="mt-4 text-xl font-bold">Account created</h1>
+          <h1 className="mt-4 text-xl font-semibold">Account created</h1>
           <p className="mt-1 text-sm text-ink-muted">
             You can sign in now. If email confirmation is on, check your inbox first.
           </p>
@@ -270,7 +270,7 @@ export function RegisterPage() {
         <BrandMark size="xs" />
         <span className="font-semibold">Doctor Cares</span>
       </div>
-      <h1 className="text-2xl font-bold tracking-tight">Create your account</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">Create your account</h1>
       <p className="text-sm text-ink-muted mt-1">Start using Doctor Cares in minutes.</p>
 
       <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
@@ -342,8 +342,8 @@ export function RegisterPage() {
           />
           <span>
             I agree to the{' '}
-            <a href="#" className="font-semibold text-brand-600 dark:text-brand-300">Terms</a> and{' '}
-            <a href="#" className="font-semibold text-brand-600 dark:text-brand-300">Privacy Policy</a>.
+            <Link to="/terms" target="_blank" rel="noreferrer" className="font-semibold text-brand-600 dark:text-brand-300">Terms</Link> and{' '}
+            <Link to="/privacy" target="_blank" rel="noreferrer" className="font-semibold text-brand-600 dark:text-brand-300">Privacy Policy</Link>.
           </span>
         </label>
 
@@ -435,7 +435,7 @@ export function ForgotPasswordPage() {
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-500/15">
         <KeyRound className="h-6 w-6" />
       </div>
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">Reset your password</h1>
+      <h1 className="mt-4 text-2xl font-semibold tracking-tight">Reset your password</h1>
       <p className="mt-1 text-sm text-ink-muted">Enter your email and we'll send you a reset link.</p>
 
       {sent ? (
@@ -515,7 +515,7 @@ export function ResetPasswordPage() {
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-success-soft text-success">
           <CheckCircle2 className="h-7 w-7" />
         </div>
-        <h1 className="mt-4 text-xl font-bold">Password updated</h1>
+        <h1 className="mt-4 text-xl font-semibold">Password updated</h1>
         <p className="mt-1 text-sm text-ink-muted">You're all set. Sign in with your new password.</p>
         <Button
           className="mt-5"
@@ -532,7 +532,7 @@ export function ResetPasswordPage() {
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-500/15">
         <KeyRound className="h-6 w-6" />
       </div>
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">Set a new password</h1>
+      <h1 className="mt-4 text-2xl font-semibold tracking-tight">Set a new password</h1>
       <p className="mt-1 text-sm text-ink-muted">Pick something you haven't used before.</p>
 
       <form onSubmit={submit} className="mt-6 space-y-4" noValidate>
@@ -580,7 +580,7 @@ export function SelectRolePage() {
       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-500 dark:bg-brand-500/15">
         <UserIcon className="h-6 w-6" />
       </div>
-      <h1 className="mt-4 text-xl font-bold">Preparing your account</h1>
+      <h1 className="mt-4 text-xl font-semibold">Preparing your account</h1>
       <p className="mt-1 text-sm text-ink-muted">
         We're finalizing your profile. This usually takes a second.
         {profile ? ' Your role is set — try refreshing.' : ''}

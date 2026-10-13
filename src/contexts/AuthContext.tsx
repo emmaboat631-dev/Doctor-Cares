@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { AuthError, Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 import { readEnvSafe } from '@/lib/env';
@@ -55,6 +55,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileLoaded, setProfileLoaded] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  // Mirror the session into a ref so the auth-state-change callback can
+  // read the latest previous session on SIGNED_OUT without re-subscribing
+  // every time `session` changes (which would re-run the whole effect and
+  // double-register listeners).
+  const sessionRef = useRef<Session | null>(null);
+  sessionRef.current = session;
 
   const loadProfile = useCallback(async (userId: string) => {
     if (!supabase) return;
@@ -110,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Best-effort — remove the current device's push token so ex-user
         // stops getting pushes. Dynamic import avoids pulling native code
         // into the web bundle unless it actually runs.
-        const prevUser = session?.user?.id;
+        const prevUser = sessionRef.current?.user?.id;
         if (prevUser) {
           import('@/lib/native/push').then(({ unregisterFromPush }) =>
             unregisterFromPush(prevUser),
@@ -121,18 +127,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
       if (next?.user) {
+        const userId = next.user.id;
         markOnboardingSeen();
-        await loadProfile(next.user.id);
+        await loadProfile(userId);
         startPresenceHeartbeat();
         startIdleTimer(onIdleSignOut);
         // Push: FCM on native, Web Push (VAPID) in the browser. Each module
         // short-circuits when it's on the wrong platform, so firing both here
         // is safe — only one actually registers a token per device.
         import('@/lib/native/push').then(({ registerForPush }) =>
-          registerForPush(next.user!.id),
+          registerForPush(userId),
         ).catch(() => { /* ignore */ });
         import('@/lib/webPush').then(({ subscribeWebPush }) =>
-          subscribeWebPush(next.user!.id),
+          subscribeWebPush(userId),
         ).catch(() => { /* ignore */ });
       } else {
         setProfile(null);
@@ -207,6 +214,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Wipe the cross-mount data cache so a new user doesn't see the old one's data.
       const { clearAsyncCache } = await import('@/hooks/useAsync');
       clearAsyncCache();
+      // Belt-and-braces: purge every service-worker runtime cache on sign-out
+      // so no leftover PHI responses (profile JSON, chat attachments, etc.)
+      // linger on a shared device. The runtime caches are now configured
+      // NetworkOnly for Supabase, but older installs may still hold
+      // cached entries from the previous SW build. Master §26.
+      try {
+        if (typeof caches !== 'undefined') {
+          const names = await caches.keys();
+          await Promise.all(names.map((n) => caches.delete(n)));
+        }
+      } catch {
+        // Best-effort — caches API may be unavailable in private mode / older WebViews.
+      }
       await supabase.auth.signOut();
     },
 

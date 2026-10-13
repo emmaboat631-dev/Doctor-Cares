@@ -57,7 +57,13 @@ export function AdminLayout() {
       {/* Mobile drawer */}
       {drawer && (
         <div className="md:hidden fixed inset-0 z-40 flex">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setDrawer(false)} />
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setDrawer(false)}
+            tabIndex={-1}
+            className="absolute inset-0 bg-black/50"
+          />
           <div className="relative z-10 flex">
             <Sidebar items={items} title="Doctor Cares · Admin" />
           </div>

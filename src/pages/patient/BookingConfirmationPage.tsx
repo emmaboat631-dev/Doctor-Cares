@@ -1,27 +1,28 @@
 import { Link, useParams } from 'react-router-dom';
-import { CheckCircle2 } from 'lucide-react';
+import { CalendarPlus, CheckCircle2 } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Card } from '@/components/ui/Card';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Avatar } from '@/components/ui/Avatar';
-import { Badge } from '@/components/ui/Badge';
+import { StatusBadge, type AppointmentStatus } from '@/components/ui/StatusBadge';
 import { useAsync } from '@/hooks/useAsync';
 import { getAppointmentForPatient } from '@/lib/api/appointments';
 import { fmtDate, fmtMoney, fmtTime } from '@/lib/format';
+import { downloadIcs } from '@/lib/calendar';
 
 export function BookingConfirmationPage() {
   const { id } = useParams<{ id: string }>();
   const appt = useAsync(() => (id ? getAppointmentForPatient(id) : Promise.resolve(null)), [id]);
 
-  if (appt.loading) return (<><Header title="Confirmed" /><LoadingSpinner fullScreen /></>);
-  if (!appt.data) return (<><Header title="Confirmed" /><EmptyState title="Appointment not found" /></>);
+  if (appt.loading) return (<><Header title="Appointment" /><LoadingSpinner fullScreen /></>);
+  if (!appt.data) return (<><Header title="Appointment" /><EmptyState title="Appointment not found" /></>);
 
   const d = appt.data;
 
   return (
     <>
-      <Header title="Confirmed" />
+      <Header title="Appointment" />
       <div className="mx-auto max-w-3xl px-4 py-8 text-center space-y-5">
         <div className="mx-auto grid h-24 w-24 place-items-center rounded-full bg-success-soft">
           <div className="grid h-16 w-16 place-items-center rounded-full bg-success text-white">
@@ -41,7 +42,7 @@ export function BookingConfirmationPage() {
                 <div className="text-xs text-ink-muted">{d.doctor?.doctor_profile?.specialty ?? '—'}</div>
               </div>
             </div>
-            <Badge tone="warning">Pending</Badge>
+            <StatusBadge status={d.status as AppointmentStatus} />
           </div>
           <div className="hairline pt-3 space-y-2 text-sm">
             <Row label="Date & time" value={`${fmtDate(d.scheduled_at)} · ${fmtTime(d.scheduled_at)}`} />
@@ -54,6 +55,26 @@ export function BookingConfirmationPage() {
           <Link to="/appointments" className="inline-flex h-11 items-center justify-center rounded-xl bg-brand-500 text-sm font-semibold text-white hover:bg-brand-600">
             View my appointments
           </Link>
+          <button
+            type="button"
+            onClick={() => {
+              const start = new Date(d.scheduled_at);
+              const end = new Date(start.getTime() + d.duration_minutes * 60_000);
+              const mode = d.mode === 'video' ? 'Video consultation'
+                : d.mode === 'clinic' ? 'Clinic visit' : 'Home visit';
+              downloadIcs({
+                uid: `${d.id}@doctor-cares`,
+                title: `Appointment with ${d.doctor?.full_name ?? 'your doctor'}`,
+                description: `${mode}. Status: ${d.status}. ${d.doctor?.doctor_profile?.specialty ?? ''}`.trim(),
+                location: mode,
+                start,
+                end,
+              });
+            }}
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-semibold text-ink-soft dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+          >
+            <CalendarPlus className="h-4 w-4" aria-hidden /> Add to calendar
+          </button>
           <Link to="/" className="inline-flex h-11 items-center justify-center rounded-xl text-sm font-semibold text-ink-muted hover:bg-slate-100 dark:hover:bg-slate-800">
             Back to home
           </Link>

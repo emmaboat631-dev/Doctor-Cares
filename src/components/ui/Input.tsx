@@ -30,7 +30,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           'border-slate-300 dark:border-slate-700',
           'focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20',
           error && 'border-danger focus-within:border-danger focus-within:ring-danger/20',
-          'transition',
+          'transition-[border-color,box-shadow] duration-150',
         )}
       >
         {leftIcon && <span className="pl-3 text-ink-muted">{leftIcon}</span>}
@@ -39,8 +39,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={inputId}
           aria-invalid={!!error}
           aria-describedby={describedBy}
+          /* text-base keeps iOS Safari from zooming on focus (needs ≥16px).
+             sm:text-sm restores the compact size on wider viewports. */
           className={cn(
-            'w-full bg-transparent px-3 py-3 text-sm text-ink dark:text-ink-onDark',
+            'w-full bg-transparent px-3 py-3 text-base sm:text-sm text-ink dark:text-ink-onDark',
             'placeholder:text-ink-faint outline-none',
             leftIcon && 'pl-2',
             rightSlot && 'pr-2',

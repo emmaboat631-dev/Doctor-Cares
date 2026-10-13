@@ -76,7 +76,7 @@ export function DoctorPatientDetailsPage() {
       <div className="mx-auto max-w-3xl px-4 py-4 space-y-4">
         <Card padding="lg" className="text-center">
           <Avatar name={p.full_name} src={p.avatar_url ?? undefined} size="xl" className="mx-auto" />
-          <h1 className="mt-3 text-lg font-bold">{p.full_name ?? 'Patient'}</h1>
+          <h1 className="mt-3 text-lg font-semibold">{p.full_name ?? 'Patient'}</h1>
           {p.phone && <div className="mt-1 text-xs text-ink-muted">{p.phone}</div>}
         </Card>
 
@@ -159,13 +159,13 @@ function ReferralsCard({ referrals }: { referrals: Referral[] }) {
         {referrals.map((r) => (
           <div key={r.id} className="rounded-xl border border-slate-200 dark:border-slate-800 p-2.5">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold truncate flex-1">
+              <span className="text-sm font-semibold truncate flex-1">
                 → Dr. {r.to_doctor?.full_name ?? '—'}
               </span>
               <Badge tone={STATUS_TONE[r.status]}>{STATUS_LABEL[r.status]}</Badge>
             </div>
             <div className="mt-1 text-xs text-ink-soft dark:text-slate-300">{r.reason}</div>
-            <div className="mt-0.5 text-[10px] text-ink-muted">{fmtDate(r.created_at)}</div>
+            <div className="mt-0.5 text-label text-ink-muted">{fmtDate(r.created_at)}</div>
           </div>
         ))}
       </div>
@@ -244,7 +244,7 @@ function MedicalHistoryCard({ m }: { m: Med | null | undefined }) {
 function Section({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="text-label font-semibold uppercase text-ink-muted">{label}</div>
       <div className="mt-0.5 text-sm">{children}</div>
     </div>
   );
@@ -259,7 +259,7 @@ const CHIP_TONES = {
 function ChipList({ label, items, tone }: { label: string; items: string[]; tone: keyof typeof CHIP_TONES }) {
   return (
     <div>
-      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="text-label font-semibold uppercase text-ink-muted">{label}</div>
       <div className="mt-1 flex flex-wrap gap-1.5">
         {items.map((it, i) => (
           <span key={`${it}-${i}`} className={cn('inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold', CHIP_TONES[tone])}>{it}</span>
@@ -272,7 +272,7 @@ function ChipList({ label, items, tone }: { label: string; items: string[]; tone
 function KeyValue({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl bg-slate-50 dark:bg-slate-800/50 p-2">
-      <div className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{label}</div>
+      <div className="text-label font-semibold uppercase text-ink-muted">{label}</div>
       <div className="mt-0.5 text-sm font-semibold capitalize">{value}</div>
     </div>
   );
@@ -312,15 +312,15 @@ function VitalsCard({ vitals, loading }: { vitals: Partial<Record<MetricType, He
               <div key={type} className="rounded-xl border border-slate-200 dark:border-slate-800 p-2.5">
                 <div className="flex items-center gap-2">
                   <span className={cn('grid h-6 w-6 place-items-center rounded-md', vi.tint)}>{vi.icon}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">{spec.label}</span>
+                  <span className="text-label font-semibold uppercase text-ink-muted">{spec.label}</span>
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-base font-bold">{formatMetric(m)}</span>
-                  <span className="text-[10px] text-ink-muted">{m.unit}</span>
+                  <span className="text-base font-semibold">{formatMetric(m)}</span>
+                  <span className="text-label text-ink-muted">{m.unit}</span>
                 </div>
                 <div className="mt-0.5 flex items-center justify-between gap-2">
-                  <span className="text-[10px] text-ink-muted">{fmtDate(m.taken_at)} · {fmtTime(m.taken_at)}</span>
-                  <span className={cn('text-[10px] font-bold uppercase tracking-wider', statusTint)}>{status}</span>
+                  <span className="text-label text-ink-muted">{fmtDate(m.taken_at)} · {fmtTime(m.taken_at)}</span>
+                  <span className={cn('text-label font-semibold uppercase', statusTint)}>{status}</span>
                 </div>
               </div>
             );

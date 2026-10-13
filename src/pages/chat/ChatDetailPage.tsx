@@ -30,8 +30,9 @@ function groupByDay(msgs: OutgoingMessage[]) {
   for (const m of msgs) {
     const d = new Date(m.created_at);
     const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key)!.push(m);
+    const bucket = groups.get(key) ?? [];
+    bucket.push(m);
+    groups.set(key, bucket);
   }
   const today = new Date();
   const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
@@ -320,10 +321,10 @@ export function ChatDetailPage() {
   const other = conv.data?.counterparty;
 
   if (initial.loading || conv.loading) {
-    return (<><ChatHeader onBack={() => navigate('/chat')} name={null} role={null} loading /><LoadingSpinner fullScreen label="Loading messages…" /></>);
+    return (<><ChatHeader onBack={() => navigate('/chat')} name={null} userRole={null} loading /><LoadingSpinner fullScreen label="Loading messages…" /></>);
   }
   if (!conv.data) {
-    return (<><ChatHeader onBack={() => navigate('/chat')} name={null} role={null} /><EmptyState title="Conversation not found" /></>);
+    return (<><ChatHeader onBack={() => navigate('/chat')} name={null} userRole={null} /><EmptyState title="Conversation not found" /></>);
   }
 
   return (
@@ -331,7 +332,7 @@ export function ChatDetailPage() {
       <ChatHeader
         onBack={() => navigate('/chat')}
         name={other?.full_name ?? null}
-        role={other?.role ?? null}
+        userRole={other?.role ?? null}
         avatarUrl={other?.avatar_url ?? undefined}
         onProfileClick={otherId
           ? () => {
@@ -348,7 +349,7 @@ export function ChatDetailPage() {
         onVideoCall={() => navigate(`/call/${conversationId}?mode=video`)}
       />
 
-      <div ref={scrollerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+      <div ref={scrollerRef} className="flex-1 overflow-y-auto overscroll-contain-y px-4 py-3 space-y-3">
         {messages.length === 0 ? (
           <div className="mt-16 text-center text-sm text-ink-muted">No messages yet. Say hi 👋</div>
         ) : (
@@ -444,7 +445,7 @@ export function ChatDetailPage() {
             rows={1}
             maxLength={4000}
             placeholder="Type a message…"
-            className="flex-1 resize-none rounded-full border border-slate-200 dark:border-slate-800 bg-surface-muted dark:bg-slate-800 px-4 py-2.5 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 max-h-32"
+            className="flex-1 resize-none rounded-full border border-slate-200 dark:border-slate-800 bg-surface-muted dark:bg-slate-800 px-4 py-2.5 text-base sm:text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 max-h-32"
           />
 
           {text.trim() ? (
@@ -452,7 +453,7 @@ export function ChatDetailPage() {
               type="submit"
               disabled={sending}
               aria-label="Send"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/30 active:scale-95 transition"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/30 touch-manipulation transition-transform duration-150 ease-spring active:scale-[0.98]"
             >
               <Send className="h-4 w-4" />
             </button>
@@ -461,7 +462,7 @@ export function ChatDetailPage() {
               type="button"
               onClick={startRecording}
               aria-label="Record voice message"
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/30 active:scale-95 transition"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/30 touch-manipulation transition-transform duration-150 ease-spring active:scale-[0.98]"
             >
               <Mic className="h-4 w-4" />
             </button>
@@ -645,9 +646,9 @@ function VoiceBubble({
 // Header
 // ---------------------------------------------------------------------------
 function ChatHeader({
-  onBack, name, role, avatarUrl, loading, onProfileClick, onVoiceCall, onVideoCall,
+  onBack, name, userRole, avatarUrl, loading, onProfileClick, onVoiceCall, onVideoCall,
 }: {
-  onBack: () => void; name: string | null; role: 'patient' | 'doctor' | 'nurse' | 'admin' | null;
+  onBack: () => void; name: string | null; userRole: 'patient' | 'doctor' | 'nurse' | 'admin' | null;
   avatarUrl?: string; loading?: boolean; onProfileClick?: () => void;
   onVoiceCall?: () => void; onVideoCall?: () => void;
 }) {
@@ -656,7 +657,7 @@ function ChatHeader({
       <Avatar name={name} src={avatarUrl} size="sm" />
       <div className="min-w-0 flex-1 text-left">
         <div className="truncate text-sm font-bold">
-          {loading ? 'Loading…' : (role === 'doctor' ? 'Dr. ' : '') + (name ?? 'User')}
+          {loading ? 'Loading…' : (userRole === 'doctor' ? 'Dr. ' : '') + (name ?? 'User')}
         </div>
         <div className="flex items-center gap-1 text-[11px]">
           <span className="h-1.5 w-1.5 rounded-full bg-success" />

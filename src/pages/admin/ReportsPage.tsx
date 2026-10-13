@@ -62,7 +62,7 @@ export function AdminReportsPage() {
           />
         ) : (
           <div className="space-y-2">
-            {reports.data!.map((r) => (
+            {(reports.data ?? []).map((r) => (
               <Card key={r.id} className={cn(
                 'border-l-4',
                 r.priority === 'high'   && 'border-l-danger',

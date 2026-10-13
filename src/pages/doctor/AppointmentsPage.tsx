@@ -5,6 +5,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { DoctorAppointmentCard } from '@/components/doctor/DoctorAppointmentCard';
+import { DeclineReasonModal } from '@/components/doctor/DeclineReasonModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAsync } from '@/hooks/useAsync';
 import { listDoctorAppointments, setAppointmentStatus } from '@/lib/api/appointments';
@@ -16,6 +17,7 @@ export function DoctorAppointmentsPage() {
   const { user } = useAuth();
   const [tab, setTab] = useState<Tab>('today');
   const [busy, setBusy] = useState<string | null>(null);
+  const [declineTarget, setDeclineTarget] = useState<string | null>(null);
 
   const appts = useAsync(async () => (user ? listDoctorAppointments(user.id) : []), [user?.id]);
 
@@ -63,6 +65,18 @@ export function DoctorAppointmentsPage() {
     }
   }, [appts]);
 
+  const handleDecline = useCallback(async (reason: string | null) => {
+    if (!declineTarget) return;
+    setBusy(declineTarget);
+    try {
+      await setAppointmentStatus(declineTarget, 'rejected', { cancel_reason: reason });
+      setDeclineTarget(null);
+      await appts.refetch();
+    } finally {
+      setBusy(null);
+    }
+  }, [appts, declineTarget]);
+
   return (
     <>
       <Header title="Appointments" />
@@ -75,7 +89,8 @@ export function DoctorAppointmentsPage() {
               onClick={() => setTab(t)}
               aria-pressed={tab === t}
               className={cn(
-                'shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold capitalize transition inline-flex items-center gap-1.5',
+                'shrink-0 rounded-full border px-3 py-1.5 text-xs font-semibold capitalize touch-manipulation inline-flex items-center gap-1.5',
+                'transition-colors duration-150',
                 tab === t
                   ? 'border-ink bg-ink text-white dark:bg-ink-onDark dark:text-ink dark:border-ink-onDark'
                   : 'border-slate-300 dark:border-slate-700 text-ink-soft dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800',
@@ -84,7 +99,7 @@ export function DoctorAppointmentsPage() {
               {t}
               {t === 'pending' && pendingCount > 0 && (
                 <span className={cn(
-                  'inline-grid min-h-[16px] min-w-[16px] place-items-center rounded-full px-1 text-[9px] font-bold',
+                  'inline-grid min-h-[16px] min-w-[16px] place-items-center rounded-full px-1 text-label font-semibold',
                   tab === t ? 'bg-white text-ink' : 'bg-danger text-white',
                 )}>
                   {pendingCount}
@@ -119,13 +134,20 @@ export function DoctorAppointmentsPage() {
                 appointment={a}
                 busy={busy}
                 onAccept={a.status === 'pending' ? (id) => act(id, 'confirmed') : undefined}
-                onReject={a.status === 'pending' ? (id) => act(id, 'rejected') : undefined}
+                onReject={a.status === 'pending' ? (id) => setDeclineTarget(id) : undefined}
                 onComplete={a.status === 'confirmed' ? (id) => act(id, 'completed') : undefined}
               />
             ))}
           </div>
         )}
       </div>
+
+      <DeclineReasonModal
+        open={!!declineTarget}
+        onClose={() => setDeclineTarget(null)}
+        onSubmit={handleDecline}
+        busy={busy === declineTarget}
+      />
     </>
   );
 }
