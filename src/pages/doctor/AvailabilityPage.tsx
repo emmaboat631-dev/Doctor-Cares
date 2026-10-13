@@ -120,7 +120,7 @@ export function DoctorAvailabilityPage() {
             <Card><div className="text-sm text-ink-muted">No windows yet. Add one below to start accepting bookings.</div></Card>
           ) : (
             <div className="space-y-1.5">
-              {availability.data!.map((w) => (
+              {(availability.data ?? []).map((w) => (
                 <div key={w.id} className="flex items-center gap-2 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2">
                   <span className="w-10 text-xs font-bold text-brand-600 dark:text-brand-300">{WEEKDAYS[w.weekday]}</span>
                   <span className="text-sm font-medium">{w.start_time.slice(0, 5)} – {w.end_time.slice(0, 5)}</span>
@@ -209,7 +209,7 @@ export function DoctorAvailabilityPage() {
             <Card><div className="text-sm text-ink-muted">No blocked dates.</div></Card>
           ) : (
             <div className="space-y-1.5">
-              {blocked.data!.map((b) => (
+              {(blocked.data ?? []).map((b) => (
                 <div key={b.id} className="flex items-center gap-2 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2">
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium">{fmtDate(b.start_date)} → {fmtDate(b.end_date)}</div>

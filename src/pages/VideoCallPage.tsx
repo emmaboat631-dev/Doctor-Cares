@@ -41,26 +41,28 @@ export function VideoCallPage() {
   // user_id in a shared channel keyed to the appointment. The waiting-room
   // UI reads the channel's live state and shows "waiting for Dr. X" vs
   // "ready — join call".
+  const userId = user?.id;
+  const profileName = profile?.full_name;
   useEffect(() => {
-    if (!supabase || !id || !user) return;
+    if (!supabase || !id || !userId) return;
     const channel = supabase.channel(`call:${id}`, {
-      config: { presence: { key: user.id } },
+      config: { presence: { key: userId } },
     });
     channelRef.current = channel;
 
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState() as Record<string, { user_id: string }[]>;
-        setPeersPresent(Object.keys(state).filter((k) => k !== user.id));
+        setPeersPresent(Object.keys(state).filter((k) => k !== userId));
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          await channel.track({ user_id: user.id, name: profile?.full_name ?? 'User' });
+          await channel.track({ user_id: userId, name: profileName ?? 'User' });
         }
       });
 
     return () => { channel.unsubscribe(); channelRef.current = null; };
-  }, [id, user?.id, profile?.full_name]);
+  }, [id, userId, profileName]);
 
   if (!id || appt.loading) {
     return (<><Header title="Video call" showBack /><LoadingSpinner fullScreen /></>);

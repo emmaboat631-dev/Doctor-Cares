@@ -33,7 +33,7 @@ export function PatientReferralsPage() {
             description="When one of your doctors refers you to a specialist, it appears here."
           />
         ) : (
-          refs.data!.map((r) => (
+          (refs.data ?? []).map((r) => (
             <Card key={r.id}>
               <div className="flex items-center gap-3">
                 <Avatar name={r.to_doctor?.full_name} src={r.to_doctor?.avatar_url ?? undefined} size="md" />

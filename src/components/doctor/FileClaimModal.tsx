@@ -24,11 +24,14 @@ export function FileClaimModal({
   const [error, setError]           = useState<string | undefined>();
 
   // Pre-fill the patient's NHIS number from their profile so the doctor
-  // doesn't have to ask them for it in the room.
+  // doesn't have to ask them for it in the room. Functional setState so
+  // the effect doesn't need to re-run on each keystroke.
   useEffect(() => {
     if (!open || !patientId) return;
     getPatientProfile(patientId).then((p) => {
-      if (p?.nhis_number && !nhisNumber) setNhisNumber(p.nhis_number);
+      const n = p?.nhis_number;
+      if (!n) return;
+      setNhisNumber((current) => (current ? current : n));
     }).catch(() => {/* fine */});
   }, [open, patientId]);
 

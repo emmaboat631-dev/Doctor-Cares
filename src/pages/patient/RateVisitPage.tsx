@@ -74,6 +74,7 @@ export function RateVisitPage() {
 
   // Already reviewed → show read-only
   if (existing.data) {
+    const review = existing.data;
     return (
       <>
         <Header title="Your review" showBack />
@@ -83,11 +84,11 @@ export function RateVisitPage() {
               <div className="text-xs text-ink-muted mb-2">You rated</div>
               <div className="flex justify-center gap-1 text-amber-500 mb-3">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={cn('h-6 w-6', i < existing.data!.rating ? 'fill-current' : 'opacity-30')} />
+                  <Star key={i} className={cn('h-6 w-6', i < review.rating ? 'fill-current' : 'opacity-30')} />
                 ))}
               </div>
-              {existing.data.body && (
-                <p className="text-sm text-ink-soft dark:text-slate-300 italic">"{existing.data.body}"</p>
+              {review.body && (
+                <p className="text-sm text-ink-soft dark:text-slate-300 italic">"{review.body}"</p>
               )}
             </div>
           </Card>

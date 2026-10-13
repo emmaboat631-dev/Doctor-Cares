@@ -26,7 +26,7 @@ export function HealthTipsPage() {
             description="Check back soon — your care team posts new tips here."
           />
         ) : (
-          tips.data!.map((t) => (
+          (tips.data ?? []).map((t) => (
             <Link
               key={t.id}
               to={`/tips/${t.id}`}

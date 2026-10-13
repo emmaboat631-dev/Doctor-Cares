@@ -79,7 +79,7 @@ export function NotificationsPage() {
             description="Notifications about appointments and messages will appear here."
           />
         ) : (
-          notifs.data!.map((n) => {
+          (notifs.data ?? []).map((n) => {
             const style = typeIcons[n.type] ?? typeIcons.system;
             return (
               <button

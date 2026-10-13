@@ -40,24 +40,26 @@ export function CallPage() {
   // Supabase Realtime presence — tells each side when the other party has
   // this call page open, so the UI can say "Dr. X is in the waiting room"
   // instead of a blind "join".
+  const userId = user?.id;
+  const profileName = profile?.full_name;
   useEffect(() => {
-    if (!supabase || !conversationId || !user) return;
+    if (!supabase || !conversationId || !userId) return;
     const channel = supabase.channel(`call:${conversationId}`, {
-      config: { presence: { key: user.id } },
+      config: { presence: { key: userId } },
     });
     channelRef.current = channel;
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState() as Record<string, unknown[]>;
-        setPeersPresent(Object.keys(state).filter((k) => k !== user.id));
+        setPeersPresent(Object.keys(state).filter((k) => k !== userId));
       })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          await channel.track({ user_id: user.id, name: profile?.full_name ?? 'User' });
+          await channel.track({ user_id: userId, name: profileName ?? 'User' });
         }
       });
     return () => { channel.unsubscribe(); channelRef.current = null; };
-  }, [conversationId, user?.id, profile?.full_name]);
+  }, [conversationId, userId, profileName]);
 
   if (!conversationId || conv.loading) {
     return (<><Header title="Call" showBack /><LoadingSpinner fullScreen /></>);

@@ -208,7 +208,7 @@ export function DoctorAppointmentDetailsPage() {
           {(d.status === 'completed' || d.status === 'confirmed') && (
             <Button variant="outline" onClick={() => setRxOpen(true)}
               leftIcon={<Pill className="h-4 w-4" />}>
-              {(rxs.data ?? []).length > 0 ? `Write another prescription (${rxs.data!.length})` : 'Write prescription'}
+              {(rxs.data ?? []).length > 0 ? `Write another prescription (${(rxs.data ?? []).length})` : 'Write prescription'}
             </Button>
           )}
           {(d.status === 'completed' || d.status === 'confirmed') && !claim.data && (

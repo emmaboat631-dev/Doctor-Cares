@@ -16,11 +16,12 @@ export function SettingsPage() {
   const { mode, setMode } = useTheme();
   const { t, i18n } = useTranslation();
   const [prefs, setPrefs] = useState<NotificationPrefs | null>(null);
+  const userId = user?.id;
 
   useEffect(() => {
-    if (!user) return;
-    getNotificationPrefs(user.id).then(setPrefs).catch(() => {/* fine */});
-  }, [user?.id]);
+    if (!userId) return;
+    getNotificationPrefs(userId).then(setPrefs).catch(() => {/* fine */});
+  }, [userId]);
 
   const changeLang = (code: LocaleCode) => {
     i18n.changeLanguage(code);

@@ -220,13 +220,13 @@ function MedicalHistoryCard({ m }: { m: Med | null | undefined }) {
       <div className="space-y-3 text-sm">
         {m.allergies && <Section label="Allergies">{m.allergies}</Section>}
         {(m.chronic_conditions?.length ?? 0) > 0 && (
-          <ChipList label="Chronic conditions" items={m.chronic_conditions!} tone="rose" />
+          <ChipList label="Chronic conditions" items={m.chronic_conditions ?? []} tone="rose" />
         )}
         {(m.current_medications?.length ?? 0) > 0 && (
-          <ChipList label="Current medications" items={m.current_medications!} tone="brand" />
+          <ChipList label="Current medications" items={m.current_medications ?? []} tone="brand" />
         )}
         {(m.immunizations?.length ?? 0) > 0 && (
-          <ChipList label="Immunizations" items={m.immunizations!} tone="emerald" />
+          <ChipList label="Immunizations" items={m.immunizations ?? []} tone="emerald" />
         )}
         {m.past_surgeries   && <Section label="Past surgeries">{m.past_surgeries}</Section>}
         {m.family_history   && <Section label="Family history">{m.family_history}</Section>}

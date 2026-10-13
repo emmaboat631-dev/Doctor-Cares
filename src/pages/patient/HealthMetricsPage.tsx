@@ -61,7 +61,7 @@ export function HealthMetricsPage() {
     const v  = Number(value);
     const v2 = spec.dualValue ? Number(value2) : null;
     if (!Number.isFinite(v) || v <= 0) return setError('Enter a valid number.');
-    if (spec.dualValue && (!Number.isFinite(v2!) || (v2 ?? 0) <= 0)) {
+    if (spec.dualValue && (v2 === null || !Number.isFinite(v2) || v2 <= 0)) {
       return setError('Enter both systolic and diastolic.');
     }
     setError(undefined);
@@ -182,7 +182,7 @@ export function HealthMetricsPage() {
             <EmptyState title="No readings yet" description="Log your first one above." />
           ) : (
             <div className="space-y-2">
-              {list.data!.map((m) => (
+              {(list.data ?? []).map((m) => (
                 <div key={m.id} className="flex items-center gap-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 p-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-baseline gap-1">

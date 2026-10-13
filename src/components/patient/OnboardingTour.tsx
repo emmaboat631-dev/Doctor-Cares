@@ -102,13 +102,16 @@ export function OnboardingTour() {
             </button>
           </div>
 
-          {s.ctaRoute && (
-            <button type="button"
-              onClick={() => { dismiss(); navigate(s.ctaRoute!); }}
-              className="mt-2 w-full text-center text-[11px] font-bold text-brand-600 dark:text-brand-300 hover:underline">
-              {s.ctaLabel}
-            </button>
-          )}
+          {s.ctaRoute && (() => {
+            const route = s.ctaRoute;
+            return (
+              <button type="button"
+                onClick={() => { dismiss(); navigate(route); }}
+                className="mt-2 w-full text-center text-[11px] font-bold text-brand-600 dark:text-brand-300 hover:underline">
+                {s.ctaLabel}
+              </button>
+            );
+          })()}
         </div>
       </div>
     </div>,

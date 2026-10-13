@@ -31,7 +31,7 @@ export function PrescriptionsPage() {
             description="When one of your doctors writes you a prescription, it appears here."
           />
         ) : (
-          rx.data!.map((r) => <RxCard key={r.id} r={r} />)
+          (rx.data ?? []).map((r) => <RxCard key={r.id} r={r} />)
         )}
       </div>
     </>
